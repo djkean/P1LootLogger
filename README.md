@@ -1,2 +1,2 @@
-# PokeOne-Loot-Logger
- A Way to Report your Loot and View Compiled Data
+# P1LootLogger
+ A way to Report and Read your Loot from PokeOne 
