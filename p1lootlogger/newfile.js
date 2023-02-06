@@ -9,29 +9,26 @@ const connection = mysql2.createConnection({
   database: process.env.P1LL_DATABASE,
 });
 
-const filedata = fs.readFileSync("listOfItems.txt").toString();
+const readItemFile = fs.readFileSync("listOfItems.txt").toString();
 
-let newData = filedata.split("\n").map((line, i) => {
-  let arrayData = line
+let formattedData = readItemFile.split("\n").map((line, i) => {
+  let arrayOfData = line
     .replace("(", "")
     .replace("),", "")
     .replaceAll("&eacute;", "e")
     .replaceAll("&#39;", "'")
-    .replaceAll("\r\n", "")
     .split(", ");
   let nameAndDesc = {
-    name: arrayData[1].replaceAll("'", ""),
-    description: arrayData[4].replaceAll("'", ""),
+    name: arrayOfData[1].replaceAll("'", ""),
+    description: arrayOfData[4].replaceAll("'", ""),
   };
 
   return nameAndDesc;
 });
 
-console.log(newData);
+console.log(formattedData);
 
-//newData.forEach((val, idx) => console.log(`[idx] ${idx}`, `[val]`, val));
-
-newData.forEach((value, index) => {
+formattedData.forEach((value, index) => {
   connection.execute(
     "INSERT INTO `test_schema`.`itemtable` (`itemName`,`itemDescription`,`itemValue`) VALUES (?,?,'0')",
     [value.name, value.description],
