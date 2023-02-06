@@ -1,16 +1,12 @@
 const fs = require("fs");
 require("dotenv").config();
 const mysql2 = require("mysql2");
+const connection = require("./connect");
 
-const connection = mysql2.createConnection({
-  host: "localhost",
-  user: process.env.P1LL_USER,
-  password: process.env.P1LL_PASSWORD,
-  database: process.env.P1LL_DATABASE,
-});
-
+// listOfItems is a txt file holding a lot of information I want to write to my own table(s)
 const readItemFile = fs.readFileSync("listOfItems.txt").toString();
 
+// formatting data from listOfItems by replacing characters and splitting entries into an array
 let formattedData = readItemFile.split("\n").map((line, i) => {
   let arrayOfData = line
     .replace("(", "")
@@ -20,7 +16,7 @@ let formattedData = readItemFile.split("\n").map((line, i) => {
     .split(", ");
   let nameAndDesc = {
     name: arrayOfData[1].replaceAll("'", ""),
-    description: arrayOfData[4].replaceAll("'", ""),
+    description: arrayOfData[4].replaceAll("'", "").replaceAll("â€™", "'"),
   };
 
   return nameAndDesc;
@@ -28,9 +24,10 @@ let formattedData = readItemFile.split("\n").map((line, i) => {
 
 console.log(formattedData);
 
+// each item (name and their description) are being written to a table in the database
 formattedData.forEach((value, index) => {
   connection.execute(
-    "INSERT INTO `test_schema`.`itemtable` (`itemName`,`itemDescription`,`itemValue`) VALUES (?,?,'0')",
+    "INSERT INTO `test_schema`.`dummytable` (`itemName`,`itemDescription`,`itemValue`) VALUES (?,?,'0')",
     [value.name, value.description],
     (err, res) => {
       if (err) console.log("error with query", err);
