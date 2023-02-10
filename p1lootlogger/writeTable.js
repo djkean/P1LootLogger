@@ -12,6 +12,7 @@ let formattedData = readItemFile.split("\n").map((line, i) => {
     .replace("(", "")
     .replace("),", "")
     .replaceAll("&eacute;", "e")
+    .replaceAll("\\r\\n", "")
     .replaceAll("&#39;", "'")
     .split(", ");
   let nameAndDesc = {
@@ -30,7 +31,7 @@ formattedData.forEach((value, index) => {
     "INSERT INTO `test_schema`.`dummytable` (`itemName`,`itemDescription`,`itemValue`) VALUES (?,?,'0')",
     [value.name, value.description],
     (err, res) => {
-      if (err) console.log("error with query", err);
+      //if (err) console.log("error with query", err);
       if (res) console.log("res success", res);
     }
   );
