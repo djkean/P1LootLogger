@@ -13,7 +13,7 @@ const connection = mysql2.createConnection({
 // query to itemtable to show the all data within it
 connection.execute("SELECT * FROM itemtable", (err, res) => {
   if (err) console.log("error with query", err);
-  if (res) console.log("res success", res);
+  //if (res) console.log("res success", res); -- don't need table being logged every connection import right now
 });
 
 module.exports = connection;
