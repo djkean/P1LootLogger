@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Nav } from "./shared/components/Nav";
+import { Nav } from "./shared/components/Nav/Nav.jsx";
 import { HomePage } from "./pages/home";
 import { TablesPage } from "./pages/tables";
 

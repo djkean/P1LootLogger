@@ -1,6 +1,6 @@
 const fs = require("fs");
 require("dotenv").config();
-const connection = require("./functions/connect");
+const connection = require("./connect");
 
 // listOfItems is a txt file holding a lot of information I want to write to my own table(s)
 const readItemFile = fs.readFileSync("listOfItems.txt").toString();
