@@ -1,5 +1,5 @@
 require("dotenv").config();
-const connection = require("./functions/connect");
+const connection = require("./connect");
 
 let test = 10;
 
