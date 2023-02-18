@@ -10,5 +10,6 @@ connection.execute(
   (err, res) => {
     if (err) console.log("error with query", err);
     if (res) console.log("res success", res);
+    connection.destroy();
   }
 );
