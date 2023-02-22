@@ -4,6 +4,9 @@ const chalk = require("chalk");
 const path = require("path");
 const app = express();
 const port = process.env.P1LL_SERVER || 8080;
+const testApi = require("./routes/test");
+
+app.use("/api", testApi);
 
 const static_dir = path.resolve(path.join(__dirname, "../build"));
 console.log(static_dir);
