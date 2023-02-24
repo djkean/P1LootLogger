@@ -8,6 +8,8 @@ const testApi = require("./routes/test");
 
 app.use("/api", testApi);
 
+app.use(express.json());
+
 const static_dir = path.resolve(path.join(__dirname, "../build"));
 console.log(static_dir);
 

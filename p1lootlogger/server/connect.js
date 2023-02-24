@@ -1,8 +1,6 @@
 require("dotenv").config({ path: __dirname + "/.env" });
 const mysql2 = require("mysql2");
 
-console.log(process.env.P1LL_USER);
-
 // connects to local database with env variables for credentials
 const connection = mysql2.createConnection({
   host: "localhost",

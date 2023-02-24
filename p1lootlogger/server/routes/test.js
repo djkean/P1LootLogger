@@ -3,7 +3,6 @@ const express = require("express");
 const chalk = require("chalk");
 const router = express.Router();
 const connection = require("../connect");
-const { parse, stringify } = require("flatted");
 
 /* router.use((req, res, next) => {
   console.log("Time: ", Date.now());
@@ -22,7 +21,8 @@ router.get("/test", (req, res) => {
     [],
     (err, results) => {
       if (err) throw err;
-      res.send(stringify({ status: 200, error: null, response: results }));
+      console.log(results);
+      res.json({ status: 200, error: null, response: results });
     }
   );
 });
@@ -30,7 +30,7 @@ router.get("/test", (req, res) => {
 // /api/itemtable route
 router.get("/itemtable", async (req, res) => {
   const query_itemtable = await connection.execute(`SELECT * FROM itemtable`);
-  res.send({ items: stringify(query_itemtable) });
+  res.json({ items: query_itemtable });
 });
 
 /* connection.execute(
