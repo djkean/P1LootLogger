@@ -2,7 +2,7 @@ import { Box, Container, Heading, SimpleGrid, Text, Center, HStack} from "@chakr
 import React from "react";
 import { useEffect, useState } from "react";
 
-export const ItemTableResults = () => {
+export const ItemTable = () => {
 const [itemTableValues, setItemTableValues] = useState([]);
 
 const itemTableStyles = {
@@ -52,8 +52,8 @@ useEffect(() => {
 //too many center components, move to regular css for those maybe?
   if (itemTableValues.length === 0) return <h2> Fetching Items...</h2>
 
-  return <div>
-    <Container as="section" maxW="100hv" maxH="100hv" bg="gray.500" pb="2em">
+  return (<div>
+    <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
       <Center>
         <Heading my="0.5em" p="0.75em">All Items</Heading>
       </Center>
@@ -72,7 +72,7 @@ useEffect(() => {
         return (
           <SimpleGrid key={item.itemID} sx={parentItemGridStyles}>
           <Center>
-            <HStack bg="gray.500">
+            <HStack>
             <Box sx={itemGridStyles} w="6em">Item Image</Box>
             <Box sx={itemGridStyles} w="8em">{item.itemName}</Box>
             <Box sx={itemGridStyles} w="25em" mr="2em">{item.itemDescription}</Box>
@@ -82,5 +82,5 @@ useEffect(() => {
       )
       })}
     </Container>
-  </div>;
+  </div>);
 };

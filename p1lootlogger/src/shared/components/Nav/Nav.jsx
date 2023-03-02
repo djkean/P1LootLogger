@@ -4,29 +4,36 @@ import { Link } from "react-router-dom";
 
 export function Nav() {
 
-  const navStyles = {
-    w: "9em",
-    h: "3em",
-
+  const ButtonStyles = {
+    boxShadow: "sm",
+    color: "#262626",
+    bg: "#FDCA40",
+    ':hover': {
+      bg: "#F2A202",
+    }
   }
 
-  const navButtonStyles = {
-    //w: "7em",
-    //h: "3em",
+  const ButtonStyles2 = {
+    boxShadow: "sm",
+    color: "#262626",
+    bg: "#DD380F",
+    ':hover': {
+      bg: "#B12805",
+    }
   }
 
-  return ( <Flex as="nav" bg="gray.200" wrap="wrap" gap="2" p="0.3em">
-    <Box sx={navStyles} bg="green.300"><Link to="/home">Home</Link></Box>
-    <Box sx={navStyles} bg="green.300"><Link to="/tables">Tables</Link></Box>
-    <Box sx={navStyles} bg="pink.300"><Link to="/itemTableResults">Items</Link></Box>
+  return ( 
+  <Flex as="nav" bg="#2D2E2E" wrap="wrap" gap="2" p="0.3em">
+    <Box><Button sx={ButtonStyles}><Link to="/home">Home</Link></Button></Box>
+    <Box><Button sx={ButtonStyles}><Link to="/tables">Tables</Link></Button></Box>
+    <Box><Button sx={ButtonStyles}><Link to="/itemtable">Items</Link></Button></Box>
     <Spacer />
     <HStack>
-      <Box sx={navButtonStyles}><Button colorScheme="yellow">Sign Up</Button></Box>
-      <Box sx={navButtonStyles}><Button colorScheme="yellow">Log In</Button></Box>
-      <Box sx={navButtonStyles}><Button colorScheme="purple">Username</Button></Box>
-      <Box sx={navButtonStyles}><Button colorScheme="purple">Log Out</Button></Box>
+      <Box><Button sx={ButtonStyles}>Sign Up</Button></Box>
+      <Box><Button sx={ButtonStyles}>Log In</Button></Box>
+      <Box><Button sx={ButtonStyles2}>Username</Button></Box>
+      <Box><Button sx={ButtonStyles2}>Log Out</Button></Box>
     </HStack>
-
   </Flex>
   )
 }
