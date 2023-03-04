@@ -4,6 +4,7 @@ import { Nav } from "./shared/components/Nav/Nav.jsx";
 import { HomePage } from "./pages/home";
 import { TablesPage } from "./pages/tables";
 import { ItemTable } from "./pages/itemtable";
+import { BossTable } from "./pages/bosstable.jsx";
 import { ChakraProvider } from "@chakra-ui/react";
 
 export function App() {
@@ -15,6 +16,7 @@ export function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/tables" element={<TablesPage />} />
           <Route path="/itemtable" element={<ItemTable />} />
+          <Route path="/bosstable" element={<BossTable />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
