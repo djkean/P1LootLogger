@@ -41,15 +41,14 @@ export function Nav() {
       <MenuButton as={Button} sx={ButtonStyles}>
         <Flex wrap="wrap">Tables <ChevronDown /></Flex>
       </MenuButton>
-      <MenuList bg="#5D5D5D">
+      <MenuList bg="#5D5D5D" border="1px solid black">
         <MenuItem sx={MenuStyles}><Link to="/itemtable">Items</Link></MenuItem>
         <MenuItem sx={MenuStyles}><Link to="/bosstable">Bosses</Link></MenuItem>
       </MenuList>
     </Menu></Box>
     <Spacer /> 
-
     <HStack>
-      <Box><Button sx={ButtonStyles}>Create Account</Button></Box>
+      <Box><Button sx={ButtonStyles}><Link to="/createaccount">Create Account</Link></Button></Box>
       <Box><Button sx={ButtonStyles}>Log In</Button></Box>
       <Box><Button sx={ButtonStyles2}>Username</Button></Box>
       <Box><Button sx={ButtonStyles2}>Log Out</Button></Box>

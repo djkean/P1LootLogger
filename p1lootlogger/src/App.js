@@ -6,6 +6,7 @@ import { TablesPage } from "./pages/tables";
 import { ItemTable } from "./pages/itemtable";
 import { BossTable } from "./pages/bosstable.jsx";
 import { ChakraProvider } from "@chakra-ui/react";
+import { CreateAccountPage } from "./pages/createaccount.jsx";
 
 export function App() {
   return (
@@ -17,6 +18,7 @@ export function App() {
           <Route path="/tables" element={<TablesPage />} />
           <Route path="/itemtable" element={<ItemTable />} />
           <Route path="/bosstable" element={<BossTable />} />
+          <Route path="/createaccount" element={<CreateAccountPage />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
