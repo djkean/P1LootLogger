@@ -1,42 +1,11 @@
 import { Box, Container, Heading, SimpleGrid, Text, Center, HStack} from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState } from "react";
+import { itemTableStyles, itemGridStyles, parentItemGridStyles } from "../components/pagestyles";
 
 export const BossTable = () => {
 const [bossTableValues, setBossTableValues] = useState([]);
 
-const itemTableStyles = {
-  px: "1em",
-  py: "1em",
-  bg: "orange.200",
-  color: "green.400",
-  mx: "1em",
-  my: "0.5em",
-  textAlign: "center",
-  ':hover': {
-    color: "red.200",
-    bg: "purple.400"
-  }
-}
-
-const parentItemGridStyles = {
-  p: "0.3em",
-  column: 3,
-  spacing: 1,
-  minChildWidth: "256px",
-  maxW: "3xl",
-  margin: "auto",
-}
-
-const itemGridStyles = {
-  bg: "orange.200",
-  h: "4.2em",
-  px: "0.3em",
-  py: "0.1em",
-  borderRadius: " 0.3em",
-  boxShadow: "base",
-  lineHeight: "1.3em",
-}
 
 const getBossesFromDb = async () => {
   const bossDbResponse = await fetch("/api/boss", { method: "GET" })

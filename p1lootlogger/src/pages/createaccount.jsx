@@ -1,37 +1,31 @@
 import React from "react";
-import { Box, Container, Heading, SimpleGrid, Text, Center, HStack, Input} from "@chakra-ui/react";
+import { Box, Container, Heading, Text, Center, Input, Button} from "@chakra-ui/react";
+import { ButtonStyles, inputStyles } from "../components/pagestyles"
 
 export function CreateAccountPage() {
-
-  const inputStyles = {
-    border: "1px solid black"
-  }
 
   return ( 
   <div> 
     <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
       <Center>
-        <Heading my="0.5em" p="0.75em">
-          Create an Account
-        </Heading>
+        <Heading my="1em" p="0.75em">Create an Account</Heading>
       </Center>
       <Center>
-        <Text>
-          To make an account, fill out the fields below:
-        </Text>
+        <Text my="1em">To make an account, fill out the fields below:</Text>
       </Center>
       <Center>
         <Box>
           <Text>Username:</Text>
-          <Input sx={inputStyles}></Input>
+          <Input sx={inputStyles} type="text"/>
           <Text>Email Address:</Text>
-          <Input sx={inputStyles}></Input>
+          <Input sx={inputStyles} type="text"/>
           <Text>Confirm Email Address:</Text>
-          <Input sx={inputStyles}></Input>
+          <Input sx={inputStyles} type="text"/>
           <Text>Password:</Text>
-          <Input sx={inputStyles} type="password"></Input>
+          <Input sx={inputStyles} type="password" placeholder="password"/>
           <Text>Confirm Password:</Text>
-          <Input sx={inputStyles} type="password"></Input>
+          <Input sx={inputStyles} type="password" placeholder="password"/>
+          <Button sx={ButtonStyles} my="1em">Register</Button>
         </Box>
       </Center>
     </Container>

@@ -2,37 +2,9 @@ import { Box, Flex, Button, Spacer, HStack, Menu, MenuButton, MenuList, MenuItem
 import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "../Chevron";
+import { ButtonStyles, ButtonStyles2, MenuStyles } from "../../../components/pagestyles";
 
 export function Nav() {
-
-  const ButtonStyles = {
-    boxShadow: "sm",
-    color: "#262626",
-    bg: "#FDCA40",
-    ':hover': {
-      bg: "#F2A202",
-    }
-  }
-
-  const ButtonStyles2 = {
-    boxShadow: "sm",
-    color: "#262626",
-    bg: "#DD380F",
-    ':hover': {
-      bg: "#B12805",
-    }
-  }
-
-  const MenuStyles = {
-    color: "#262626",
-    bg: "#FDCA40",
-    border: "solid 1px #5D5D5D",
-    borderRadius: "0.3em",
-    ':hover': {
-      bg: "#F2A202",
-      boxShadow: "sm",
-    }
-  }
 
   return ( 
   <Flex as="nav" bg="#2D2E2E" wrap="wrap" gap="2" p="0.3em">
