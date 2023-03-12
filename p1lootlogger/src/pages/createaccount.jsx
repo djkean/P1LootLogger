@@ -1,10 +1,11 @@
-import React from "react";
-import { Box, Container, Heading, Text, Center, Input, Button} from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Box, Container, Heading, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
 import { ButtonStyles, inputStyles } from "../components/pagestyles"
 
 export function CreateAccountPage() {
 
-  return ( 
+  return (
+
   <div> 
     <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
       <Center>
@@ -14,18 +15,20 @@ export function CreateAccountPage() {
         <Text my="1em">To make an account, fill out the fields below:</Text>
       </Center>
       <Center>
-        <Box>
-          <Text>Username:</Text>
-          <Input sx={inputStyles} type="text"/>
-          <Text>Email Address:</Text>
-          <Input sx={inputStyles} type="text"/>
-          <Text>Confirm Email Address:</Text>
-          <Input sx={inputStyles} type="text"/>
-          <Text>Password:</Text>
-          <Input sx={inputStyles} type="password" placeholder="password"/>
-          <Text>Confirm Password:</Text>
-          <Input sx={inputStyles} type="password" placeholder="password"/>
-          <Button sx={ButtonStyles} my="1em">Register</Button>
+        <Box as="form">
+          <FormControl>
+            <FormLabel>Username:</FormLabel>
+            <Input sx={inputStyles} type="text" id="reg--username"/>
+            <FormLabel>Email Address:</FormLabel>
+            <Input sx={inputStyles} type="email" id="reg--email--1"/>
+            <FormLabel>Confirm Email Address:</FormLabel>
+            <Input sx={inputStyles} type="email" id="reg--email--2"/>
+            <FormLabel>Password:</FormLabel>
+            <Input sx={inputStyles} type="password" id="reg--password--1" placeholder="password"/>
+            <FormLabel>Confirm Password:</FormLabel>
+            <Input sx={inputStyles} type="password" id="reg--password--2" placeholder="password"/>
+            <Button sx={ButtonStyles} my="1em">Register</Button>
+          </FormControl>
         </Box>
       </Center>
     </Container>
