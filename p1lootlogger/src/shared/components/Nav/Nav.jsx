@@ -21,7 +21,7 @@ export function Nav() {
     <Spacer /> 
     <HStack>
       <Box><Button sx={ButtonStyles}><Link to="/createaccount">Create Account</Link></Button></Box>
-      <Box><Button sx={ButtonStyles}>Log In</Button></Box>
+      <Box><Button sx={ButtonStyles}><Link to="/login">Log In</Link></Button></Box>
       <Box><Button sx={ButtonStyles2}>Username</Button></Box>
       <Box><Button sx={ButtonStyles2}>Log Out</Button></Box>
     </HStack>

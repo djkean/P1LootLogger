@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Container, Heading, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
 import { ButtonStyles, inputStyles } from "../components/pagestyles"
+import { Link } from "react-router-dom"
 
 export function CreateAccountPage() {
 
@@ -15,7 +16,11 @@ export function CreateAccountPage() {
         <Text my="1em">To make an account, fill out the fields below:</Text>
       </Center>
       <Center>
-        <Box as="form">
+        <Text my="1em">Already have an account? Log in </Text><Text color="#FDCA40">
+          <Link to="/login"> here.</Link></Text>
+      </Center>
+      <Center>
+        <Box as="form" id="create--account--form">
           <FormControl>
             <FormLabel>Username:</FormLabel>
             <Input sx={inputStyles} type="text" id="reg--username"/>
