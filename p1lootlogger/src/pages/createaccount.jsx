@@ -32,7 +32,7 @@ export function CreateAccountPage() {
             <Input sx={inputStyles} type="password" id="reg--password--1" placeholder="password"/>
             <FormLabel>Confirm Password:</FormLabel>
             <Input sx={inputStyles} type="password" id="reg--password--2" placeholder="password"/>
-            <Button sx={ButtonStyles} my="1em">Register</Button>
+            <Button sx={ButtonStyles} my="1em" type="submit">Register</Button>
           </FormControl>
         </Box>
       </Center>

@@ -1,8 +1,26 @@
 import { Box, Container, Heading, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
 import { ButtonStyles, inputStyles } from "../components/pagestyles"
+import { React, useState} from "react";
 import { Link } from "react-router-dom"
+import { loginVerification } from "../components/loginVerification";
 
 export function LoginPage() {
+  const [loginDetails, setLoginDetails] = useState({
+    username: "",
+    email: "",
+    password: "",
+  })
+  const [errors, setErrors] = useState({})
+
+  const handleFields = (event) => {
+    setLoginDetails(_ => ({..._, [event.target.name]: [event.target.value]}))
+  }
+
+  const submitFields = (event) => {
+    event.preventDefault();
+    setErrors(loginVerification(loginDetails))
+
+  }
 
   return (
   <div> 
@@ -15,13 +33,13 @@ export function LoginPage() {
         <Text color="#FDCA40"><Link to="/createaccount"> here.</Link></Text>
       </Center>
       <Center>
-        <Box as="form" id="login--form">
+        <Box as="form" id="login--form" onSubmit={submitFields}>
           <FormControl>
             <FormLabel>Username:</FormLabel>
-            <Input sx={inputStyles} type="text" id="ver--username"/>
+            <Input sx={inputStyles} type="text" id="ver--username" name="username" onChange={handleFields}/>
             <FormLabel>Password:</FormLabel>
-            <Input sx={inputStyles} type="password" id="ver--password" placeholder="password"/>
-            <Button sx={ButtonStyles} my="1em">Log In</Button>
+            <Input sx={inputStyles} type="password" id="ver--password" name="password" onChange={handleFields} placeholder="password"/>
+            <Button sx={ButtonStyles} my="1em" type="submit">Log In</Button>
           </FormControl>
         </Box>
       </Center>
