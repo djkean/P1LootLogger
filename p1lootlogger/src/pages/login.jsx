@@ -10,7 +10,8 @@ export function LoginPage() {
     email: "",
     password: "",
   })
-  const [errors, setErrors] = useState({})
+  
+  const [loginError, setLoginError] = useState({})
 
   const handleFields = (event) => {
     setLoginDetails(_ => ({..._, [event.target.name]: [event.target.value]}))
@@ -18,8 +19,7 @@ export function LoginPage() {
 
   const submitFields = (event) => {
     event.preventDefault();
-    setErrors(loginVerification(loginDetails))
-
+    setLoginError(loginVerification(loginDetails))
   }
 
   return (
@@ -37,8 +37,10 @@ export function LoginPage() {
           <FormControl>
             <FormLabel>Username:</FormLabel>
             <Input sx={inputStyles} type="text" id="ver--username" name="username" onChange={handleFields}/>
+            {loginError.username && <Text>{loginError.username}</Text>}
             <FormLabel>Password:</FormLabel>
             <Input sx={inputStyles} type="password" id="ver--password" name="password" onChange={handleFields} placeholder="password"/>
+            {loginError.password && <Text>{loginError.password}</Text>}
             <Button sx={ButtonStyles} my="1em" type="submit">Log In</Button>
           </FormControl>
         </Box>
