@@ -29,15 +29,18 @@ export function LoginPage() {
         <Heading my="1em" p="0.75em">Log In</Heading>
       </Center>
       <Center>
+        <Text my="1em">Log in by filling the fields below:</Text>
+      </Center>
+      <Center>
         <Text my="1em">Need an account? You can create one </Text>
         <Text color="#FDCA40"><Link to="/createaccount"> here.</Link></Text>
       </Center>
       <Center>
         <Box as="form" id="login--form" onSubmit={submitFields}>
           <FormControl>
-            <FormLabel>Username:</FormLabel>
-            <Input sx={inputStyles} type="text" id="ver--username" name="username" onChange={handleFields}/>
-            {loginError.username && <Text>{loginError.username}</Text>}
+            <FormLabel>Email:</FormLabel>
+            <Input sx={inputStyles} type="email" id="ver--email" name="email" onChange={handleFields}/>
+            {loginError.email && <Text>{loginError.email}</Text>}
             <FormLabel>Password:</FormLabel>
             <Input sx={inputStyles} type="password" id="ver--password" name="password" onChange={handleFields} placeholder="password"/>
             {loginError.password && <Text>{loginError.password}</Text>}

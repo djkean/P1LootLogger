@@ -27,4 +27,9 @@ router.get("/boss", (req, res) => {
   });
 });
 
+// signup
+/* router.post("/createaccount", (req, res) => {
+  connection.query = "INSERT INTO usertable2 (`username`,`email`,`password`) VALUES (?,?,?)"
+}) */
+
 module.exports = router;
