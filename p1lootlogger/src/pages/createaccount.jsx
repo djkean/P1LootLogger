@@ -1,8 +1,10 @@
 import React, {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Container, Heading, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
 import { ButtonStyles, inputStyles } from "../components/pagestyles"
 import { Link } from "react-router-dom"
 import { regVerification } from "../components/regVerification";
+import axios from "axios";
 
 export function CreateAccountPage() {
   const [regDetails, setRegDetails] = useState({
@@ -17,10 +19,16 @@ export function CreateAccountPage() {
     setRegDetails(_ => ({..._, [event.target.name]: [event.target.value]}))
   }
 
+  const navigate = useNavigate();
   const submitFields = (event) => {
     event.preventDefault();
     setRegError(regVerification(regDetails))
     console.log(regDetails)
+    if (regError.name === "" && regError.email === "" && regError.password === "") {
+      axios.post("http://localhost:8080/createaccount", regDetails)
+      .then((res => navigate("/login")))
+      .catch((err => console.log(err)))
+    }
   }
 
   return (
