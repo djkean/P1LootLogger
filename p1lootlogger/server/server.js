@@ -27,14 +27,25 @@ app.get("/*", (req, res, next) => {
 });
 
 app.post("/createaccount", (req, res) => {
-  connection.query(
-    "INSERT INTO `usertable2` (`username`,`email`,`password`,`status`) VALUES (?,?,?,'4')",
-    [req.body.name, req.body.email, req.body.password],
-    (err, res) => {
-      if (err) console.log("error with query", err);
-      if (res) console.log("success with query", res);
-    }
-  );
+  try {
+    connection.query(
+      "INSERT INTO `usertable2` (`username`,`email`,`password`,`status`) VALUES (?,?,?,'4')",
+      [req.body.username, req.body.email, req.body.password],
+      (err, result) => {
+        console.log(req.body.username);
+        if (err) {
+          console.log("error with query", err);
+          res.status(500).send("not good");
+        } else if (res) {
+          console.log("success with query", result);
+          res.status(200).send("success");
+        }
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+  }
 });
 
 app.listen(port);
