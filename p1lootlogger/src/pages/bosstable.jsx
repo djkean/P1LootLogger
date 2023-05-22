@@ -6,7 +6,6 @@ import { itemTableStyles, itemGridStyles, parentItemGridStyles } from "../compon
 export const BossTable = () => {
 const [bossTableValues, setBossTableValues] = useState([]);
 
-
 const getBossesFromDb = async () => {
   const bossDbResponse = await fetch("/api/boss", { method: "GET" })
   const bossDbResponseJson = await bossDbResponse.json();

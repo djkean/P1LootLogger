@@ -16,6 +16,7 @@ export function Nav() {
       <MenuList bg="#5D5D5D" border="1px solid black">
         <MenuItem sx={MenuStyles}><Link to="/itemtable">Items</Link></MenuItem>
         <MenuItem sx={MenuStyles}><Link to="/bosstable">Bosses</Link></MenuItem>
+        <MenuItem sx={MenuStyles}><Link to="/bossinfo">Boss Info</Link></MenuItem>
       </MenuList>
     </Menu></Box>
     <Spacer /> 
