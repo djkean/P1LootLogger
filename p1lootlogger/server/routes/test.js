@@ -28,7 +28,7 @@ router.get("/boss", (req, res) => {
 });
 
 // bossinfo route
-router.get("bossinfo", (req, res) => {
+router.get("/bossinfo", (req, res) => {
   connection.query(`SELECT * FROM bossinfotable`, [], (err, results) => {
     if (err) throw err;
     console.log(results);
