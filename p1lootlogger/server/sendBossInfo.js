@@ -154,30 +154,3 @@ const TEAM_DATA = [
 connection.execute("UPDATE `test_schema`.`bossinfotable2`SET `teamData` = ? WHERE `ID` = 102", [JSON.stringify(TEAM_DATA)], (err, res) => {
   if (res) console.log(chalk.cyan("bossinfotable2 was successfully updated"))
 });
-
-/* return (
-	<div>
-		<Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
-			<Center>
-				<Heading my="0.5em" p="0.75em">(boss name here) - Details</Heading>
-			</Center>
-			<Center>
-				<Text>In-depth information about (boss name here)</Text>
-			</Center>
-			 {bossInfoValues.length > 0 && bossInfoValues.map((info) => {
-				return (
-					<SimpleGrid key={info.ID} sx={parentItemGridStyles}>
-						<Center>
-							<HStack>
-								<Box sx={itemGridStyles} w="6em">Boss Image</Box>
-								<Box sx={itemGridStyles} w="8em">{info.bossName}</Box>
-								<Box sx={itemGridStyles} w="25em" mr="2em">{info?.teamData[1]?.Pokemon}</Box>
-							</HStack>
-						</Center>
-					</SimpleGrid>
-				)
-			 })}
-		</Container>
-	</div>
-)
-} */
