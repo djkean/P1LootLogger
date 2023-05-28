@@ -32,7 +32,7 @@ router.get("/bossinfo", (req, res) => {
   connection.query(`SELECT * FROM bossinfotable2`, [], (err, results) => {
     if (err) throw err;
     console.log(results);
-    res.json({status: 200, error: null, response: results});
+    res.json({ status: 200, error: null, response: results });
   })
 })
 

@@ -1,3 +1,5 @@
+import { m } from "framer-motion"
+
 export const ButtonStyles = {
   boxShadow: "sm",
   color: "#262626",
@@ -62,4 +64,10 @@ export const itemGridStyles = {
 
 export const inputStyles = {
   border: "1px solid black"
+}
+
+export const bossInfoStyles = {
+  borderWidth: "14px",
+  borderRadius: "lg",
+  boxShadow: "2xl",
 }
