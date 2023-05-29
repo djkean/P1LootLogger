@@ -2,7 +2,6 @@ import { Badge, Button, Center, Flex, Heading, Image, Stack, Text } from "@chakr
 import React from "react";
 import { useEffect, useState } from "react";
 import { InfoCardStack, InfoImageLayout, InfoSummaryCard, InfoDropBadge, InfoTabStack, InfoTabButton } from "../components/pagestyles";
-import { bossImage } from "../imageImport";
 
 export const BossInfo = () => {
  const [bossInfoValues, setBossInfoValues] = useState([]);
@@ -23,15 +22,13 @@ export const BossInfo = () => {
 
   bossInfoValues.map((bossData) => console.log(bossData.bossDrops)) 
 
-  //src={bossImage(info.ID)}
-
   return (
     bossInfoValues.length > 0 && bossInfoValues.map((info) => {
       return (
           <Center key={info.ID} py={6}>
             <Stack sx={InfoCardStack} w={{sm: '100%', md: '540px'}} height={{sm: '476px', md: '20rem'}} direction={{base: 'column', md: 'row'}}>
               <Flex flex={1}>
-                <Image sx={InfoImageLayout} src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/150.png"/>
+                <Image sx={InfoImageLayout} src={`/images/${info.ID}.png`} />
               </Flex>
               <Stack sx={InfoSummaryCard}>
                 <Heading fontSize={'2xl'} fontFamily={'body'}> {info.bossName} </Heading>
