@@ -1,0 +1,11 @@
+{ "Ash": [
+  "Pikachu", "Jade Orb", "Metal Coat", "Reroll Token", "Shiny+ Hour", "Hidden Ability+ Hour"
+],
+"Mewtwo": [
+  "Mew Egg", "Jade Orb", "Reroll Token", "Shiny+ Hour", "Hidden Ability+ Hour", "Trainer Exp+ Hour", "EV Training+ Hour"
+],
+
+"Root of Evil": [
+  "Baby Egg", "Rare+ Hour", "Wild Money Hour", "Shiny+ Hour", "Pokemon Exp Hour", "Money+ Hour", "Hidden Ability+ Hour", "EV Training Hour"
+]
+}

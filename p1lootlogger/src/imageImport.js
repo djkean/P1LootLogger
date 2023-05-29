@@ -1,0 +1,1 @@
+export const bossImage = (bossID) => `/images/${bossID}.png`;
