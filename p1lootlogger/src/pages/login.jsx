@@ -1,7 +1,6 @@
-import { Box, Container, Heading, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
+import { Avatar, Box, Badge, Stack, Container, Heading, Link, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
 import { ButtonStyles, inputStyles } from "../components/pagestyles"
 import { React, useState} from "react";
-import { Link } from "react-router-dom"
 import { loginVerification } from "../components/loginVerification";
 
 export function LoginPage() {
@@ -21,7 +20,7 @@ export function LoginPage() {
     event.preventDefault();
     setLoginError(loginVerification(loginDetails))
   }
-
+ 
   return (
   <div> 
     <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
@@ -32,8 +31,9 @@ export function LoginPage() {
         <Text my="1em">Log in by filling the fields below:</Text>
       </Center>
       <Center>
-        <Text my="1em">Need an account? You can create one </Text>
-        <Text color="#FDCA40"><Link to="/createaccount"> here.</Link></Text>
+      <Text my="1em">Need an account? You can create one {' '}
+      <Link to="/createaccount" color="#FDCA40">here.</Link> {' '}
+        </Text>   
       </Center>
       <Center>
         <Box as="form" id="login--form" onSubmit={submitFields}>
@@ -50,5 +50,8 @@ export function LoginPage() {
       </Center>
     </Container>
   </div> 
-  )
+  ) 
 }
+
+        /*  <Text my="1em">Need an account? You can create one </Text>
+        <Text color="#FDCA40"><Link to="/createaccount"> here.</Link></Text> */

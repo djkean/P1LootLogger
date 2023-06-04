@@ -80,7 +80,7 @@ export const InfoCardStack = {
   boxShadow: '2xl',
   padding: "4",
   w: { sm: '100%', md: '540px' },
-  height: { sm: '476px', md: '20rem' },
+  height: { sm: '30rem', md: '20rem' },
   direction: { base: 'column', md: 'row' }
 }
 
@@ -110,13 +110,15 @@ export const InfoDropBadge = {
 export const InfoTabStack = {
   width: "100%",
   mt: "2rem",
-  padding: 2,
+  padding: 1,
   justifyContent: "space-between",
   alignItems: "center"
 }
 
 export const InfoTabButton = {
   flex: 1,
+  px: 1,
+  py: 1,
   fontSize: "sm",
   rounded: "full",
   bg: "orange.200",
@@ -126,6 +128,13 @@ export const InfoTabButton = {
     bg: "orange.300"
   },
   ':focus': {
+    bg: "orange.300"
+  }
+}
+
+export const DropDownMenu = {
+  bg: "orange.200",
+  ':hover': {
     bg: "orange.300"
   }
 }

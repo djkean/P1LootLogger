@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Container, Heading, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
+import { Box, Container, Heading, Link, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
 import { ButtonStyles, inputStyles } from "../components/pagestyles"
-import { Link } from "react-router-dom"
 import { regVerification } from "../components/regVerification";
 import axios from "axios";
 
@@ -45,8 +44,8 @@ export function CreateAccountPage() {
         <Text my="1em">To make an account, fill out the fields below:</Text>
       </Center>
       <Center>
-        <Text my="1em">Already have an account? Log in </Text><Text color="#FDCA40">
-          <Link to="/login"> here.</Link></Text>
+        <Text my="1em">Already have an account? Log in </Text> {' '}
+          <Link to="/login" color="#FDCA40"> here.</Link> {' '}
       </Center>
       <Center>
         <Box as="form" id="reg--form" onSubmit={submitFields}>
