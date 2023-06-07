@@ -1,5 +1,6 @@
-import { Avatar, Box, Badge, Stack, Container, Heading, Link, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
-import { ButtonStyles, inputStyles } from "../components/pagestyles"
+import { Avatar, Badge, Box, Button, Center, Checkbox, Container, FormControl, FormLabel, Flex, 
+  Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
+import { ButtonStyles, inputStyles, LoginStack, LoginBox, LoginFlex, FormControlColors, InputFieldColors, FormButton } from "../components/pagestyles"
 import { React, useState} from "react";
 import { loginVerification } from "../components/loginVerification";
 
@@ -22,7 +23,43 @@ export function LoginPage() {
   }
  
   return (
-  <div> 
+    <Flex sx={LoginFlex} align={"center"}>
+      <Stack sx={LoginStack} spacing={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"} py={3}>Log In</Heading>
+          <Text fontSize={"lg"}>Don't have an account? Create one {" "}
+            <Link to="/createaccount" color="#FDCA40">here</Link>
+          </Text>
+        </Stack>
+        <Box sx={LoginBox} as="form" id="login--form" onSubmit={submitFields}>
+          <Stack spacing={3}>
+            <FormControl id="email" sx={FormControlColors}>
+              <FormLabel color={"#FDCA40"}>Email:</FormLabel>
+              <Input type="email" sx={InputFieldColors}
+              id="ver--email" name="email" onChange={handleFields}/>
+              {loginError.email && <Text>{loginError.email}</Text>}
+            </FormControl>
+            <FormControl id="password" sx={FormControlColors}>
+              <FormLabel color={"#FDCA40"}>Password:</FormLabel>
+              <Input type="password" sx={InputFieldColors}
+              id="ver--password" name="password" onChange={handleFields}/>
+              {loginError.password && <Text>{loginError.password}</Text>}
+            </FormControl>
+            <Button sx={FormButton}> Sign in</Button>
+            <Text color={"#BFA55C"} align={"center"}>Forgot Password? Click here</Text>
+          </Stack>
+        </Box>
+      </Stack>
+    </Flex>
+  ) 
+}
+
+        /*  <Text my="1em">Need an account? You can create one </Text>
+        <Text color="#FDCA40"><Link to="/createaccount"> here.</Link></Text> */
+
+        /*  
+        
+        <div> 
     <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
       <Center>
         <Heading my="1em" p="0.75em">Log In</Heading>
@@ -50,8 +87,6 @@ export function LoginPage() {
       </Center>
     </Container>
   </div> 
-  ) 
-}
-
-        /*  <Text my="1em">Need an account? You can create one </Text>
-        <Text color="#FDCA40"><Link to="/createaccount"> here.</Link></Text> */
+        
+        
+        */

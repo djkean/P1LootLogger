@@ -138,3 +138,44 @@ export const DropDownMenu = {
     bg: "orange.300"
   }
 }
+
+export const LoginFlex = {
+  minH: "100vh",
+  justify: "center",
+  bg: "#5D5D5D",
+}
+
+export const LoginStack = {
+  mx: "auto",
+  maxW: "lg",
+  py: 12,
+  px: 6,
+}
+
+export const LoginBox = {
+  rounded: "lg",
+  bg: "#2A2823",
+  boxShadow: "lg",
+  p: 8,
+}
+
+export const FormControlColors = {
+  color: "#BFA55C",
+  borderColor: "#5D5D5D"
+}
+
+export const InputFieldColors = {
+  ':focus': {
+    color: "#FDCA40",
+    borderColor: "#FDCA40"
+  }
+}
+
+export const FormButton = {
+  color: "#2A2823",
+  bg: "#FDCA40",
+  ':hover': {
+    bg: "#5D5D5D",
+    color: "#FDCA40"
+  }
+}
