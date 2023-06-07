@@ -76,6 +76,7 @@ export const InfoCardStack = {
   borderWidth: "1px",
   borderRadius: "lg",
   border: "1px grey.900",
+  borderColor: "black",
   bg: "#5D5D5D",
   boxShadow: '2xl',
   padding: "4",

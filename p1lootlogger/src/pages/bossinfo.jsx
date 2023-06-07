@@ -25,7 +25,7 @@ export const BossInfo = () => {
   return (
     bossInfoValues.length > 0 && bossInfoValues.map((info) => {
       return (
-        <Center key={info.ID} py={6}>
+        <Center key={info.ID} py={6} bg={"#2A2823"}>
           <Stack sx={InfoCardStack} w={{sm: '100%', md: '540px'}} height={{sm: '476px', md: '20rem'}} direction={{base: 'column', md: 'row'}}>
             <Flex flex={1}>
               <Image sx={InfoImageLayout} src={`/images/${info.ID}.png`} />
@@ -50,7 +50,7 @@ export const BossInfo = () => {
                   <MenuButton sx={InfoTabButton}>View Loot</MenuButton>
                   <MenuList bg="#5D5D5D">
                     {info.bossDrops.map((loot) => {
-                      return ( <MenuItem sx={DropDownMenu}>{loot}</MenuItem>)
+                      return (<MenuItem sx={DropDownMenu}>{loot}</MenuItem>)
                     })}
                   </MenuList>
                 </Menu>
@@ -60,7 +60,7 @@ export const BossInfo = () => {
                   <MenuButton sx={InfoTabButton}>View Roster</MenuButton>
                   <MenuList bg="#5D5D5D">
                     {info.teamData.map((roster) => {
-                      return ( <MenuItem sx={DropDownMenu}>{roster.Pokemon}</MenuItem>)
+                      return (<MenuItem sx={DropDownMenu}>{roster.Pokemon}</MenuItem>)
                     })}
                   </MenuList>
                 </Menu>
