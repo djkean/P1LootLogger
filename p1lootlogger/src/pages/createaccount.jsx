@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Container, Heading, Link, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
-import { ButtonStyles, inputStyles } from "../components/pagestyles"
+import { Flex, Stack, Box, Container, Heading, Link, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
+import { ButtonStyles, inputStyles, LoginFlex, LoginStack, LoginBox,FormButton, InputFieldColors, FormControlColors } from "../components/pagestyles"
 import { regVerification } from "../components/regVerification";
 import axios from "axios";
 
@@ -34,7 +34,47 @@ export function CreateAccountPage() {
     }
   }
 
+
   return (
+
+<Flex sx={LoginFlex} align={"center"}>
+      <Stack sx={LoginStack} spacing={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"} py={3}>Create Account</Heading>
+          <Text fontSize={"lg"}>Already have an account? Log in {" "}
+            <Link to="/createaccount" color="#FDCA40">here</Link>
+          </Text>
+        </Stack>
+        <Box sx={LoginBox} as="form" id="reg--form" onSubmit={submitFields}>
+          <Stack spacing={3}>
+          <FormControl id="username" sx={FormControlColors}>
+              <FormLabel color={"#FDCA40"}>Username:</FormLabel>
+              <Input type="username" sx={InputFieldColors}
+              id="reg--username" name="username" onChange={handleFields}/>
+              {regError.username && <Text>{regError.username}</Text>}
+            </FormControl>
+            <FormControl id="email" sx={FormControlColors}>
+              <FormLabel color={"#FDCA40"}>Email:</FormLabel>
+              <Input type="email" sx={InputFieldColors}
+              id="reg--email--1" name="email" onChange={handleFields}/>
+              {regError.email && <Text>{regError.email}</Text>}
+            </FormControl>
+            <FormControl id="password" sx={FormControlColors}>
+              <FormLabel color={"#FDCA40"}>Password:</FormLabel>
+              <Input type="password" sx={InputFieldColors}
+              id="reg--password--1" name="password" onChange={handleFields}/>
+              {regError.password && <Text>{regError.password}</Text>}
+            </FormControl>
+            <Button sx={FormButton}>Create Account</Button>
+            <Text color={"#BFA55C"} align={"center"}></Text>
+          </Stack>
+        </Box>
+      </Stack>
+    </Flex>
+
+  )
+
+  /* return (
   <div> 
     <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
       <Center>
@@ -65,7 +105,7 @@ export function CreateAccountPage() {
       </Center>
     </Container>
   </div>
-  )
+  ) */
 }
 
 /* <FormLabel>Confirm Email Address:</FormLabel>
