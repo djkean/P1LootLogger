@@ -6,6 +6,7 @@ import { TablesPage } from "./pages/tables";
 import { ItemTable } from "./pages/itemtable";
 import { BossTable } from "./pages/bosstable.jsx";
 import { BossInfo } from "./pages/bossinfo.jsx";
+import { BossDetails } from "./pages/bossdetails.jsx";
 import { ChakraProvider } from "@chakra-ui/react";
 import { CreateAccountPage } from "./pages/createaccount.jsx";
 import { LoginPage } from "./pages/login.jsx";
@@ -21,6 +22,7 @@ export function App() {
           <Route path="/itemtable" element={<ItemTable />} />
           <Route path="/bosstable" element={<BossTable />} />
           <Route path="/bossinfo" element={<BossInfo />} />
+          <Route path="/bossdetails" element={<BossDetails />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/createaccount" element={<CreateAccountPage />} />
         </Routes>

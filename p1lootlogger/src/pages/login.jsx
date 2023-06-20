@@ -44,9 +44,9 @@ export function LoginPage() {
               <Input type="password" sx={InputFieldColors}
               id="ver--password" name="password" onChange={handleFields}/>
               {loginError.password && <Text>{loginError.password}</Text>}
-            </FormControl>
-            <Button sx={FormButton}> Sign in</Button>
+              <Button sx={FormButton}> Sign in</Button>
             <Text color={"#BFA55C"} align={"center"}>Forgot Password? Click here</Text>
+            </FormControl>
           </Stack>
         </Box>
       </Stack>

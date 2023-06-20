@@ -36,6 +36,16 @@ router.get("/bossinfo", (req, res) => {
   })
 })
 
+// bossdetails route
+// same route before adding specific params to above
+router.get("/bossdetails", (req, res) => {
+  connection.query(`SELECT * FROM bossinfotable2`, [], (err, results) => {
+    if (err) throw err;
+    console.log(results);
+    res.json({ status: 200, error: null, response: results });
+  })
+})
+
 // signup
 /* router.post("/createaccount", (req, res) => {
   connection.query = "INSERT INTO usertable2 (`username`,`email`,`password`) VALUES (?,?,?)"

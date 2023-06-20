@@ -1,0 +1,13 @@
+{ "Ash": [
+  {
+    "Super Repel": "1-3"
+  }, 
+  {"Super Repel": {
+    "Min": 1, 
+    "Max": 3
+  }
+
+  }
+]
+
+}

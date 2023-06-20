@@ -1,6 +1,7 @@
-import { Badge, Button, Center, Flex, Heading, Image, Link, 
+import { Badge, Button, Center, Flex, Heading, Image, 
   Menu, MenuButton, MenuList, Stack, Text, MenuItem } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { InfoCardStack, InfoImageLayout, InfoSummaryCard, 
   InfoDropBadge, InfoTabStack, InfoTabButton, DropDownMenu } from "../components/pagestyles";
 
@@ -34,7 +35,7 @@ export const BossInfo = () => {
               <Heading fontSize={'2xl'} fontFamily={'body'}> {info.bossName} </Heading>
               <Text fontWeight={600} color={'gray.700'} size="sm" mb={4}> {info.region} / {info.location} </Text>
               <Text textAlign={'center'} px={3} fontWeight={400}> 
-                A comprehensive collection of all {info.bossName}'s information. 
+                <Link to="/bossdetails">A comprehensive collection of all {info.bossName}'s information. </Link>
               </Text>
               <Stack align={'center'} justify={'center'} direction={'row'} mt={4}>
                 <Badge sx={InfoDropBadge}> {info.bossDrops[0]} </Badge>
