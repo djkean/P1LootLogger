@@ -14,13 +14,40 @@ export const BossDetails = () => {
     }
 
     useEffect(() => {
-      console.log(bossDetails)
+      console.log()
       getBossDetailsFromDb()
     }, []);
   
-    if (bossDetails?.length === 0) return <h2>fetching Boss Details...</h2>
+    if (bossDetails.length === 0) return <h2>fetching Boss Details...</h2>
+    
+    bossDetails.map((allInfo) => console.log(allInfo))
+    
+    return (
+    <> 
+      <div>
+        <table border="1px solid black">
+          <tbody>
+            {bossDetails.length > 0 && bossDetails.map((allInfo) => {
+              return (
+                <tr key={allInfo.ID}>
+                  <td>{allInfo.ID}</td>
+                  <td>{allInfo.bossName}</td>
+                  <td>{allInfo.bossDrops}</td>
+                  <td>{allInfo.teamType}</td>
+                  <td>{allInfo.teamSize}</td>
+                  <td>{allInfo.region}</td>
+                  <td>{allInfo.subRegion}</td>
+                  <td>{allInfo.location}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </> )
 
-    bossDetails.map((details) => console.log(details.bossName)) 
+          
+    // <td>{allInfo.teamData}</td>
   }
 
  
