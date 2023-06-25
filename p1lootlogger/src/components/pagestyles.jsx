@@ -180,3 +180,16 @@ export const FormButton = {
     color: "#FDCA40"
   }
 }
+
+export const bossCardStack = {
+  borderWidth: "1px",
+  borderRadius: "lg",
+  border: "1px grey.900",
+  borderColor: "black",
+  bg: "#5D5D5D",
+  boxShadow: 'md',
+  padding: "4",
+  w: { sm: '100%', md: '80rem' },
+  height: { sm: '30rem', md: '40rem' },
+  direction: { base: 'column', md: 'row' }
+}
