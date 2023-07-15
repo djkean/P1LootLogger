@@ -29,9 +29,6 @@ useEffect(() => {
         <Text>A list of all items found in PokeOne</Text>
       </Center>
       <Center>
-        <Text>If you think any items are missing, please let us know!</Text>
-      </Center>
-      <Center>
         <Box sx={itemTableStyles} w="584px">
           <Text>Search bar or something else here later</Text>
         </Box>
