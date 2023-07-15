@@ -54,7 +54,7 @@ export const parentItemGridStyles = {
 
 export const itemGridStyles = {
   bg: "orange.200",
-  h: "4.2em",
+  h: "5.2em",
   px: "0.3em",
   py: "0.1em",
   borderRadius: " 0.3em",

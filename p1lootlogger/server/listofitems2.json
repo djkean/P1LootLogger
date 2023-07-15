@@ -2858,20 +2858,6 @@
       "ItemImage": 426
     },
     {
-      "ID": 426,
-      "Name": "???",
-      "BattleID": "",
-      "Description": "",
-      "ItemImage": 427
-    },
-    {
-      "ID": 427,
-      "Name": "???",
-      "BattleID": "",
-      "Description": "",
-      "ItemImage": 428
-    },
-    {
       "ID": 428,
       "Name": "Explorer Kit",
       "BattleID": "explorerkit",
@@ -4228,13 +4214,6 @@
       "BattleID": "xtransceiver",
       "Description": "A high-tech transceiver with a camera function. It allows up to four-way calls.",
       "ItemImage": 622
-    },
-    {
-      "ID": 622,
-      "Name": "???",
-      "BattleID": "",
-      "Description": "",
-      "ItemImage": 623
     },
     {
       "ID": 623,

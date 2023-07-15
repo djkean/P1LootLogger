@@ -1,4 +1,4 @@
-import { Box, Container, Heading, SimpleGrid, Text, Center, HStack} from "@chakra-ui/react";
+import { Box, Container, Heading, SimpleGrid, Text, Center, HStack, Image} from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState } from "react";
 import { itemTableStyles, parentItemGridStyles, itemGridStyles } from "../components/pagestyles";
@@ -32,18 +32,19 @@ useEffect(() => {
         <Text>If you think any items are missing, please let us know!</Text>
       </Center>
       <Center>
-        <Box sx={itemTableStyles} w="640px">
+        <Box sx={itemTableStyles} w="584px">
           <Text>Search bar or something else here later</Text>
         </Box>
       </Center>
       {itemTableValues.length > 0 && itemTableValues.map((item) => {
         return (
-          <SimpleGrid key={item.itemID} sx={parentItemGridStyles}>
+          <SimpleGrid key={item.id} sx={parentItemGridStyles}>
             <Center>
               <HStack>
-                <Box sx={itemGridStyles} w="6em">Item Image</Box>
-                <Box sx={itemGridStyles} w="8em">{item.itemName}</Box>
-                <Box sx={itemGridStyles} w="25em" mr="2em">{item.itemDescription}</Box>
+                <Box sx={itemGridStyles} w="2.5em"> <Image src={`/images/items/icons/${item.image}.png`}/>
+                </Box>
+                <Box sx={itemGridStyles} w="8em">{item.name}</Box>
+                <Box sx={itemGridStyles} w="25em" mr="2em">{item.description}</Box>
               </HStack>
             </Center>
           </SimpleGrid>

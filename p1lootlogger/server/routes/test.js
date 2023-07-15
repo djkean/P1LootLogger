@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
 
 // /api/test route
 router.get("/test", (req, res) => {
-  connection.query(`SELECT * FROM itemtable`, [], (err, results) => {
+  connection.query(`SELECT * FROM newitemtable`, [], (err, results) => {
     if (err) throw err;
     console.log(results);
     res.json({ status: 200, error: null, response: results });
