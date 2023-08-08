@@ -5,31 +5,27 @@ import { itemTableStyles, parentItemGridStyles, itemGridStyles } from "../compon
 
 export const ItemTable = () => {
 const [itemTableValues, setItemTableValues] = useState([]);
-const [currentPage, setCurrentPage] = useState(1);
+const [page, setPage] = useState(1);
+
+const previousPage = page - 1;
+const nextPage = page + 1;
+const itemsPerPage = 50;
+const totalPages = Math.ceil(itemTableValues.length / itemsPerPage);
+const itemsOnCurrentPage = useMemo(() => {
+  const itemsOnPageMemo = itemTableValues?.sort((a, b) =>
+  itemTableValues[a]?.name.localeCompare(itemTableValues[b]?.name)
+  )
+  ?.filter((_, index) => 
+  index < page * itemsPerPage && index >= previousPage * itemsPerPage)
+  return itemsOnPageMemo;
+}, [page, itemTableValues]);
 
 const getItemsFromDb = async () => {
   const itemDbResponse = await fetch("/api/test", { method: "GET" })
   const itemDbResponseJson = await itemDbResponse.json();
   setItemTableValues(itemDbResponseJson.response)
+  console.log(itemDbResponseJson.response);
   return itemDbResponseJson.response
-}
-
-
-const previousPage = currentPage - 1;
-const nextPage = currentPage + 1;
-const itemsPerPage = 100;
-const totalPages = Math.ceil(Object.keys(matchingItems).length / itemsPerPage);
-const itemsOnCurrentPage = useMemo(() => {
-  const itemsOnPageMemo = Object.keys(matchingItems)?.sort((a, b) => 
-  matchingItems[a].name.localeCompare(matchingItems[b].name)
-  )?.filter(
-    (_, index) => index < currentPage * itemsPerPage 
-    && index >= (currentPage -1) * itemsPerPage);
-    return itemsOnPageMemo;
-}, [currentPage, matchingItems])
-
-const testingOn = () => {
-  console.log("hello there this button works")
 }
 
 useEffect(() => { 
@@ -41,6 +37,16 @@ useEffect(() => {
   return (<div>
     <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
       <Center>
+        <Button onClick={() => setPage(previousPage)}
+        isDisabled={previousPage < 1 ? true : false}>
+          {previousPage}      
+        </Button>
+        <Button onClick={() => setPage(nextPage)}
+        isDisabled={page >= totalPages ? true : false}>
+          {nextPage}
+        </Button>
+      </Center>
+      <Center>
         <Heading my="0.5em" p="0.75em">All Items</Heading>
       </Center>
       <Center>
@@ -48,11 +54,10 @@ useEffect(() => {
       </Center>
       <Center>
         <Box sx={itemTableStyles} w="36.5em">
-          <Button onClick={()=>setCurrentPage((currentPage) => currentPage + 1)}></Button>
           <Text>Search bar or something else here later</Text>
         </Box>
       </Center>
-      {itemTableValues.length > 0 && itemTableValues.map((item) => {
+      {itemsOnCurrentPage.length > 0 && itemsOnCurrentPage.map((item) => {
         return (
           <SimpleGrid key={item.id} sx={parentItemGridStyles}>
             <Center>
