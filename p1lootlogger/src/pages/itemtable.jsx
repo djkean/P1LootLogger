@@ -1,4 +1,4 @@
-import { Box, Button, Container, Heading, SimpleGrid, Text, Center, HStack, Image} from "@chakra-ui/react";
+import { Box, Button, Container, Heading, SimpleGrid, Text, Center, HStack, Image, Input} from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState, useMemo } from "react";
 import { itemTableStyles, parentItemGridStyles, itemGridStyles } from "../components/pagestyles";
@@ -6,26 +6,35 @@ import { itemTableStyles, parentItemGridStyles, itemGridStyles } from "../compon
 export const ItemTable = () => {
 const [itemTableValues, setItemTableValues] = useState([]);
 const [page, setPage] = useState(1);
+const [searchFilter, setSearchFilter] = useState("");
 
 const previousPage = page - 1;
 const nextPage = page + 1;
 const itemsPerPage = 50;
 const totalPages = Math.ceil(itemTableValues.length / itemsPerPage);
 const itemsOnCurrentPage = useMemo(() => {
-  const itemsOnPageMemo = itemTableValues?.sort((a, b) =>
+  const getMatchingItems = itemTableValues?.sort((a, b) =>
   itemTableValues[a]?.name.localeCompare(itemTableValues[b]?.name)
-  )
-  ?.filter((_, index) => 
+  )?.filter((key) => 
+  key.name.toLowerCase().indexOf(searchFilter.toLocaleLowerCase()) > -1)
+
+  const totalSearchResults = getMatchingItems.length
+  const itemsToDisplay = getMatchingItems?.filter((_, index) => 
   index < page * itemsPerPage && index >= previousPage * itemsPerPage)
-  return itemsOnPageMemo;
-}, [page, itemTableValues]);
+  return {itemCount: totalSearchResults, items: itemsToDisplay};
+}, [page, itemTableValues, searchFilter]);
 
 const getItemsFromDb = async () => {
   const itemDbResponse = await fetch("/api/test", { method: "GET" })
   const itemDbResponseJson = await itemDbResponse.json();
   setItemTableValues(itemDbResponseJson.response)
-  console.log(itemDbResponseJson.response);
+  //console.log(itemDbResponseJson.response);
   return itemDbResponseJson.response
+}
+
+const updateSearchQuery = (searchValue) => {
+  setPage(1);
+  setSearchFilter(searchValue)
 }
 
 useEffect(() => { 
@@ -37,6 +46,18 @@ useEffect(() => {
   return (<div>
     <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
       <Center>
+        <Heading my="0.5em" p="0.75em">All Items</Heading>
+      </Center>
+      <Center>
+        <Text>A list of all items found in PokeOne</Text>
+      </Center>
+      <Center>
+        <Box w="36.5em">
+          <Input type="text" onChange={(e) => updateSearchQuery(e.target.value)}></Input>
+        </Box>
+      </Center>
+      <Center>
+        <Text>{itemsOnCurrentPage.itemCount} of {itemTableValues.length} items matched your search.</Text>
         <Button onClick={() => setPage(previousPage)}
         isDisabled={previousPage < 1 ? true : false}>
           {previousPage}      
@@ -46,18 +67,11 @@ useEffect(() => {
           {nextPage}
         </Button>
       </Center>
-      <Center>
-        <Heading my="0.5em" p="0.75em">All Items</Heading>
-      </Center>
-      <Center>
-        <Text>A list of all items found in PokeOne</Text>
-      </Center>
-      <Center>
-        <Box sx={itemTableStyles} w="36.5em">
-          <Text>Search bar or something else here later</Text>
-        </Box>
-      </Center>
-      {itemsOnCurrentPage.length > 0 && itemsOnCurrentPage.map((item) => {
+      {(searchFilter != "" && itemsOnCurrentPage.itemCount == 0) ? (
+        <Center>
+          <Text>No items matched your search.</Text>
+        </Center>
+      ) : itemsOnCurrentPage.itemCount > 0 && itemsOnCurrentPage.items.map((item) => {
         return (
           <SimpleGrid key={item.id} sx={parentItemGridStyles}>
             <Center>
@@ -74,3 +88,16 @@ useEffect(() => {
     </Container>
   </div>);
 };
+
+/* if (searchFilter != "" && itemsOnCurrentPage.length == 0) {
+  return (
+    <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
+      <Center>
+      <Box w="36.5em">
+        <Text>No items matched your search.</Text>
+        <Input type="text" onChange={(e) => updateSearchQuery(e.target.value)}></Input>
+      </Box>
+      </Center>
+    </Container>
+  )
+} */
