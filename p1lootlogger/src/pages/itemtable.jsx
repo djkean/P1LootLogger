@@ -1,17 +1,18 @@
 import { Box, Button, Container, Heading, SimpleGrid, Text, Center, HStack, Image, Input} from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState, useMemo } from "react";
-import { itemTableStyles, parentItemGridStyles, itemGridStyles } from "../components/pagestyles";
+import { pageButtonUI, listGridUI, gridRowUI, searchBarUI } from "../components/pagestyles";
 
 export const ItemTable = () => {
 const [itemTableValues, setItemTableValues] = useState([]);
-const [page, setPage] = useState(1);
 const [searchFilter, setSearchFilter] = useState("");
+const [page, setPage] = useState(1);
 
 const previousPage = page - 1;
 const nextPage = page + 1;
-const itemsPerPage = 50;
+const itemsPerPage = 25;
 const totalPages = Math.ceil(itemTableValues.length / itemsPerPage);
+
 const itemsOnCurrentPage = useMemo(() => {
   const getMatchingItems = itemTableValues?.sort((a, b) =>
   itemTableValues[a]?.name.localeCompare(itemTableValues[b]?.name)
@@ -53,16 +54,16 @@ useEffect(() => {
       </Center>
       <Center>
         <Box w="36.5em">
-          <Input type="text" onChange={(e) => updateSearchQuery(e.target.value)}></Input>
+          <Input type="text" sx={searchBarUI} onChange={(e) => updateSearchQuery(e.target.value)}></Input>
         </Box>
       </Center>
-      <Center>
+      <Center sx={searchBarUI} >
         <Text>{itemsOnCurrentPage.itemCount} of {itemTableValues.length} items matched your search.</Text>
-        <Button onClick={() => setPage(previousPage)}
+        <Button sx={pageButtonUI} onClick={() => setPage(previousPage)}
         isDisabled={previousPage < 1 ? true : false}>
           {previousPage}      
         </Button>
-        <Button onClick={() => setPage(nextPage)}
+        <Button sx={pageButtonUI} onClick={() => setPage(nextPage)}
         isDisabled={page >= totalPages ? true : false}>
           {nextPage}
         </Button>
@@ -73,13 +74,13 @@ useEffect(() => {
         </Center>
       ) : itemsOnCurrentPage.itemCount > 0 && itemsOnCurrentPage.items.map((item) => {
         return (
-          <SimpleGrid key={item.id} sx={parentItemGridStyles}>
+          <SimpleGrid key={item.id} sx={listGridUI}>
             <Center>
               <HStack>
-                <Box sx={itemGridStyles} w="2.5em"> <Image src={`/images/items/icons/${item.image}.png`}/>
+                <Box sx={gridRowUI} w="2.5em"> <Image src={`/images/items/icons/${item.image}.png`}/>
                 </Box>
-                <Box sx={itemGridStyles} w="8em">{item.name}</Box>
-                <Box sx={itemGridStyles} w="25em" mr="2em">{item.description}</Box>
+                <Box sx={gridRowUI} w="8em">{item.name}</Box>
+                <Box sx={gridRowUI} w="25em" mr="2em">{item.description}</Box>
               </HStack>
             </Center>
           </SimpleGrid>
@@ -88,16 +89,3 @@ useEffect(() => {
     </Container>
   </div>);
 };
-
-/* if (searchFilter != "" && itemsOnCurrentPage.length == 0) {
-  return (
-    <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
-      <Center>
-      <Box w="36.5em">
-        <Text>No items matched your search.</Text>
-        <Input type="text" onChange={(e) => updateSearchQuery(e.target.value)}></Input>
-      </Box>
-      </Center>
-    </Container>
-  )
-} */

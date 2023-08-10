@@ -18,17 +18,6 @@ export const ButtonStyles2 = {
   }
 }
 
-export const MenuStyles = {
-  color: "#262626",
-  bg: "#FDCA40",
-  border: "solid 1px #5D5D5D",
-  borderRadius: "0.3em",
-  ':hover': {
-    bg: "#F2A202",
-    boxShadow: "sm",
-  }
-}
-
 export const itemTableStyles = {
   px: "1em",
   py: "1em",
@@ -43,7 +32,7 @@ export const itemTableStyles = {
   }
 }
 
-export const parentItemGridStyles = {
+export const listGridUI = {
   p: "0.3em",
   column: 3,
   spacing: 1,
@@ -52,7 +41,21 @@ export const parentItemGridStyles = {
   margin: "auto",
 }
 
-export const itemGridStyles = {
+
+export const MenuStyles = {
+  color: "#262626",
+  bg: "#FDCA40",
+  border: "solid 1px #5D5D5D",
+  borderRadius: "0.3em",
+  ':hover': {
+    bg: "#F2A202",
+    boxShadow: "sm",
+  }
+}
+
+
+
+export const gridRowUI = {
   bg: "orange.200",
   h: "5.2em",
   px: "0.3em",
@@ -192,4 +195,19 @@ export const bossCardStack = {
   w: { sm: '100%', md: '80rem' },
   height: { sm: '30rem', md: '40rem' },
   direction: { base: 'column', md: 'row' }
+}
+
+export const searchBarUI = {
+  my: "0.5em"
+}
+
+export const pageButtonUI = {
+  mx: "0.25em",
+  my: "0.5em",
+  bg: "orange.200",
+  color: "#2A2823",
+  ':hover': {
+    bg: "orange.300",
+    color: "black"
+  }
 }
