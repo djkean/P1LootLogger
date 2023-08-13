@@ -1,7 +1,7 @@
-import { Box, Container, Heading, SimpleGrid, Text, Center, HStack} from "@chakra-ui/react";
+import { Box, Center, Container, Heading, HStack, SimpleGrid, Text} from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState } from "react";
-import { itemTableStyles, gridRowUI, listGridUI } from "../components/pagestyles";
+import { gridRowUI, listGridUI } from "../components/pagestyles";
 
 export const BossTable = () => {
 const [bossTableValues, setBossTableValues] = useState([]);
@@ -31,11 +31,6 @@ useEffect(() => {
       </Center>
       <Center>
         <Text>If you think any dailies are missing, please let us know!</Text>
-      </Center>
-      <Center>
-        <Box sx={itemTableStyles} w="640px">
-          <Text>Search bar or something else here later</Text>
-        </Box>
       </Center>
       {bossTableValues.length > 0 && bossTableValues.map((boss) => {
         return (

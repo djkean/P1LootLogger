@@ -1,15 +1,13 @@
-import { m } from "framer-motion"
-
-export const ButtonStyles = {
+export const NavButton = {
+  bg: "#FDCA40",
   boxShadow: "sm",
   color: "#262626",
-  bg: "#FDCA40",
   ':hover': {
     bg: "#F2A202",
   }
 }
 
-export const ButtonStyles2 = {
+export const AccountButton = {
   boxShadow: "sm",
   color: "#262626",
   bg: "#DD380F",
@@ -18,7 +16,7 @@ export const ButtonStyles2 = {
   }
 }
 
-export const itemTableStyles = {
+/*export const itemTableStyles = {
   px: "1em",
   py: "1em",
   bg: "orange.200",
@@ -30,7 +28,7 @@ export const itemTableStyles = {
     color: "red.200",
     bg: "purple.400"
   }
-}
+}*/
 
 export const listGridUI = {
   p: "0.3em",
@@ -40,7 +38,6 @@ export const listGridUI = {
   maxW: "3xl",
   margin: "auto",
 }
-
 
 export const MenuStyles = {
   color: "#262626",
@@ -52,8 +49,6 @@ export const MenuStyles = {
     boxShadow: "sm",
   }
 }
-
-
 
 export const gridRowUI = {
   bg: "orange.200",
@@ -202,10 +197,10 @@ export const searchBarUI = {
 }
 
 export const pageButtonUI = {
-  mx: "0.25em",
-  my: "0.5em",
   bg: "orange.200",
   color: "#2A2823",
+  mx: "0.25em",
+  my: "0.5em",
   ':hover': {
     bg: "orange.300",
     color: "black"

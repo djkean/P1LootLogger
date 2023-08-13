@@ -1,6 +1,5 @@
-import { Avatar, Badge, Box, Button, Center, Checkbox, Container, FormControl, FormLabel, Flex, 
-  Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
-import { ButtonStyles, inputStyles, LoginStack, LoginBox, LoginFlex, FormControlColors, InputFieldColors, FormButton } from "../components/pagestyles"
+import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
+import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack} from "../components/pagestyles"
 import { React, useState} from "react";
 import { loginVerification } from "../components/loginVerification";
 
@@ -53,40 +52,3 @@ export function LoginPage() {
     </Flex>
   ) 
 }
-
-        /*  <Text my="1em">Need an account? You can create one </Text>
-        <Text color="#FDCA40"><Link to="/createaccount"> here.</Link></Text> */
-
-        /*  
-        
-        <div> 
-    <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
-      <Center>
-        <Heading my="1em" p="0.75em">Log In</Heading>
-      </Center>
-      <Center>
-        <Text my="1em">Log in by filling the fields below:</Text>
-      </Center>
-      <Center>
-      <Text my="1em">Need an account? You can create one {' '}
-      <Link to="/createaccount" color="#FDCA40">here.</Link> {' '}
-        </Text>   
-      </Center>
-      <Center>
-        <Box as="form" id="login--form" onSubmit={submitFields}>
-          <FormControl>
-            <FormLabel>Email:</FormLabel>
-            <Input sx={inputStyles} type="email" id="ver--email" name="email" onChange={handleFields}/>
-            {loginError.email && <Text>{loginError.email}</Text>}
-            <FormLabel>Password:</FormLabel>
-            <Input sx={inputStyles} type="password" id="ver--password" name="password" onChange={handleFields} placeholder="password"/>
-            {loginError.password && <Text>{loginError.password}</Text>}
-            <Button sx={ButtonStyles} my="1em" type="submit">Log In</Button>
-          </FormControl>
-        </Box>
-      </Center>
-    </Container>
-  </div> 
-        
-        
-        */
