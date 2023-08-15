@@ -1,7 +1,7 @@
 import { Box, Button, Container, Heading, SimpleGrid, Text, Center, HStack, Image, Input} from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState, useMemo } from "react";
-import { pageButtonUI, ListGridUI, GridRowUI, searchBarUI } from "../components/pagestyles";
+import { PageButtonUI, ListGridUI, GridRowUI, SearchBarUI } from "../components/pagestyles";
 
 export const ItemTable = () => {
 const [itemTableValues, setItemTableValues] = useState([]);
@@ -54,16 +54,16 @@ useEffect(() => {
       </Center>
       <Center>
         <Box w="36.5em">
-          <Input type="text" sx={searchBarUI} onChange={(e) => updateSearchQuery(e.target.value)}></Input>
+          <Input type="text" sx={SearchBarUI} onChange={(e) => updateSearchQuery(e.target.value)}></Input>
         </Box>
       </Center>
-      <Center sx={searchBarUI} >
+      <Center sx={SearchBarUI} >
         <Text>{itemsOnCurrentPage.itemCount} of {itemTableValues.length} items matched your search.</Text>
-        <Button sx={pageButtonUI} onClick={() => setPage(previousPage)}
+        <Button sx={PageButtonUI} onClick={() => setPage(previousPage)}
         isDisabled={previousPage < 1 ? true : false}>
           {previousPage}      
         </Button>
-        <Button sx={pageButtonUI} onClick={() => setPage(nextPage)}
+        <Button sx={PageButtonUI} onClick={() => setPage(nextPage)}
         isDisabled={page >= totalPages ? true : false}>
           {nextPage}
         </Button>
@@ -77,10 +77,11 @@ useEffect(() => {
           <SimpleGrid key={item.id} sx={ListGridUI}>
             <Center>
               <HStack>
-                <Box sx={GridRowUI} w="2.5em"> <Image src={`/images/items/icons/${item.image}.png`}/>
+                <Box sx={GridRowUI} w="10em">
+                  <Image src={`/images/items/icons/${item.image}.png`}/>
+                  {item.name}
                 </Box>
-                <Box sx={GridRowUI} w="8em">{item.name}</Box>
-                <Box sx={GridRowUI} w="25em" mr="2em">{item.description}</Box>
+                <Box sx={GridRowUI} w="30em" mr="2em">{item.description}</Box>
               </HStack>
             </Center>
           </SimpleGrid>

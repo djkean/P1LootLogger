@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; 
 import { InfoCardStack, InfoImageLayout, InfoSummaryCard, 
-  InfoDropBadge, InfoTabStack, InfoTabButton, DropDownMenu, bossCardStack } from "../components/pagestyles";
+  InfoDropBadge, InfoTabStack, InfoTabButton, DropDownMenu, BossCardStack } from "../components/pagestyles";
   import { Badge, Center, Flex, Heading, Image, 
     Menu, MenuButton, MenuList, Stack, Text, MenuItem } from "@chakra-ui/react";
 
@@ -41,7 +41,7 @@ export const BossDetails = () => {
     console.log("hello")
     return (
       <Center key={allinfo.ID} py={6} bg={"#2A2823"}>
-        <Stack sx={bossCardStack} w={{sm: '100%', md: '800px'}} height={{sm: '476px', md: '25rem'}} direction={{base: 'column', md: 'row'}}>
+        <Stack sx={BossCardStack} w={{sm: '100%', md: '800px'}} height={{sm: '476px', md: '25rem'}} direction={{base: 'column', md: 'row'}}>
           <Flex flex={1}>
             <Image sx={InfoImageLayout} src={`/images/${allinfo.ID}.png`} />
           </Flex>
