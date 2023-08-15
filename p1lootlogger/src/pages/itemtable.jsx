@@ -1,7 +1,7 @@
 import { Box, Button, Container, Heading, SimpleGrid, Text, Center, HStack, Image, Input} from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState, useMemo } from "react";
-import { pageButtonUI, listGridUI, gridRowUI, searchBarUI } from "../components/pagestyles";
+import { pageButtonUI, ListGridUI, GridRowUI, searchBarUI } from "../components/pagestyles";
 
 export const ItemTable = () => {
 const [itemTableValues, setItemTableValues] = useState([]);
@@ -74,13 +74,13 @@ useEffect(() => {
         </Center>
       ) : itemsOnCurrentPage.itemCount > 0 && itemsOnCurrentPage.items.map((item) => {
         return (
-          <SimpleGrid key={item.id} sx={listGridUI}>
+          <SimpleGrid key={item.id} sx={ListGridUI}>
             <Center>
               <HStack>
-                <Box sx={gridRowUI} w="2.5em"> <Image src={`/images/items/icons/${item.image}.png`}/>
+                <Box sx={GridRowUI} w="2.5em"> <Image src={`/images/items/icons/${item.image}.png`}/>
                 </Box>
-                <Box sx={gridRowUI} w="8em">{item.name}</Box>
-                <Box sx={gridRowUI} w="25em" mr="2em">{item.description}</Box>
+                <Box sx={GridRowUI} w="8em">{item.name}</Box>
+                <Box sx={GridRowUI} w="25em" mr="2em">{item.description}</Box>
               </HStack>
             </Center>
           </SimpleGrid>

@@ -1,7 +1,7 @@
 import { Box, Center, Container, Heading, HStack, SimpleGrid, Text} from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState } from "react";
-import { gridRowUI, listGridUI } from "../components/pagestyles";
+import { GridRowUI, ListGridUI } from "../components/pagestyles";
 
 export const BossTable = () => {
 const [bossTableValues, setBossTableValues] = useState([]);
@@ -34,12 +34,12 @@ useEffect(() => {
       </Center>
       {bossTableValues.length > 0 && bossTableValues.map((boss) => {
         return (
-          <SimpleGrid key={boss.bossID} sx={listGridUI}>
+          <SimpleGrid key={boss.bossID} sx={ListGridUI}>
             <Center>
               <HStack>
-                <Box sx={gridRowUI} w="6em">Boss Image</Box>
-                <Box sx={gridRowUI} w="8em">{boss.bossName}</Box>
-                <Box sx={gridRowUI} w="25em" mr="2em">{boss.bossRegion}</Box>
+                <Box sx={GridRowUI} w="6em">Boss Image</Box>
+                <Box sx={GridRowUI} w="8em">{boss.bossName}</Box>
+                <Box sx={GridRowUI} w="25em" mr="2em">{boss.bossRegion}</Box>
               </HStack>
             </Center>
           </SimpleGrid>

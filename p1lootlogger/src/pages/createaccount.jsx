@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import { React, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Flex, Stack, Box, Heading, Link, Text, Center, Input, Button, FormControl, FormLabel} from "@chakra-ui/react";
-import { LoginFlex, LoginStack, LoginBox,FormButton, InputFieldColors, FormControlColors } from "../components/pagestyles"
+import { Button, Box, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
+import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles"
 import { regVerification } from "../components/regVerification";
 import axios from "axios";
 

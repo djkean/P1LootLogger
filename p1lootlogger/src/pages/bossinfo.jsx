@@ -1,9 +1,7 @@
-import { Badge, Button, Center, Flex, Heading, Image, 
-  Menu, MenuButton, MenuList, Stack, Text, MenuItem } from "@chakra-ui/react";
+import { Badge, Center, Flex, Heading, Image, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { InfoCardStack, InfoImageLayout, InfoSummaryCard, 
-  InfoDropBadge, InfoTabStack, InfoTabButton, DropDownMenu } from "../components/pagestyles";
+import { DropDownMenu, InfoCardStack, InfoDropBadge, InfoImageLayout, InfoSummaryCard, InfoTabButton, InfoTabStack } from "../components/pagestyles";
 
 export const BossInfo = () => {
  const [bossInfoValues, setBossInfoValues] = useState([]);

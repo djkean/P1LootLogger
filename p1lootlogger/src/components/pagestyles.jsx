@@ -1,12 +1,3 @@
-export const NavButton = {
-  bg: "#FDCA40",
-  boxShadow: "sm",
-  color: "#262626",
-  ':hover': {
-    bg: "#F2A202",
-  }
-}
-
 export const AccountButton = {
   boxShadow: "sm",
   color: "#262626",
@@ -16,86 +7,71 @@ export const AccountButton = {
   }
 }
 
-/*export const itemTableStyles = {
-  px: "1em",
-  py: "1em",
+export const GridRowUI = {
   bg: "orange.200",
-  color: "green.400",
-  mx: "1em",
-  my: "0.5em",
-  textAlign: "center",
-  ':hover': {
-    color: "red.200",
-    bg: "purple.400"
-  }
-}*/
+  borderRadius: " 0.3em",
+  boxShadow: "base",
+  h: "5.2em",
+  lineHeight: "1.3em",
+  px: "0.3em",
+  py: "0.1em",
+}
 
-export const listGridUI = {
-  p: "0.3em",
+export const InfoCardStack = {
+  bg: "#5D5D5D",
+  border: "1px grey.900",
+  borderColor: "black",
+  borderRadius: "lg",
+  borderWidth: "1px",
+  boxShadow: '2xl',
+  direction: { base: 'column', md: 'row' },
+  height: { sm: '30rem', md: '20rem' },
+  padding: "4",
+  w: { sm: '100%', md: '540px' },
+}
+
+export const ListGridUI = {
   column: 3,
-  spacing: 1,
-  minChildWidth: "256px",
-  maxW: "3xl",
   margin: "auto",
+  maxW: "3xl",
+  minChildWidth: "256px",
+  p: "0.3em",
+  spacing: 1,
 }
 
 export const MenuStyles = {
-  color: "#262626",
   bg: "#FDCA40",
   border: "solid 1px #5D5D5D",
   borderRadius: "0.3em",
+  color: "#262626",
   ':hover': {
     bg: "#F2A202",
     boxShadow: "sm",
   }
 }
 
-export const gridRowUI = {
-  bg: "orange.200",
-  h: "5.2em",
-  px: "0.3em",
-  py: "0.1em",
-  borderRadius: " 0.3em",
-  boxShadow: "base",
-  lineHeight: "1.3em",
-}
-
-export const inputStyles = {
-  border: "1px solid black"
-}
-
-export const bossInfoStyles = {
-  borderWidth: "14px",
-  borderRadius: "lg",
-  boxShadow: "2xl",
-}
-
-export const InfoCardStack = {
-  borderWidth: "1px",
-  borderRadius: "lg",
-  border: "1px grey.900",
-  borderColor: "black",
-  bg: "#5D5D5D",
-  boxShadow: '2xl',
-  padding: "4",
-  w: { sm: '100%', md: '540px' },
-  height: { sm: '30rem', md: '20rem' },
-  direction: { base: 'column', md: 'row' }
+export const NavButton = {
+  bg: "#FDCA40",
+  boxShadow: "sm",
+  color: "#262626",
+  ':hover': {
+    bg: "#F2A202",
+  }
 }
 
 export const InfoImageLayout = {
-  objectFit: "cover",
+  border:"1px grey.900",
   boxSize: "100%",
-  border:"1px grey.900"
+  objectFit: "cover",
 }
 
 export const InfoSummaryCard = {
+  alignItems: "center",
   flex: 1,
   flexDirection: "column",
   justifyCenter: "center",
-  alignItems: "center",
   p: 1,
-  pt: 2
+  pt: 2,
 }
 
 export const InfoDropBadge = {
