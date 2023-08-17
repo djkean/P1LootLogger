@@ -34,7 +34,6 @@ export function CreateAccountPage() {
     }
   }
 
-
   return (
     <Flex sx={LoginFlex} align={"center"}>
       <Stack sx={LoginStack} spacing={6}>

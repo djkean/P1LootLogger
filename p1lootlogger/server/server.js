@@ -7,6 +7,7 @@ const port = process.env.P1LL_SERVER || 8080;
 const testApi = require("./routes/test");
 const cors = require("cors");
 const connection = require("./connect");
+const jwt = require("jsonwebtoken");
 
 app.use("/api", testApi);
 app.use(cors());
@@ -47,6 +48,14 @@ app.post("/createaccount", (req, res) => {
     res.status(500);
   }
 });
+
+app.post(("/login"), (req, res) => {
+  const username = req.body.username
+  const user = { name: username }
+
+  const loginToken = jwt.sign(user, process.env.P1LL_LOGINTOKEN)
+  res.json({ loginToken: loginToken })
+})
 
 app.listen(port);
 
