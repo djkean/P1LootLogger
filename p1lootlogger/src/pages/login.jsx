@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack} from "../components/pagestyles"
 import { React, useState} from "react";
 import { loginVerification } from "../components/loginVerification";
@@ -19,6 +19,7 @@ export function LoginPage() {
   const submitFields = (event) => {
     event.preventDefault();
     setLoginError(loginVerification(loginDetails))
+    console.log(loginDetails)
   }
  
   return (
@@ -43,7 +44,9 @@ export function LoginPage() {
               <Input type="password" sx={InputFieldColors}
               id="ver--password" name="password" onChange={handleFields}/>
               {loginError.password && <Text>{loginError.password}</Text>}
-              <Button sx={FormButton}> Sign in</Button>
+              <Center>
+                <Input type="submit" sx={FormButton} value="Sign In"/>
+              </Center>
               <Text color={"#BFA55C"} align={"center"}>Forgot Password? Click here</Text>
             </FormControl>
           </Stack>

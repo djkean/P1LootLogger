@@ -1,6 +1,6 @@
 export function regVerification(regDetails) {
   let error = {}
-  const usernamePattern = /^[a-z0-9_-]{3,16}$/
+  const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
   const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/ 
   const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 

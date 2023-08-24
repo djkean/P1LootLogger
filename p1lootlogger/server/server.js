@@ -49,13 +49,29 @@ app.post("/createaccount", (req, res) => {
   }
 });
 
-app.post(("/login"), (req, res) => {
+app.post("/login", (req, res) => {
+  const loginQuery = "SELECT * FROM usertable2 WHERE email = ? AND password = ?";
+  const loginValues = [
+    req.body.email,
+    req.body.password
+  ]
+  connection.query(loginQuery, [loginValues], (err, response) => {
+    if (err) {
+      return res.json("LOGIN UNSUCCESSFUL", err)
+    }
+    else if (response) {
+      return res.json(response)
+    }
+  })
+})
+
+/* app.post(("/login"), (req, res) => {
   const username = req.body.username
   const user = { name: username }
 
   const loginToken = jwt.sign(user, process.env.P1LL_LOGINTOKEN)
   res.json({ loginToken: loginToken })
-})
+}) */
 
 app.listen(port);
 
