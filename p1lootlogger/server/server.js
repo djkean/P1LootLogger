@@ -51,16 +51,20 @@ app.post("/createaccount", (req, res) => {
 
 app.post("/login", (req, res) => {
   const loginQuery = "SELECT * FROM usertable2 WHERE email = ? AND password = ?";
-  const loginValues = [
-    req.body.email,
-    req.body.password
-  ]
-  connection.query(loginQuery, [loginValues], (err, response) => {
+  connection.query(loginQuery, [req.body.email, req.body.password], (err, result) => {
     if (err) {
-      return res.json("LOGIN UNSUCCESSFUL", err)
+      console.log("LOGIN QUERY UNSUCCESSFUL", err);
+      res.status(500).send("NOT GOOD LOGIN");
     }
-    else if (response) {
-      return res.json(response)
+    else if (res) {
+      if (result.length > 0) {
+        console.log("successful login query", result)
+        res.status(200).send("success");
+      }
+      else {
+        console.log("LOGIN UNSUCCESSFUL")
+        res.status(401).send("incorrect credentials")
+      }
     }
   })
 })

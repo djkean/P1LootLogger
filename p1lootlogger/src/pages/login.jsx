@@ -2,6 +2,7 @@ import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Link
 import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack} from "../components/pagestyles"
 import { React, useState} from "react";
 import { loginVerification } from "../components/loginVerification";
+import axios from "axios";
 
 export function LoginPage() {
   const [loginDetails, setLoginDetails] = useState({
@@ -20,6 +21,9 @@ export function LoginPage() {
     event.preventDefault();
     setLoginError(loginVerification(loginDetails))
     console.log(loginDetails)
+    axios.post("http://localhost:8080/login", loginDetails)
+    .then(res => console.log("axios post success", res))
+    .catch(err => console.log("axios post failed", err))
   }
  
   return (
