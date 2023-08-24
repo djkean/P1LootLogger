@@ -11,7 +11,7 @@ export function CreateAccountPage() {
     email: "",
     password: "",
   })
-  
+
   const [regError, setRegError] = useState({})
 
   const handleFields = (event) => {

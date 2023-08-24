@@ -22,8 +22,8 @@ export function LoginPage() {
     setLoginError(loginVerification(loginDetails))
     console.log(loginDetails)
     axios.post("http://localhost:8080/login", loginDetails)
-    .then(res => console.log("axios post success", res))
-    .catch(err => console.log("axios post failed", err))
+    .then(res => console.log("axios post SUCCESS", res))
+    .catch(err => console.log("axios post ERROR", err))
   }
  
   return (
