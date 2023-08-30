@@ -19,7 +19,7 @@ export function CreateAccountPage() {
   }
 
   const navigate = useNavigate();
-  const submitFields = (event) => {
+  const submitFields = async (event) => {
     event.preventDefault();
     setRegError(regVerification(regDetails))
     let error = regVerification(regDetails)
@@ -28,7 +28,7 @@ export function CreateAccountPage() {
     console.log(error.username, error.email, error.password)
     if (error.username === "" && error.email === "" && error.password === "") {
       console.log("123")
-      axios.post("http://localhost:8080/createaccount", regDetails)
+      await axios.post("http://localhost:8080/createaccount", regDetails)
       .then((res => navigate("/login")))
       .catch((err => console.log(err)))
     }

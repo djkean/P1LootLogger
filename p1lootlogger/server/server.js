@@ -8,6 +8,8 @@ const testApi = require("./routes/test");
 const cors = require("cors");
 const connection = require("./connect");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+
 
 app.use("/api", testApi);
 app.use(cors());
@@ -27,11 +29,16 @@ app.get("/*", (req, res, next) => {
   res.sendFile(path.join(static_dir, "index.html"));
 });
 
-app.post("/createaccount", (req, res) => {
+app.post("/createaccount", async (req, res) => {
   try {
+    const password = await req.body.password.toString()
+    const keystring = process.env.P1LL_HASHSTRING.toString()
+    const hash4 = crypto.pbkdf2Sync(password, keystring, 1000, 64, "sha256").toString("hex")
+    console.log(chalk.red(hash4))
+
     connection.query(
-      "INSERT INTO `usertable2` (`username`,`email`,`password`,`status`) VALUES (?,?,?,'4')",
-      [req.body.username, req.body.email, req.body.password],
+      "INSERT INTO `usertable3` (`username`,`email`,`password`,`status`) VALUES (?,?,?,'4')",
+      [req.body.username, req.body.email, hash4],
       (err, result) => {
         console.log(req.body.username);
         if (err) {
@@ -58,12 +65,12 @@ app.post("/login", (req, res) => {
     }
     else if (res) {
       if (result.length > 0) {
-        console.log("successful login query", result)
+        console.log("successful login query", result);
         res.status(200).send("success");
       }
       else {
-        console.log("LOGIN UNSUCCESSFUL")
-        res.status(401).send("incorrect credentials")
+        console.log("LOGIN UNSUCCESSFUL");
+        res.status(401).send("incorrect credentials");
       }
     }
   })
