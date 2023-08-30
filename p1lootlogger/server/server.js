@@ -33,7 +33,8 @@ app.post("/createaccount", async (req, res) => {
   try {
     const password = await req.body.password.toString()
     const keystring = process.env.P1LL_HASHSTRING.toString()
-    const hash4 = crypto.pbkdf2Sync(password, keystring, 1000, 64, "sha256").toString("hex")
+    const salt = crypto.randomBytes(16).toString("hex")
+    const hash4 = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha256").toString("hex")
     console.log(chalk.red(hash4))
 
     connection.query(
@@ -75,6 +76,11 @@ app.post("/login", (req, res) => {
     }
   })
 })
+
+const testPassword = "password123"
+const testSalt = crypto.randomBytes(16).toString("hex")
+const hashedPass = crypto.pbkdf2Sync(testPassword, testSalt, 1000, 64, "sha256").toString("hex")
+console.log(hashedPass)
 
 /* app.post(("/login"), (req, res) => {
   const username = req.body.username
