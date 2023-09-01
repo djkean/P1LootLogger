@@ -2,7 +2,7 @@
   "name": "p1lootlogger",
   "version": "0.1.0",
   "private": true,
-  "homepage": "./",
+  "homepage": "./home",
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.5.1",

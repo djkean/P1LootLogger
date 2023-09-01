@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; 
-import { InfoCardStack, InfoImageLayout, InfoSummaryCard, 
+import { InfoImageLayout, InfoSummaryCard, 
   InfoDropBadge, InfoTabStack, InfoTabButton, DropDownMenu, BossCardStack } from "../components/pagestyles";
-  import { Badge, Center, Flex, Heading, Image, 
-    Menu, MenuButton, MenuList, Stack, Text, MenuItem } from "@chakra-ui/react";
+import { Badge, Center, Flex, Heading, Image, 
+  Menu, MenuButton, MenuList, Stack, Text, MenuItem } from "@chakra-ui/react";
 
 export const BossDetails = () => {
   const [bossDetails, setBossDetails] = useState([]);
@@ -26,11 +26,6 @@ export const BossDetails = () => {
   useEffect(() => {
     getBossDetailsFromDb();
     getBossListFromDb();
-
-    console.clear();
-    console.log('BossDetails component re-render');
-    console.log(bossDetails)
-    console.log(bossListValues)
   }, []);
 
   if (bossDetails.length === 0) return <h2>fetching Boss Details...</h2>;
@@ -38,7 +33,6 @@ export const BossDetails = () => {
  return (
   <>
   {bossDetails?.length > 0 && bossDetails.filter((boss => boss.ID === 101)).map((allinfo) => {
-    console.log("hello")
     return (
       <Center key={allinfo.ID} py={6} bg={"#2A2823"}>
         <Stack sx={BossCardStack} w={{sm: '100%', md: '800px'}} height={{sm: '476px', md: '25rem'}} direction={{base: 'column', md: 'row'}}>

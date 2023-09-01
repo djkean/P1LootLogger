@@ -68,7 +68,7 @@ useEffect(() => {
           {nextPage}
         </Button>
       </Center>
-      {(searchFilter != "" && itemsOnCurrentPage.itemCount == 0) ? (
+      {(searchFilter !== "" && itemsOnCurrentPage.itemCount === 0) ? (
         <Center>
           <Text>No items matched your search.</Text>
         </Center>

@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const chalk = require("chalk");
 const router = express.Router();
 const connection = require("../connect");
 
@@ -13,7 +12,7 @@ router.get("/", (req, res) => {
 router.get("/test", (req, res) => {
   connection.query(`SELECT * FROM newitemtable`, [], (err, results) => {
     if (err) throw err;
-    console.log(results);
+    //console.log(results);
     res.json({ status: 200, error: null, response: results });
   });
 });
@@ -22,7 +21,7 @@ router.get("/test", (req, res) => {
 router.get("/boss", (req, res) => {
   connection.query(`SELECT * FROM bosstable`, [], (err, results) => {
     if (err) throw err;
-    console.log(results);
+    //console.log(results);
     res.json({ status: 200, error: null, response: results });
   });
 });
@@ -31,7 +30,7 @@ router.get("/boss", (req, res) => {
 router.get("/bossinfo", (req, res) => {
   connection.query(`SELECT * FROM bossinfotable2`, [], (err, results) => {
     if (err) throw err;
-    console.log(results);
+    //console.log(results);
     res.json({ status: 200, error: null, response: results });
   })
 })
@@ -41,14 +40,9 @@ router.get("/bossinfo", (req, res) => {
 router.get("/bossdetails", (req, res) => {
   connection.query(`SELECT * FROM bossinfotable2`, [], (err, results) => {
     if (err) throw err;
-    console.log(results);
+    //console.log(results);
     res.json({ status: 200, error: null, response: results });
   })
 })
-
-// signup
-/* router.post("/createaccount", (req, res) => {
-  connection.query = "INSERT INTO usertable2 (`username`,`email`,`password`) VALUES (?,?,?)"
-}) */
 
 module.exports = router;
