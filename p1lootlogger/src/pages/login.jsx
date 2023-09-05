@@ -14,7 +14,7 @@ export function LoginPage() {
   const [loginError, setLoginError] = useState({})
 
   const handleFields = (event) => {
-    setLoginDetails(_ => ({..._, [event.target.name]: [event.target.value]}))
+    setLoginDetails(_ => ({..._, [event.target.name]: event.target.value}))
   }
 
   const submitFields = (event) => {

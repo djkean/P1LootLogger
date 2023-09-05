@@ -52,22 +52,23 @@ app.post("/createaccount", async (req, res) => {
   }
 });
 
-app.post("/login", (req, res) => {
-  const loginQuery = "SELECT * FROM usertable2 WHERE email = ? AND password = ?";
-  connection.query(loginQuery, [req.body.email, req.body.password], (err, result) => {
+app.post("/login", async (req, res) => {
+  const typedPassword = req.body.password
+  const loginQuery2 = "SELECT `email`, `password`, `salt` FROM `usertable3` WHERE `email` = ? LIMIT 1"
+  connection.query(loginQuery2, [req.body.email], async (err, result) => {
+    const {email, password, salt} = result[0]
+    const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
     if (err) {
       console.log(chalk.red("LOGIN QUERY UNSUCCESSFUL"), err);
-      res.status(500).send("SOMETHING WENT WRONG  ");
+      res.status(500).send("SOMETHING WENT WRONG");
     }
-    else if (res) {
-      if (result.length > 0) {
-        console.log(chalk.green("LOGIN QUERY SUCCESSFUL"), result);
-        res.status(200).send("LOGIN OK");
-      }
-      else {
-        console.log(chalk.red("LOGIN UNSUCCESSFUL"));
-        res.status(401).send("INCORRECT CREDENTIALS");
-      }
+    else if (password === comparedPass) {
+      console.log(chalk.green("LOGIN QUERY SUCCESSFUL"));
+      res.status(200).send("LOGIN OK");
+    }
+    else {
+      console.log(chalk.red("LOGIN UNSUCCESSFUL"));
+      res.status(401).send("INCORRECT CREDENTIALS");
     }
   })
 })
