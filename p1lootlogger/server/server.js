@@ -56,30 +56,28 @@ app.post("/login", async (req, res) => {
   const typedPassword = req.body.password
   const loginQuery2 = "SELECT `email`, `password`, `salt` FROM `usertable3` WHERE `email` = ? LIMIT 1"
   connection.query(loginQuery2, [req.body.email], async (err, result) => {
-    const {email, password, salt} = result[0]
+    if (typeof result[0]?.email === "undefined") {
+      console.log(chalk.red("LOGIN UNSUCCESSFUL, INVALID EMAIL"))
+      res.status(401).send({ message: "LOGIN UNSUCCESSFUL, INVALID EMAIL" })
+      return
+    }
+    const { email, password, salt } = result[0]
     const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
     if (err) {
       console.log(chalk.red("LOGIN QUERY UNSUCCESSFUL"), err);
-      res.status(500).send("SOMETHING WENT WRONG");
+      res.status(500).send({ message: "SOMETHING WENT WRONG" });
     }
     else if (password === comparedPass) {
+      const loginToken = jwt.sign(email, process.env.P1LL_LOGINTOKEN)
       console.log(chalk.green("LOGIN QUERY SUCCESSFUL"));
-      res.status(200).send("LOGIN OK");
+      res.status(200).send({ message: "LOGIN SUCCESSFUL", loginToken: loginToken });
     }
     else {
       console.log(chalk.red("LOGIN UNSUCCESSFUL"));
-      res.status(401).send("INCORRECT CREDENTIALS");
+      res.status(401).send({ message: "LOGIN UNSUCCESSFUL, INVALID CREDENTIALS" });
     }
   })
 })
-
-/* app.post(("/login"), (req, res) => {
-  const username = req.body.username
-  const user = { name: username }
-
-  const loginToken = jwt.sign(user, process.env.P1LL_LOGINTOKEN)
-  res.json({ loginToken: loginToken })
-}) */
 
 app.listen(port);
 console.log(chalk.green(`listening on port ${port}`));
