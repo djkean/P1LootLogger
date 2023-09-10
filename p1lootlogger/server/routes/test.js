@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const connection = require("../connect");
+const jwt = require("jsonwebtoken");
 
 // /api route
 router.get("/", (req, res) => {
@@ -10,6 +11,7 @@ router.get("/", (req, res) => {
 
 // /api/test route
 router.get("/test", (req, res) => {
+  //jwt.verify(,process.env.P1LL_LOGINTOKEN)
   connection.query(`SELECT * FROM newitemtable`, [], (err, results) => {
     if (err) throw err;
     //console.log(results);

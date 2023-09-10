@@ -10,6 +10,12 @@ const connection = require("./connect");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
+const verifyUser = (req, res, next) => {
+  console.log("CHECKING TOKEN");
+  next();
+}
+
+app.use(verifyUser);
 app.use("/api", testApi);
 app.use(cors());
 app.use(express.json());
@@ -54,8 +60,8 @@ app.post("/createaccount", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const typedPassword = req.body.password
-  const loginQuery2 = "SELECT `email`, `password`, `salt` FROM `usertable3` WHERE `email` = ? LIMIT 1"
-  connection.query(loginQuery2, [req.body.email], async (err, result) => {
+  const loginQuery = "SELECT `email`, `password`, `salt` FROM `usertable3` WHERE `email` = ? LIMIT 1"
+  connection.query(loginQuery, [req.body.email], async (err, result) => {
     if (typeof result[0]?.email === "undefined") {
       console.log(chalk.red("LOGIN UNSUCCESSFUL, INVALID EMAIL"))
       res.status(401).send({ message: "LOGIN UNSUCCESSFUL, INVALID EMAIL" })

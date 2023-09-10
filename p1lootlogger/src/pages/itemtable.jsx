@@ -26,7 +26,7 @@ const itemsOnCurrentPage = useMemo(() => {
 }, [page, itemTableValues, searchFilter]);
 
 const getItemsFromDb = async () => {
-  const itemDbResponse = await fetch("/api/test", { method: "GET" })
+  const itemDbResponse = await fetch("/api/test", { headers: { "Authorization": `Bearer ${Token}`, "Content-Type": "application/json" } } ,{ method: "GET" })
   const itemDbResponseJson = await itemDbResponse.json();
   setItemTableValues(itemDbResponseJson.response)
   //console.log(itemDbResponseJson.response);
