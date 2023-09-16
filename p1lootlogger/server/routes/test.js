@@ -5,12 +5,12 @@ const router = express.Router();
 const connection = require("../connect");
 const jwt = require("jsonwebtoken");
 //const expressJwt = require("express-jwt");
-const { expressJwt: eJwt } = require("express-jwt")
+//const { expressJwt: eJwt } = require("express-jwt")
 
 const JWTKEY = process.env.P1LL_LOGINTOKEN;
 //const checkToken = req.headers["Authorization"].split(" ")[1], 
 
-app.use(
+/* app.use(
   jwt({
     secret: JWTKEY,
     algorithms: ["HS256"],
@@ -27,7 +27,7 @@ app.use(
     path: ["/login", "/createaccount"],
   }
   )
-) 
+) */
 
 
 // /api route

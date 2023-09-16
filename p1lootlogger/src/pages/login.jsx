@@ -22,7 +22,10 @@ export function LoginPage() {
     setLoginError(loginVerification(loginDetails))
     console.log(loginDetails)
     axios.post("http://localhost:8080/login", loginDetails)
-    .then(res => console.log("axios post SUCCESS", res))
+    .then(res => {
+      localStorage.setItem("P1LL_TOKEN", res.data.loginToken)
+      console.log("axios post SUCCESS", res)
+    })
     .catch(err => console.log("axios post ERROR", err))
   }
  

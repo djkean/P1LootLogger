@@ -9,11 +9,27 @@ const cors = require("cors");
 const connection = require("./connect");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+//const cookie = require("cookie");
 
 const verifyUser = (req, res, next) => {
-  console.log("CHECKING TOKEN");
-  next();
-}
+  console.log("CHECKING TOKEN", req);
+  const header = req.headers['authorization']
+  const token = header && header.split(" ")[1]
+  const secret = process.env.P1LL_SECRETTOKEN
+  console.log(req.headers)
+  //console.log(header, token)
+  if (token == null) {
+    console.log("TOKEN CHECK FAIL")
+    return
+  }
+
+  jwt.verify(token, secret, (err, email) => {
+    if (err) console.log("INVALID TOKEN")
+    req.email = email
+    console.log("TOKEN CHECK OK")
+    next();
+  })
+} 
 
 app.use(verifyUser);
 app.use("/api", testApi);
@@ -75,7 +91,14 @@ app.post("/login", async (req, res) => {
     }
     else if (password === comparedPass) {
       const loginToken = jwt.sign(email, process.env.P1LL_LOGINTOKEN)
-      console.log(chalk.green("LOGIN QUERY SUCCESSFUL"));
+      /* console.log(chalk.green("LOGIN QUERY SUCCESSFUL"));
+      res.setHeader("Set-Cookie", cookie.serialize("jwt", loginToken, {
+        httpOnly: true, 
+        maxAge: 60 * 60 * 2, // SS * MM * HH * DD
+        sameSite: "strict",
+        secure: false,
+        path: "/"
+      })) */
       res.status(200).send({ message: "LOGIN SUCCESSFUL", loginToken: loginToken });
     }
     else {

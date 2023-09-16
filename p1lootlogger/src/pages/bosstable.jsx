@@ -2,12 +2,14 @@ import { Box, Center, Container, Heading, HStack, SimpleGrid, Text} from "@chakr
 import React from "react";
 import { useEffect, useState } from "react";
 import { GridRowUI, ListGridUI } from "../components/pagestyles";
+import { getToken } from "../shared/getToken";
 
 export const BossTable = () => {
 const [bossTableValues, setBossTableValues] = useState([]);
-
 const getBossesFromDb = async () => {
-  const bossDbResponse = await fetch("/api/boss", { method: "GET" })
+  const bossDbResponse = await fetch("/api/boss", { headers: {
+    "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json"
+  } }, { method: "GET" })
   const bossDbResponseJson = await bossDbResponse.json();
   setBossTableValues(bossDbResponseJson.response)
   return bossDbResponseJson.response
