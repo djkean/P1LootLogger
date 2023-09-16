@@ -36,7 +36,7 @@ useEffect(() => {
       </Center>
       {bossTableValues.length > 0 && bossTableValues.map((boss) => {
         return (
-          <SimpleGrid key={boss.bossID} sx={ListGridUI}>
+          <SimpleGrid key={boss.ID} sx={ListGridUI}>
             <Center>
               <HStack>
                 <Box sx={GridRowUI} w="6em">Boss Image</Box>

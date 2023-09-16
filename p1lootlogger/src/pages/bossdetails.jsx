@@ -4,13 +4,16 @@ import { InfoImageLayout, InfoSummaryCard,
   InfoDropBadge, InfoTabStack, InfoTabButton, DropDownMenu, BossCardStack } from "../components/pagestyles";
 import { Badge, Center, Flex, Heading, Image, 
   Menu, MenuButton, MenuList, Stack, Text, MenuItem } from "@chakra-ui/react";
+import { getToken } from "../shared/getToken";
 
 export const BossDetails = () => {
   const [bossDetails, setBossDetails] = useState([]);
   const [bossListValues, setBossListValues] = useState([])
 
   const getBossDetailsFromDb = async () => {
-    const bossDetailsResponse = await fetch("/api/bossdetails", { method: "GET" });
+    const bossDetailsResponse = await fetch("/api/bossdetails", { headers: {
+      "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json"
+    } }, { method: "GET" });
     const bossDetailsResponseJson = await bossDetailsResponse.json();
     setBossDetails(bossDetailsResponseJson.response);
     return bossDetailsResponseJson.response;
@@ -58,8 +61,8 @@ export const BossDetails = () => {
               <Menu direction={"row"}>
                 <MenuButton sx={InfoTabButton}>View Loot</MenuButton>
                 <MenuList bg="#5D5D5D">
-                  {allinfo.bossDrops.map((drops) => {
-                    return (<MenuItem sx={DropDownMenu}>{drops}</MenuItem>)
+                  {allinfo.bossDrops.map((drops, index) => {
+                    return (<MenuItem key={index} sx={DropDownMenu}>{drops}</MenuItem>)
                   })}
                 </MenuList>
               </Menu>
@@ -68,8 +71,8 @@ export const BossDetails = () => {
               <Menu>
                 <MenuButton sx={InfoTabButton}>View Roster</MenuButton>
                 <MenuList bg="#5D5D5D">
-                  {allinfo.teamData.map((roster) => {
-                    return (<MenuItem sx={DropDownMenu}>{roster.Pokemon}</MenuItem>)
+                  {allinfo.teamData.map((roster, index) => {
+                    return (<MenuItem key={index} sx={DropDownMenu}>{roster.Pokemon}</MenuItem>)
                   })}
                 </MenuList>
               </Menu>

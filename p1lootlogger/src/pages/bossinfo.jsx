@@ -2,12 +2,15 @@ import { Badge, Center, Flex, Heading, Image, Menu, MenuButton, MenuItem, MenuLi
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DropDownMenu, InfoCardStack, InfoDropBadge, InfoImageLayout, InfoSummaryCard, InfoTabButton, InfoTabStack } from "../components/pagestyles";
+import { getToken } from "../shared/getToken";
 
 export const BossInfo = () => {
  const [bossInfoValues, setBossInfoValues] = useState([]);
 
   const getBossInfoFromDb = async () => {
-    const bossInfoDbResponse = await fetch("/api/bossinfo", {method: "GET" })
+    const bossInfoDbResponse = await fetch("/api/bossinfo", { headers: {
+      "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json"
+    } }, {method: "GET" })
     const bossInfoDbResponseJson = await bossInfoDbResponse.json();
     setBossInfoValues(bossInfoDbResponseJson.response)
     return bossInfoDbResponseJson.response

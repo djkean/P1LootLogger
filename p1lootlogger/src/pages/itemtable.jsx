@@ -3,13 +3,11 @@ import React from "react";
 import { useEffect, useState, useMemo } from "react";
 import { PageButtonUI, ListGridUI, GridRowUI, SearchBarUI } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
-//import { useCookies } from "react-cookie";
 
 export const ItemTable = () => {
 const [itemTableValues, setItemTableValues] = useState([]);
 const [searchFilter, setSearchFilter] = useState("");
 const [page, setPage] = useState(1);
-//const [cookie, setCookie] = useCookies([])
 
 const previousPage = page - 1;
 const nextPage = page + 1;
@@ -29,8 +27,7 @@ const itemsOnCurrentPage = useMemo(() => {
 }, [page, itemTableValues, searchFilter]);
 
 const getItemsFromDb = async () => {
-  const token = getToken()
-  const itemDbResponse = await fetch("/api/test", { headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" } } ,{ method: "GET" })
+  const itemDbResponse = await fetch("/api/test", { headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" } } ,{ method: "GET" })
   const itemDbResponseJson = await itemDbResponse.json();
   setItemTableValues(itemDbResponseJson.response)
   //console.log(itemDbResponseJson.response);
@@ -41,25 +38,6 @@ const updateSearchQuery = (searchValue) => {
   setPage(1);
   setSearchFilter(searchValue)
 }
-
-/* useEffect(() => {
-  const jwt = cookie.jwt
-  if (jwt) {
-    fetch("/api/test", {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${jwt}`
-      },
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-    })
-    .catch(error => {
-      console.error(error)
-    })
-  }
-}, [cookie.jwt]) */
 
 useEffect(() => { 
   getItemsFromDb()
