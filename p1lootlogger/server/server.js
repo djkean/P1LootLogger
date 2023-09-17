@@ -10,13 +10,12 @@ const connection = require("./connect");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-const optOutPaths = ["/login", "/createaccount"];
-
+const optOut = ["/login", "/createaccount"];
 const verifyUser = (req, res, next) => {
   const path = req.path
   //console.log(req.headers)
   //console.log(header, token)
-  if (optOutPaths.includes(path)) {
+  if (optOut.includes(path)) {
     next()
   }
   else {
@@ -25,14 +24,19 @@ const verifyUser = (req, res, next) => {
     const token = header && header.split(" ")[1]
     const secret = process.env.P1LL_SECRETTOKEN
     if (token == null) {
-      console.log("TOKEN CHECK FAIL")
-      return
+      console.log("TOKEN CHECK FAIL - NO TOKEN")
+      return //res.status(403).json({ message: "Invalid Token "});
     }
   
     jwt.verify(token, secret, (err, decoded) => {
-      if (err) console.log(err)
-      console.log("TOKEN CHECK OK")
-      next();
+      if (err) {
+        console.log("TOKEN AUTH FAIL - INVALID TOKEN")
+        return //res.status(403).json({ message: "Invalid Token "});
+      }
+      else {
+        console.log("TOKEN CHECK OK")
+        next();
+      }
     })
   }
 } 
@@ -97,6 +101,7 @@ app.post("/login", async (req, res) => {
     }
     else if (password === comparedPass) {
       const loginToken = jwt.sign(email, process.env.P1LL_SECRETTOKEN)
+      console.log(chalk.green("LOGIN SUCCESSFUL"))
       res.status(200).send({ message: "LOGIN SUCCESSFUL", loginToken: loginToken });
     }
     else {

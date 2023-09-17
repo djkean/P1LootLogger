@@ -15,25 +15,35 @@ export function Nav() {
           <Flex wrap="wrap">Tables <ChevronDown /></Flex>
         </MenuButton>
         <MenuList bg="#5D5D5D" border="1px solid black">
-          <MenuItem sx={MenuStyles}>
-            <Link to="/itemtable">Items</Link>
-          </MenuItem>
-          <MenuItem sx={MenuStyles}>
-            <Link to="/bosstable">Bosses</Link>
-          </MenuItem>
-          <MenuItem sx={MenuStyles}>
-            <Link to="/bossinfo">Boss Info</Link>
-          </MenuItem>
+          <Link to="/itemtable">
+            <MenuItem sx={MenuStyles}>Items</MenuItem>
+          </Link>
+          <Link to="/bosstable">
+            <MenuItem sx={MenuStyles}>Bosses</MenuItem>
+          </Link>
+          <Link to="/bossinfo">
+            <MenuItem sx={MenuStyles}>Boss Info</MenuItem>
+          </Link>
         </MenuList>
       </Menu>
     </Box>
     <Spacer /> 
     <HStack>
       <Box>
-        <Button sx={NavButton}><Link to="/createaccount">Create Account</Link></Button></Box>
-      <Box><Button sx={NavButton}><Link to="/login">Log In</Link></Button></Box>
-      <Box><Button sx={AccountButton}>Username</Button></Box>
-      <Box><Button sx={AccountButton}>Log Out</Button></Box>
+        <Link to="/createaccount">
+          <Button sx={NavButton}>Create Account</Button>
+        </Link>
+      </Box>
+      <Box>
+        <Link to="/login"><Button sx={NavButton}>Log In</Button>
+        </Link>
+      </Box>
+      <Box>
+        <Button sx={AccountButton}>Username</Button>
+        </Box>
+      <Box>
+        <Button sx={AccountButton}>Log Out</Button>
+      </Box>
     </HStack>
   </Flex>
   )

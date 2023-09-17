@@ -158,6 +158,7 @@ export const MenuStyles = {
   border: "solid 1px #5D5D5D",
   borderRadius: "0.3em",
   color: "#262626",
+  display: "block",
   ':hover': {
     bg: "#F2A202",
     boxShadow: "sm",
