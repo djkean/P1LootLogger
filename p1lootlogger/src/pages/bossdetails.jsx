@@ -8,7 +8,7 @@ import { getToken } from "../shared/getToken";
 
 export const BossDetails = () => {
   const [bossDetails, setBossDetails] = useState([]);
-  const [bossListValues, setBossListValues] = useState([])
+  //const [bossListValues, setBossListValues] = useState([])
 
   const getBossDetailsFromDb = async () => {
     const bossDetailsResponse = await fetch("/api/bossdetails", { headers: {
@@ -19,16 +19,18 @@ export const BossDetails = () => {
     return bossDetailsResponseJson.response;
   }
 
+  /*
   const getBossListFromDb = async () => {
     const bossDbResponse = await fetch("/api/boss", { method: "GET" })
     const bossDbResponseJson = await bossDbResponse.json();
     setBossListValues(bossDbResponseJson.response)
     return bossDbResponseJson.response
   } 
+  */
 
   useEffect(() => {
     getBossDetailsFromDb();
-    getBossListFromDb();
+    //getBossListFromDb();
   }, []);
 
   if (bossDetails.length === 0) return <h2>fetching Boss Details...</h2>;

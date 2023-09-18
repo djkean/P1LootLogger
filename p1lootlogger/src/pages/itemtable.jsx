@@ -24,7 +24,7 @@ const itemsOnCurrentPage = useMemo(() => {
   const itemsToDisplay = getMatchingItems?.filter((_, index) => 
   index < page * itemsPerPage && index >= previousPage * itemsPerPage)
   return {itemCount: totalSearchResults, items: itemsToDisplay};
-}, [page, itemTableValues, searchFilter]);
+}, [page, itemTableValues, searchFilter, previousPage]);
 
 const getItemsFromDb = async () => {
   const itemDbResponse = await fetch("/api/test", { headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" } } ,{ method: "GET" })

@@ -22,8 +22,7 @@ export const BossInfo = () => {
   }, []);
 
   if (bossInfoValues.length === 0) return <h2>fetching Boss Info...</h2>
-
-  bossInfoValues.map((bossData) => console.log(bossData.bossDrops, bossData.teamData[0].Pokemon)) 
+  //bossInfoValues.map((bossData) => console.log(bossData.bossDrops, bossData.teamData[0].Pokemon)) 
   return (
     bossInfoValues.length > 0 && bossInfoValues.map((info) => {
       return (
@@ -51,8 +50,8 @@ export const BossInfo = () => {
                 <Menu direction={"row"}>
                   <MenuButton sx={InfoTabButton}>View Loot</MenuButton>
                   <MenuList bg="#5D5D5D">
-                    {info.bossDrops.map((loot) => {
-                      return (<MenuItem sx={DropDownMenu}>{loot}</MenuItem>)
+                    {info.bossDrops.map((loot, index) => {
+                      return (<MenuItem key={index} sx={DropDownMenu}>{loot}</MenuItem>)
                     })}
                   </MenuList>
                 </Menu>
@@ -61,8 +60,8 @@ export const BossInfo = () => {
                 <Menu>
                   <MenuButton sx={InfoTabButton}>View Roster</MenuButton>
                   <MenuList bg="#5D5D5D">
-                    {info.teamData.map((roster) => {
-                      return (<MenuItem sx={DropDownMenu}>{roster.Pokemon}</MenuItem>)
+                    {info.teamData.map((roster, index) => {
+                      return (<MenuItem key={index} sx={DropDownMenu}>{roster.Pokemon}</MenuItem>)
                     })}
                   </MenuList>
                 </Menu>
@@ -80,17 +79,17 @@ export const BossInfo = () => {
 
 /* 
 {info.teamData.map((roster) => {
-                    return (
-                      <MenuItem>{roster.Pokemon}</MenuItem>
-                    )
-                  })}
+  return (
+    <MenuItem>{roster.Pokemon}</MenuItem>
+  )
+})}
 */
 
 /* 
 <MenuItem>{info.teamData[0]?.Pokemon}</MenuItem>
-                    <MenuItem>{info.teamData[1]?.Pokemon}</MenuItem>
-                    <MenuItem>{info.teamData[2]?.Pokemon}</MenuItem>
-                    <MenuItem>{info.teamData[3]?.Pokemon}</MenuItem>
-                    <MenuItem>{info.teamData[4]?.Pokemon}</MenuItem>
-                    <MenuItem>{info.teamData[5]?.Pokemon}</MenuItem>
+<MenuItem>{info.teamData[1]?.Pokemon}</MenuItem>
+<MenuItem>{info.teamData[2]?.Pokemon}</MenuItem>
+<MenuItem>{info.teamData[3]?.Pokemon}</MenuItem>
+<MenuItem>{info.teamData[4]?.Pokemon}</MenuItem>
+<MenuItem>{info.teamData[5]?.Pokemon}</MenuItem>
 */

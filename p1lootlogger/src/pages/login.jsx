@@ -20,13 +20,12 @@ export function LoginPage() {
   const submitFields = (event) => {
     event.preventDefault();
     setLoginError(loginVerification(loginDetails))
-    console.log(loginDetails)
     axios.post("http://localhost:8080/login", loginDetails)
     .then(res => {
       localStorage.setItem("P1LL_TOKEN", res.data.loginToken)
-      console.log("axios post SUCCESS", res)
+      console.log("SUCCESS (AXIOS)")
     })
-    .catch(err => console.log("axios post ERROR", err))
+    .catch(console.log("ERROR (AXIOS)"))
   }
  
   return (
