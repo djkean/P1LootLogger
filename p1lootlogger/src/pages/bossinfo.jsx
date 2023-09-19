@@ -1,19 +1,29 @@
 import { Badge, Center, Flex, Heading, Image, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DropDownMenu, InfoCardStack, InfoDropBadge, InfoImageLayout, InfoSummaryCard, InfoTabButton, InfoTabStack } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
 
 export const BossInfo = () => {
  const [bossInfoValues, setBossInfoValues] = useState([]);
 
+ const navigate = useNavigate()
   const getBossInfoFromDb = async () => {
-    const bossInfoDbResponse = await fetch("/api/bossinfo", { headers: {
-      "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json"
-    } }, {method: "GET" })
-    const bossInfoDbResponseJson = await bossInfoDbResponse.json();
-    setBossInfoValues(bossInfoDbResponseJson.response)
-    return bossInfoDbResponseJson.response
+    try {
+      const bossInfoDbResponse = await fetch("/api/bossinfo", { headers: {
+        "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json"
+      } }, {method: "GET" })
+      if (bossInfoDbResponse.status !== 200) {
+        console.log("You need to log in")
+        navigate("/login")
+      }
+      const bossInfoDbResponseJson = await bossInfoDbResponse.json();
+      setBossInfoValues(bossInfoDbResponseJson.response)
+      return bossInfoDbResponseJson.response
+    }
+    catch(err) {
+      console.log(err, "Something went wrong")
+    }
   }
 
   useEffect(() => {

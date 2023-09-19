@@ -1,22 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom"; 
 import { InfoImageLayout, InfoSummaryCard, 
   InfoDropBadge, InfoTabStack, InfoTabButton, DropDownMenu, BossCardStack } from "../components/pagestyles";
 import { Badge, Center, Flex, Heading, Image, 
   Menu, MenuButton, MenuList, Stack, Text, MenuItem } from "@chakra-ui/react";
 import { getToken } from "../shared/getToken";
 
+
 export const BossDetails = () => {
   const [bossDetails, setBossDetails] = useState([]);
   //const [bossListValues, setBossListValues] = useState([])
 
+  const navigate = useNavigate()
   const getBossDetailsFromDb = async () => {
-    const bossDetailsResponse = await fetch("/api/bossdetails", { headers: {
-      "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json"
-    } }, { method: "GET" });
-    const bossDetailsResponseJson = await bossDetailsResponse.json();
-    setBossDetails(bossDetailsResponseJson.response);
-    return bossDetailsResponseJson.response;
+    try {
+      const bossDetailsResponse = await fetch("/api/bossdetails", { headers: {
+        "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json"
+      } }, { method: "GET" });
+      /*if (bossDetailsResponse.status === 403) {
+        console.log("Invalid Token")
+        navigate("/login")
+      }
+      else*/ if (bossDetailsResponse.status !== 200) {
+        console.log("You need to log in")
+        navigate("/login")
+      }
+      const bossDetailsResponseJson = await bossDetailsResponse.json();
+      setBossDetails(bossDetailsResponseJson.response);
+      return bossDetailsResponseJson.response;
+    }
+    catch(err) {
+      console.log(err, "Something went wrong")
+    }
   }
 
   /*

@@ -6,54 +6,53 @@ import { getToken } from "../shared/getToken";
 import { useNavigate } from "react-router-dom";
 
 export const ItemTable = () => {
-const [itemTableValues, setItemTableValues] = useState([]);
-const [searchFilter, setSearchFilter] = useState("");
-const [page, setPage] = useState(1);
+  const [itemTableValues, setItemTableValues] = useState([]);
+  const [searchFilter, setSearchFilter] = useState("");
+  const [page, setPage] = useState(1);
 
-const previousPage = page - 1;
-const nextPage = page + 1;
-const itemsPerPage = 25;
-const totalPages = Math.ceil(itemTableValues?.length / itemsPerPage);
+  const previousPage = page - 1;
+  const nextPage = page + 1;
+  const itemsPerPage = 25;
+  const totalPages = Math.ceil(itemTableValues?.length / itemsPerPage);
 
-const itemsOnCurrentPage = useMemo(() => {
-  const getMatchingItems = itemTableValues?.sort((a, b) =>
-  itemTableValues[a]?.name.localeCompare(itemTableValues[b]?.name)
-  )?.filter((key) => 
-  key.name.toLowerCase().indexOf(searchFilter.toLocaleLowerCase()) > -1)
+  const itemsOnCurrentPage = useMemo(() => {
+    const getMatchingItems = itemTableValues?.sort((a, b) =>
+    itemTableValues[a]?.name.localeCompare(itemTableValues[b]?.name)
+    )?.filter((key) => 
+    key.name.toLowerCase().indexOf(searchFilter.toLocaleLowerCase()) > -1)
 
-  const totalSearchResults = getMatchingItems?.length
-  const itemsToDisplay = getMatchingItems?.filter((_, index) => 
-  index < page * itemsPerPage && index >= previousPage * itemsPerPage)
-  return {itemCount: totalSearchResults, items: itemsToDisplay};
-}, [page, itemTableValues, searchFilter, previousPage]);
+    const totalSearchResults = getMatchingItems?.length
+    const itemsToDisplay = getMatchingItems?.filter((_, index) => 
+    index < page * itemsPerPage && index >= previousPage * itemsPerPage)
+    return {itemCount: totalSearchResults, items: itemsToDisplay};
+  }, [page, itemTableValues, searchFilter, previousPage]);
 
-const navigate = useNavigate()
-const getItemsFromDb = async () => {
-  try {
-    const itemDbResponse = await fetch("/api/test", { headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" } } ,{ method: "GET" })
-    if (itemDbResponse.status !== 200) {
-      console.log("YOU NEED TO LOG IN??")
-      navigate("/login")
+  const navigate = useNavigate()
+  const getItemsFromDb = async () => {
+    try {
+      const itemDbResponse = await fetch("/api/test", { headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" } } ,{ method: "GET" })
+      if (itemDbResponse.status !== 200) {
+        console.log("You need to log in")
+        navigate("/login")
+      }
+      const itemDbResponseJson = await itemDbResponse.json();
+      console.log(itemDbResponse)
+      setItemTableValues(itemDbResponseJson.response)
+      return itemDbResponseJson.response
     }
-    const itemDbResponseJson = await itemDbResponse.json();
-    console.log(itemDbResponse)
-    setItemTableValues(itemDbResponseJson.response)
-    //console.log(itemDbResponseJson.response);
-    return itemDbResponseJson.response
+    catch(err) {
+      console.log(err, "Something went wrong")
+    }
   }
-  catch(err) {
-    console.log(err, "UH OH!!")
+
+  const updateSearchQuery = (searchValue) => {
+    setPage(1);
+    setSearchFilter(searchValue)
   }
-}
 
-const updateSearchQuery = (searchValue) => {
-  setPage(1);
-  setSearchFilter(searchValue)
-}
-
-useEffect(() => { 
-  getItemsFromDb()
-}, []);
+  useEffect(() => { 
+    getItemsFromDb()
+  }, []);
 
   if (itemTableValues.length === 0) return <h2>Fetching Items...</h2>
 

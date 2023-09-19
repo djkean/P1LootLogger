@@ -3,30 +3,42 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { GridRowUI, ListGridUI } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
+import { useNavigate } from "react-router-dom";
 
 export const BossTable = () => {
-const [bossTableValues, setBossTableValues] = useState([]);
-const getBossesFromDb = async () => {
-  const bossDbResponse = await fetch("/api/boss", { headers: {
-    "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json"
-  } }, { method: "GET" })
-  const bossDbResponseJson = await bossDbResponse.json();
-  setBossTableValues(bossDbResponseJson.response)
-  return bossDbResponseJson.response
-}
+  const [bossTableValues, setBossTableValues] = useState([]);
 
-useEffect(() => { 
-  console.log()
-  getBossesFromDb()
-}, []);
+  const navigate = useNavigate()
+  const getBossesFromDb = async () => {
+    try {
+      const bossDbResponse = await fetch("/api/boss", { headers: {
+        "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json"
+      } }, { method: "GET" })
+      if (bossDbResponse.status !== 200) {
+        console.log("You need to log in")
+        navigate("/login")
+      }
+      const bossDbResponseJson = await bossDbResponse.json();
+      setBossTableValues(bossDbResponseJson.response)
+      return bossDbResponseJson.response
+    }
+    catch(err) {
+      console.log(err, "Something went wrong")
+    }
+  }
 
-//too many center components, move to regular css for those maybe?
+  useEffect(() => { 
+    console.log()
+    getBossesFromDb()
+  }, []);
+
+  //too many center components, move to regular css for those maybe?
   if (bossTableValues.length === 0) return <h2> Fetching Bosses...</h2>
 
   return (<div>
     <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
       <Center>
-        <Heading my="0.5em" p="0.75em">All Items</Heading>
+        <Heading my="0.5em" p="0.75em">All Bosses</Heading>
       </Center>
       <Center>
         <Text>A list of all bosses/dailies found in PokeOne</Text>
