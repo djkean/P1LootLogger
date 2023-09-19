@@ -13,8 +13,6 @@ const crypto = require("crypto");
 const optOut = ["/", "/home", "/login", "/createaccount"];
 const verifyUser = (req, res, next) => {
   const path = req.path
-  //console.log(req.headers)
-  //console.log(header, token)
   if (optOut.includes(path)) {
     next()
   }
@@ -25,13 +23,13 @@ const verifyUser = (req, res, next) => {
     const secret = process.env.P1LL_SECRETTOKEN
     if (token == null) {
       console.log(chalk.red("TOKEN CHECK FAIL - NO TOKEN"))
-      return //res.status(403).json({ message: "Invalid Token "});
+      return res.status(403).json({ message: "Invalid Token "});
     }
   
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {
         console.log(chalk.red("TOKEN AUTH FAIL - INVALID TOKEN"))
-        return //res.status(403).json({ message: "Invalid Token "});
+        return res.status(403).json({ message: "Invalid Token "});
       }
       else {
         console.log(chalk.green("TOKEN CHECK OK"))

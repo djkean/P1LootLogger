@@ -3,6 +3,7 @@ import React from "react";
 import { useEffect, useState, useMemo } from "react";
 import { PageButtonUI, ListGridUI, GridRowUI, SearchBarUI } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
+import { useNavigate } from "react-router-dom";
 
 export const ItemTable = () => {
 const [itemTableValues, setItemTableValues] = useState([]);
@@ -12,7 +13,7 @@ const [page, setPage] = useState(1);
 const previousPage = page - 1;
 const nextPage = page + 1;
 const itemsPerPage = 25;
-const totalPages = Math.ceil(itemTableValues.length / itemsPerPage);
+const totalPages = Math.ceil(itemTableValues?.length / itemsPerPage);
 
 const itemsOnCurrentPage = useMemo(() => {
   const getMatchingItems = itemTableValues?.sort((a, b) =>
@@ -20,18 +21,29 @@ const itemsOnCurrentPage = useMemo(() => {
   )?.filter((key) => 
   key.name.toLowerCase().indexOf(searchFilter.toLocaleLowerCase()) > -1)
 
-  const totalSearchResults = getMatchingItems.length
+  const totalSearchResults = getMatchingItems?.length
   const itemsToDisplay = getMatchingItems?.filter((_, index) => 
   index < page * itemsPerPage && index >= previousPage * itemsPerPage)
   return {itemCount: totalSearchResults, items: itemsToDisplay};
 }, [page, itemTableValues, searchFilter, previousPage]);
 
+const navigate = useNavigate()
 const getItemsFromDb = async () => {
-  const itemDbResponse = await fetch("/api/test", { headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" } } ,{ method: "GET" })
-  const itemDbResponseJson = await itemDbResponse.json();
-  setItemTableValues(itemDbResponseJson.response)
-  //console.log(itemDbResponseJson.response);
-  return itemDbResponseJson.response
+  try {
+    const itemDbResponse = await fetch("/api/test", { headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" } } ,{ method: "GET" })
+    if (itemDbResponse.status !== 200) {
+      console.log("YOU NEED TO LOG IN??")
+      navigate("/login")
+    }
+    const itemDbResponseJson = await itemDbResponse.json();
+    console.log(itemDbResponse)
+    setItemTableValues(itemDbResponseJson.response)
+    //console.log(itemDbResponseJson.response);
+    return itemDbResponseJson.response
+  }
+  catch(err) {
+    console.log(err, "UH OH!!")
+  }
 }
 
 const updateSearchQuery = (searchValue) => {

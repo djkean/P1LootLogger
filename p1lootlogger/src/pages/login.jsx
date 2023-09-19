@@ -1,8 +1,9 @@
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack} from "../components/pagestyles"
-import { React, useState} from "react";
+import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles"
+import { React, useState } from "react";
 import { loginVerification } from "../components/loginVerification";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function LoginPage() {
   const [loginDetails, setLoginDetails] = useState({
@@ -17,6 +18,7 @@ export function LoginPage() {
     setLoginDetails(_ => ({..._, [event.target.name]: event.target.value}))
   }
 
+  const navigate = useNavigate()
   const submitFields = (event) => {
     event.preventDefault();
     setLoginError(loginVerification(loginDetails))
@@ -25,7 +27,8 @@ export function LoginPage() {
       localStorage.setItem("P1LL_TOKEN", res.data.loginToken)
       console.log("SUCCESS (AXIOS)")
     })
-    .catch(console.log("ERROR (AXIOS)"))
+    .then(navigate("/itemtable"))
+    .catch(err => console.log("ERROR (AXIOS)", err))
   }
  
   return (
