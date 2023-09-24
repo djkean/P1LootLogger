@@ -1,4 +1,4 @@
-import { Box, Flex, Button, Spacer, HStack, Menu, MenuButton, MenuList, MenuItem} from "@chakra-ui/react";
+import { Box, Flex, Button, Spacer, HStack, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "../Chevron";
@@ -35,12 +35,15 @@ export function Nav() {
         </Link>
       </Box>
       <Box>
-        <Link to="/login"><Button sx={NavButton}>Log In</Button>
+        <Link to="/login">
+          <Button sx={NavButton}>Log In</Button>
         </Link>
       </Box>
       <Box>
-        <Button sx={AccountButton}>Username</Button>
-        </Box>
+        <Link to="/settings">
+          <Button sx={AccountButton}>Username</Button>
+        </Link>
+      </Box>
       <Box>
         <Button sx={AccountButton}>Log Out</Button>
       </Box>
