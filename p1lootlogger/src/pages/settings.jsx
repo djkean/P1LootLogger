@@ -1,8 +1,23 @@
-import { React } from "react";
-import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles"; 
+import { React, useState } from "react";
+import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import { FormButton, FormContext, FormControlColors, FormWarning, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles"; 
 
 export function SettingsPage() {
+  const [newUsername, setNewUsername] = useState({username: "",})
+  const [newPassword, setNewPassword] = useState({
+    oldPassword: "",
+    newPassword1: "",
+    newPassword2: "",
+  })
+
+  const changeUsername = (event) => {
+    setNewUsername(_ => ({..._, [event.target.name]: event.target.value}))
+  }
+
+  const changePassword = (event) => {
+    setNewPassword(_ => ({..._, [event.target.name]: event.target.value}))
+  }
+
   return (
     <Flex sx={LoginFlex} align={"center"}>
       <Stack sx={LoginStack} spacing={6}>
@@ -11,32 +26,40 @@ export function SettingsPage() {
         </Stack>
         <Box sx={LoginBox} id="settings--form">
           <Stack spacing={3}>
-            <Stack as="form">
-            <FormControl id="username" sx={FormControlColors}>
-              <FormLabel color={"#FDCA40"}>
-                Change Username:</FormLabel>
-                <Text color={"#BFA55C"} align={"left"} py={1}>
-                  Enter your new Username
-                </Text>
-              <Input type="text" sx={InputFieldColors}
-              id="change--username" name="username" />
-               <Center>
-                <Input type="submit" sx={FormButton} value="Change Username"/>
-              </Center>
-            </FormControl>
+            <Stack as="form" id="change--user" onSubmit={changeUsername}>
+              <FormControl id="username" sx={FormControlColors}>
+                <FormLabel color={"#FDCA40"}>Change Username:</FormLabel>
+                <Text sx={FormContext}> Enter your new Username </Text>
+                <Input type="text" sx={InputFieldColors}id="change--username" name="username" />
+                <Center>
+                  <Input type="submit" sx={FormButton} value="Change Username"/>
+                </Center>
+              </FormControl>
             </Stack>
-            <Stack as="form">
-            <FormControl id="delete--account" sx={FormControlColors}>
-              <FormLabel color={"#FDCA40"}>Delete Account:</FormLabel>
-              <Text color={"#BFA55C"} align={"left"} py={1}>
-                Please re-type your Password to confirm
-                </Text>
-              <Input type="password" sx={InputFieldColors}
-              id="ver--password" name="password"/>
-              <Center>
-                <Input type="submit" sx={FormButton} value="Delete my Account"/>
-              </Center>
-            </FormControl>
+            <Stack as="form" paddingTop={"2em"}>
+              <FormControl id="change--password" sx={FormControlColors}>
+                <FormLabel color={"#FDCA40"}>Change Password:</FormLabel>
+                <Text sx={FormContext}>Type your current Password:</Text>
+                <Input type="password" sx={InputFieldColors} id="oldPassword" name="oldPassword"/>
+                <Text sx={FormContext}>Type your new Password: </Text>
+                <Input type="password" sx={InputFieldColors} id="newPassword1" name="newPassword1"/>
+                <Text sx={FormContext}>Re-type your new Password: </Text>
+                <Input type="password" sx={InputFieldColors} id="newPassword2" name="newPassword2"/>
+                <Center>
+                  <Input type="submit" sx={FormButton} value="Change Password"/>
+                </Center>
+              </FormControl>
+            </Stack>
+            <Stack as="form" paddingTop={"2em"}>
+              <FormControl id="delete--account" sx={FormControlColors}>
+                <FormLabel color={"#FDCA40"}>Delete Account:</FormLabel>
+                <Text sx={FormContext}>Re-type your Password to confirm:</Text>
+                <Input type="password" sx={InputFieldColors} id="delete--account" name="delete--acount"/>
+                <Center>
+                  <Input type="submit" sx={FormButton} value="Delete my Account"/>
+                </Center>
+                <Text sx={FormWarning}>This will permanently delete your account!</Text>
+              </FormControl>
             </Stack>
           </Stack>
         </Box>

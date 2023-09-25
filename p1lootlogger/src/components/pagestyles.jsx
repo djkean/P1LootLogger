@@ -42,6 +42,17 @@ export const FormControlColors = {
   color: "#BFA55C",
 }
 
+export const FormContext = {
+  align: "left",
+  color: "#BFA55C",
+  py: "0.2em",
+}
+
+export const FormWarning = {
+  align: "left",
+  color: "#A00C00",
+}
+
 export const GridRowUI = {
   alignItems: "flex-start",
   bg: "orange.200",
