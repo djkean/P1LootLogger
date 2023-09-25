@@ -1,6 +1,6 @@
 export function checkUsernameRegex(newUsername) {
   let error = {}
-  const usernamePattern = /^[a-zA-Z90-9_-]{3,16}$/
+  const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 
   if (newUsername === "") {
     error.username = "Please enter a new Username"
@@ -14,10 +14,44 @@ export function checkUsernameRegex(newUsername) {
   return error
 }
 
-export function checkPasswordRegex(newPassword) {
-  let passwordError = {}
+export function checkPasswordRegex(oldPassword) {
+  let error = {}
   const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
   if (oldPassword === "") {
-    error.oldPassword = "Please enter your current Password"
+    error.oldPassword = "This field cannot be blank"
   }
+  /* 
+  If the typed password fails a regex quest then it cannot be their current password anyway
+  else if (!passwordPattern.test(oldPassword)) {
+    error.oldPassword = ""
+  } */
+  else if (oldPassword === newPassword1 || oldPassword === newPassword2) {
+    error.oldPassword = "Your new password matches your current typed password"
+  }
+  else {
+    error.oldPassword = ""
+  }
+  if (newPassword1 === "") {
+    error.newPassword1 = "This field cannot be blank"
+  }
+  else if (!passwordPattern.test(newPassword1)) {
+    error.newPassword1 = "Make sure your password contains numbers, capital, and lowercase characters"
+  }
+  else {
+    error.newPassword1 = ""
+  }
+  if (newPassword2 === "") {
+    error.newPassword2 = "This field cannot be blank"
+  }
+  else if (!passwordPattern.test(newPassword2)) {
+    error.newPassword2 = "Make sure your password contains numbers, capital, and lowercase characters"
+  }
+  else if (newPassword1 != newPassword2) {
+    error.newPassword1 = "Make sure both new password fields match"
+    error.newPassword2 = "Make sure both new password fields match"
+  }
+  else {
+    error.newPassword2 = ""
+  }
+  return error
 }

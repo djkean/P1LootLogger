@@ -10,9 +10,9 @@ export function SettingsPage() {
     newPassword2: "",
   })
 
-  const usernameField = (event) => {
+  /* const usernameField = (event) => {
     setChangeUsername(_ => ({..._, [event.target.name]: event.target.value}))
-  }
+  } */
 
   /* const changePassword = (event) => {
     setNewPassword(_ => ({..._, [event.target.name]: event.target.value}))
