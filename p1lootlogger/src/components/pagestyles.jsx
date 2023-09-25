@@ -149,6 +149,7 @@ export const LoginBox = {
   boxShadow: "lg",
   p: 8,
   rounded: "lg",
+  width: "22em"
 }
 
 export const LoginFlex = {
@@ -162,6 +163,7 @@ export const LoginStack = {
   mx: "auto",
   py: 12,
   px: 6,
+  align: "center",
 }
 
 export const MenuStyles = {
@@ -185,10 +187,6 @@ export const NavButton = {
   }
 }
 
-export const SearchBarUI = {
-  my: "0.5em"
-}
-
 export const PageButtonUI = {
   bg: "orange.200",
   color: "#2A2823",
@@ -198,4 +196,21 @@ export const PageButtonUI = {
     bg: "orange.300",
     color: "black"
   }
+}
+
+export const SearchBarUI = {
+  my: "0.5em"
+}
+
+export const SettingsBox = {
+  bg: "#2A2823",
+  boxShadow: "lg",
+  p: 8,
+  rounded: "lg",
+  width: "28em",
+}
+
+export const TitleTheme = {
+  color: "#FDCA40",
+  fontWeight: "600",
 }

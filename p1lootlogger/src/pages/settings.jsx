@@ -1,22 +1,22 @@
 import { React, useState } from "react";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormContext, FormControlColors, FormWarning, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles"; 
+import { FormButton, FormContext, FormControlColors, FormWarning, InputFieldColors, LoginFlex, LoginStack, SettingsBox } from "../components/pagestyles"; 
 
 export function SettingsPage() {
-  const [newUsername, setNewUsername] = useState({username: "",})
+  const [changeUsername, setChangeUsername] = useState({username: "",})
   const [newPassword, setNewPassword] = useState({
     oldPassword: "",
     newPassword1: "",
     newPassword2: "",
   })
 
-  const changeUsername = (event) => {
-    setNewUsername(_ => ({..._, [event.target.name]: event.target.value}))
+  const usernameField = (event) => {
+    setChangeUsername(_ => ({..._, [event.target.name]: event.target.value}))
   }
 
-  const changePassword = (event) => {
+  /* const changePassword = (event) => {
     setNewPassword(_ => ({..._, [event.target.name]: event.target.value}))
-  }
+  } */
 
   return (
     <Flex sx={LoginFlex} align={"center"}>
@@ -24,7 +24,7 @@ export function SettingsPage() {
         <Stack align={"center"}>
           <Heading fontSize={"3xl"} py={3}>User Settings</Heading>
         </Stack>
-        <Box sx={LoginBox} id="settings--form">
+        <Box sx={SettingsBox} id="settings--form">
           <Stack spacing={3}>
             <Stack as="form" id="change--user" onSubmit={changeUsername}>
               <FormControl id="username" sx={FormControlColors}>

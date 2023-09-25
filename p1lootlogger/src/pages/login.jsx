@@ -33,7 +33,7 @@ export function LoginPage() {
  
   return (
     <Flex sx={LoginFlex} align={"center"}>
-      <Stack sx={LoginStack} spacing={6}>
+      <Stack sx={LoginStack} spacing={6} align={"center"}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} py={3}>Log In</Heading>
           <Text fontSize={"lg"}>Don't have an account? Create one {" "}

@@ -8,9 +8,9 @@ export function regVerification(regDetails) {
   if(regDetails.username === "") {
     error.username = "Please enter a Username"
   }
-  else if (!usernamePattern.test(regDetails.username)) (
+  else if (!usernamePattern.test(regDetails.username)) {
     error.username = "Username must be 3-16 characters long & is restricted to alphanumeric characters (A-Z, 0-9), - and _"
-  )
+  }
   else {
     error.username = ""
   }
@@ -19,7 +19,7 @@ export function regVerification(regDetails) {
     error.email = "Please enter an Email"
   }
   else if(!emailPattern.test(regDetails.email)) {
-    error.email = "Please check that Email is correct"
+    error.email = "Please check that your Email is correct"
   }
   else {
     error.email = ""

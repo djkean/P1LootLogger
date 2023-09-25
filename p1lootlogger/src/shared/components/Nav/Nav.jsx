@@ -1,8 +1,8 @@
-import { Box, Flex, Button, Spacer, HStack, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { Box, Flex, Button, Spacer, HStack, Menu, MenuButton, MenuList, MenuItem, Text } from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "../Chevron";
-import { AccountButton, NavButton, MenuStyles } from "../../../components/pagestyles";
+import { AccountButton, NavButton, MenuStyles, TitleTheme } from "../../../components/pagestyles";
 
 export function Nav() {
 
@@ -27,8 +27,14 @@ export function Nav() {
         </MenuList>
       </Menu>
     </Box>
-    <Spacer /> 
-    <HStack>
+    <Spacer/>
+    <Box fontSize={"2xl"}>
+      <Text sx={TitleTheme}>
+        PokeOne LootLogger
+      </Text>
+    </Box>
+    <Spacer/>
+    <HStack align={"right"}>
       <Box>
         <Link to="/createaccount">
           <Button sx={NavButton}>Create Account</Button>
