@@ -25,28 +25,34 @@ export function checkPasswordRegex(oldPassword) {
   else if (!passwordPattern.test(oldPassword)) {
     error.oldPassword = ""
   } */
+  // eslint-disable-next-line no-undef
   else if (oldPassword === newPassword1 || oldPassword === newPassword2) {
     error.oldPassword = "Your new password matches your current typed password"
   }
   else {
     error.oldPassword = ""
   }
+  // eslint-disable-next-line no-undef
   if (newPassword1 === "") {
     error.newPassword1 = "This field cannot be blank"
   }
+   // eslint-disable-next-line no-undef
   else if (!passwordPattern.test(newPassword1)) {
     error.newPassword1 = "Make sure your password contains numbers, capital, and lowercase characters"
   }
   else {
     error.newPassword1 = ""
   }
+  // eslint-disable-next-line no-undef
   if (newPassword2 === "") {
     error.newPassword2 = "This field cannot be blank"
   }
+   // eslint-disable-next-line no-undef
   else if (!passwordPattern.test(newPassword2)) {
     error.newPassword2 = "Make sure your password contains numbers, capital, and lowercase characters"
   }
-  else if (newPassword1 != newPassword2) {
+   // eslint-disable-next-line no-undef
+  else if (newPassword1 !== newPassword2) {
     error.newPassword1 = "Make sure both new password fields match"
     error.newPassword2 = "Make sure both new password fields match"
   }

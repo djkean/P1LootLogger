@@ -1,22 +1,23 @@
 import { React, useState } from "react";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormContext, FormControlColors, FormWarning, InputFieldColors, LoginFlex, LoginStack, SettingsBox } from "../components/pagestyles"; 
+import { checkUsernameRegex, checkPasswordRegex } from "../components/settingsVerification";
 
 export function SettingsPage() {
-  const [changeUsername, setChangeUsername] = useState({username: "",})
+  const [newUsername, setNewUsername] = useState({username: "",})
   const [newPassword, setNewPassword] = useState({
     oldPassword: "",
     newPassword1: "",
     newPassword2: "",
   })
 
-  /* const usernameField = (event) => {
-    setChangeUsername(_ => ({..._, [event.target.name]: event.target.value}))
-  } */
+  const changeUsername = (event) => {
+    setNewUsername(_ => ({..._, [event.target.name]: event.target.value}))
+  }
 
-  /* const changePassword = (event) => {
+  const changePassword = (event) => {
     setNewPassword(_ => ({..._, [event.target.name]: event.target.value}))
-  } */
+  }
 
   return (
     <Flex sx={LoginFlex} align={"center"}>
@@ -26,11 +27,11 @@ export function SettingsPage() {
         </Stack>
         <Box sx={SettingsBox} id="settings--form">
           <Stack spacing={3}>
-            <Stack as="form" id="change--user" onSubmit={changeUsername}>
+            <Stack as="form" id="change--user">
               <FormControl id="username" sx={FormControlColors}>
                 <FormLabel color={"#FDCA40"}>Change Username:</FormLabel>
-                <Text sx={FormContext}> Enter your new Username </Text>
-                <Input type="text" sx={InputFieldColors}id="change--username" name="username" />
+                <Text sx={FormContext}> Enter your new Username: </Text>
+                <Input type="text" sx={InputFieldColors} id="change--username" name="username" onChange={changeUsername}/>
                 <Center>
                   <Input type="submit" sx={FormButton} value="Change Username"/>
                 </Center>
