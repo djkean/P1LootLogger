@@ -10,6 +10,8 @@ export function SettingsPage() {
     newPassword1: "",
     newPassword2: "",
   })
+  const [usernameError, setUsernameError] = useState({})
+  const [passwordError, setpasswordError] = useState({})
 
   const changeUsername = (event) => {
     setNewUsername(_ => ({..._, [event.target.name]: event.target.value}))
@@ -17,6 +19,17 @@ export function SettingsPage() {
 
   const changePassword = (event) => {
     setNewPassword(_ => ({..._, [event.target.name]: event.target.value}))
+  }
+
+  const submitUsername = (event) => {
+    event.preventDefault();
+    setUsernameError(checkUsernameRegex(newUsername))
+    console.log(newUsername)
+  }
+
+  const submitPassword = (event) => {
+    event.preventDefault();
+    setpasswordError(checkPasswordRegex(newPassword))
   }
 
   return (
@@ -27,25 +40,26 @@ export function SettingsPage() {
         </Stack>
         <Box sx={SettingsBox} id="settings--form">
           <Stack spacing={3}>
-            <Stack as="form" id="change--user">
+            <Stack as="form" id="change--user" onSubmit={submitUsername}>
               <FormControl id="username" sx={FormControlColors}>
                 <FormLabel color={"#FDCA40"}>Change Username:</FormLabel>
                 <Text sx={FormContext}> Enter your new Username: </Text>
                 <Input type="text" sx={InputFieldColors} id="change--username" name="username" onChange={changeUsername}/>
+                {usernameError.username && <Text>{usernameError.username}</Text>}
                 <Center>
                   <Input type="submit" sx={FormButton} value="Change Username"/>
                 </Center>
               </FormControl>
             </Stack>
-            <Stack as="form" paddingTop={"2em"}>
+            <Stack as="form" paddingTop={"2em"} onSubmit={submitPassword}>
               <FormControl id="change--password" sx={FormControlColors}>
                 <FormLabel color={"#FDCA40"}>Change Password:</FormLabel>
                 <Text sx={FormContext}>Type your current Password:</Text>
-                <Input type="password" sx={InputFieldColors} id="oldPassword" name="oldPassword"/>
+                <Input type="password" sx={InputFieldColors} id="oldPassword" name="oldPassword" onChange={changePassword}/>
                 <Text sx={FormContext}>Type your new Password: </Text>
-                <Input type="password" sx={InputFieldColors} id="newPassword1" name="newPassword1"/>
+                <Input type="password" sx={InputFieldColors} id="newPassword1" name="newPassword1" onChange={changePassword}/>
                 <Text sx={FormContext}>Re-type your new Password: </Text>
-                <Input type="password" sx={InputFieldColors} id="newPassword2" name="newPassword2"/>
+                <Input type="password" sx={InputFieldColors} id="newPassword2" name="newPassword2" onChange={changePassword}/>
                 <Center>
                   <Input type="submit" sx={FormButton} value="Change Password"/>
                 </Center>
@@ -55,7 +69,7 @@ export function SettingsPage() {
               <FormControl id="delete--account" sx={FormControlColors}>
                 <FormLabel color={"#FDCA40"}>Delete Account:</FormLabel>
                 <Text sx={FormContext}>Re-type your Password to confirm:</Text>
-                <Input type="password" sx={InputFieldColors} id="delete--account" name="delete--acount"/>
+                <Input type="password" sx={InputFieldColors} id="del--acc-pass" name="delete--account"/>
                 <Center>
                   <Input type="submit" sx={FormButton} value="Delete my Account"/>
                 </Center>

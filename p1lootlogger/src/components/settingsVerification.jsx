@@ -5,7 +5,7 @@ export function checkUsernameRegex(newUsername) {
   if (newUsername === "") {
     error.username = "Please enter a new Username"
   }
-  else if (!usernamePattern.test(newUsername)) {
+  else if (!usernamePattern.test(newUsername.username)) {
     error.username = "Username must be 3-16 characters long & is restricted to alphanumeric characters (A-Z, 0-9), - and _"
   }
   else {

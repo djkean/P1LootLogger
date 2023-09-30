@@ -109,5 +109,11 @@ app.post("/login", async (req, res) => {
   })
 })
 
+app.post("/settings", async (req, res) => {
+  const changeUsername = req.body.username
+  const changeUsernameQuery = "SELECT `username` FROM `usertable3` WHERE `username` = ? LIMIT 1"
+  connection.query(changeUsernameQuery, [req.body.username])
+} )
+
 app.listen(port);
 console.log(chalk.bgCyan(`LISTENING ON (${port})`));
