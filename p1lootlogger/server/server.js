@@ -23,13 +23,14 @@ const verifyUser = (req, res, next) => {
     const secret = process.env.P1LL_SECRETTOKEN
     if (token == null) {
       console.log(chalk.red("TOKEN CHECK FAIL - NO TOKEN"))
-      return res.status(403).json({ message: "Invalid Token "});
+      return res.status(403).json({ message: "Invalid Token" });
     }
   
     jwt.verify(token, secret, (err, decoded) => {
+      console.log(decoded)
       if (err) {
         console.log(chalk.red("TOKEN AUTH FAIL - INVALID TOKEN"))
-        return res.status(403).json({ message: "Invalid Token "});
+        return res.status(403).json({ message: "Invalid Token" });
       }
       else {
         console.log(chalk.green("TOKEN CHECK OK"))
@@ -41,7 +42,7 @@ const verifyUser = (req, res, next) => {
 
 app.use(verifyUser);
 app.use("/api", testApi);
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
 const static_dir = path.resolve(path.join(__dirname, "../build"));
@@ -109,11 +110,32 @@ app.post("/login", async (req, res) => {
   })
 })
 
-app.post("/settings", async (req, res) => {
-  const changeUsername = req.body.username
-  const changeUsernameQuery = "SELECT `username` FROM `usertable3` WHERE `username` = ? LIMIT 1"
-  connection.query(changeUsernameQuery, [req.body.username])
-} )
+app.post("/changeusername", async (req, res) => {
+  const header = req.headers['authorization']
+  const token = header && header.split(" ")[1]
+  const secret = process.env.P1LL_SECRETTOKEN
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) {
+      console.log(chalk.red("TOKEN AUTH FAIL - INVALID TOKEN"))
+      res.status(401).send({message: "CHANGE USER QUERY FAILED INVALID TOKEN"})
+    }
+    else {
+      const username = req.body.username
+      const email = decoded
+      const changeUsernameQuery = "UPDATE `usertable3` SET `username` = ? WHERE `email` = ? LIMIT 1"
+      connection.query(changeUsernameQuery, [username, email], async (err, result) => {
+        if (err) {
+          console.log(chalk.red("ERROR WITH CHANGE USER QUERY", err))
+          res.status(500).send({ message: "CHANGE USER QUERY FAILED"})
+        }
+        else if (res) {
+          console.log(chalk.green("CHANGED USERNAME!"))
+          res.status(200).send({ message: "YOUR USERNAME WAS CHANGED"})
+        }
+      })
+    }
+  })
+})
 
 app.listen(port);
 console.log(chalk.bgCyan(`LISTENING ON (${port})`));
