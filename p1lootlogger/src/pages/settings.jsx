@@ -2,6 +2,8 @@ import { React, useState } from "react";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormContext, FormControlColors, FormWarning, InputFieldColors, LoginFlex, LoginStack, SettingsBox } from "../components/pagestyles"; 
 import { checkUsernameRegex, checkPasswordRegex } from "../components/settingsVerification";
+import axios from "axios";
+import { getToken } from "../shared/getToken";
 
 export function SettingsPage() {
   const [newUsername, setNewUsername] = useState({username: "",})
@@ -24,8 +26,17 @@ export function SettingsPage() {
   const submitUsername = (event) => {
     event.preventDefault();
     setUsernameError(checkUsernameRegex(newUsername))
+    let error = checkUsernameRegex(newUsername)
+    setUsernameError(error)
+    console.log(error.username)
+    if (error.username === "") {
+      axios.post("/changeusername", newUsername, 
+    { headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" } })
+      .then(console.log("NAME CHANGE OK (AXIOS)"))
+      .catch(err => console.log("ERROR CHANGING USERNAME (AXIOS)", err))
     console.log(newUsername)
-  }
+    }
+  } 
 
   const submitPassword = (event) => {
     event.preventDefault();
@@ -69,7 +80,7 @@ export function SettingsPage() {
               <FormControl id="delete--account" sx={FormControlColors}>
                 <FormLabel color={"#FDCA40"}>Delete Account:</FormLabel>
                 <Text sx={FormContext}>Re-type your Password to confirm:</Text>
-                <Input type="password" sx={InputFieldColors} id="del--acc-pass" name="delete--account"/>
+                <Input type="password" sx={InputFieldColors} id="del--acc--pass" name="delete--account"/>
                 <Center>
                   <Input type="submit" sx={FormButton} value="Delete my Account"/>
                 </Center>
