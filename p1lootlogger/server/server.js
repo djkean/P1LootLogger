@@ -124,16 +124,25 @@ app.post("/changeusername", async (req, res) => {
       console.log(chalk.red("USERNAME LENGTH INVALID"))
     }
     else {
-      const email = decoded
-      const changeUsernameQuery = "UPDATE `usertable3` SET `username` = ? WHERE `email` = ? LIMIT 1"
-      connection.query(changeUsernameQuery, [username, email], async (err, result) => {
-        if (err) {
-          console.log(chalk.red("ERROR WITH CHANGE USER QUERY", err))
-          res.status(500).send({ message: "CHANGE USER QUERY FAILED"})
+      const isUsernameUnique = "SELECT `username` FROM `usertable3` WHERE `username` = ?"
+      connection.query(isUsernameUnique, [username], async (err, usernames) => {
+        if (usernames.length !== 0) {
+          console.log(chalk.red("USERNAME TAKEN"))
+          res.status(409).send({ message: "THIS USERNAME IS ALREADY TAKEN" })
         }
-        else if (res) {
-          console.log(chalk.green("CHANGED USERNAME!"))
-          res.status(200).send({ message: "YOUR USERNAME WAS CHANGED"})
+        else {
+          const email = decoded
+          const changeUsernameQuery = "UPDATE `usertable3` SET `username` = ? WHERE `email` = ? LIMIT 1"
+          connection.query(changeUsernameQuery, [username, email], async (err, result) => {
+            if (err) {
+              console.log(chalk.red("ERROR WITH CHANGE USER QUERY", err))
+              res.status(500).send({ message: "CHANGE USER QUERY FAILED" })
+            }
+            else if (res) {
+              console.log(chalk.green("CHANGED USERNAME!"))
+              res.status(200).send({ message: "YOUR USERNAME WAS CHANGED" })
+            }
+          })
         }
       })
     }
