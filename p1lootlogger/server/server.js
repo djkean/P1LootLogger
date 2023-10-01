@@ -25,7 +25,6 @@ const verifyUser = (req, res, next) => {
       console.log(chalk.red("TOKEN CHECK FAIL - NO TOKEN"))
       return res.status(403).json({ message: "Invalid Token" });
     }
-  
     jwt.verify(token, secret, (err, decoded) => {
       console.log(decoded)
       if (err) {
@@ -89,7 +88,7 @@ app.post("/login", async (req, res) => {
   connection.query(loginQuery, [req.body.email], async (err, result) => {
     if (typeof result[0]?.email === "undefined") {
       console.log(chalk.red("LOGIN UNSUCCESSFUL, INVALID EMAIL"))
-      res.status(401).send({ message: "LOGIN UNSUCCESSFUL, INVALID EMAIL" })
+      res.status(403).send({ message: "LOGIN UNSUCCESSFUL, INVALID EMAIL" })
       return
     }
     const { email, password, salt } = result[0]
@@ -105,7 +104,7 @@ app.post("/login", async (req, res) => {
     }
     else {
       console.log(chalk.red("LOGIN UNSUCCESSFUL"));
-      res.status(401).send({ message: "LOGIN UNSUCCESSFUL, INVALID CREDENTIALS" });
+      res.status(403).send({ message: "LOGIN UNSUCCESSFUL, INVALID CREDENTIALS" });
     }
   })
 })
@@ -114,13 +113,17 @@ app.post("/changeusername", async (req, res) => {
   const header = req.headers['authorization']
   const token = header && header.split(" ")[1]
   const secret = process.env.P1LL_SECRETTOKEN
+  const username = req.body.username
+  const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
   jwt.verify(token, secret, (err, decoded) => {
     if (err) {
       console.log(chalk.red("TOKEN AUTH FAIL - INVALID TOKEN"))
-      res.status(401).send({message: "CHANGE USER QUERY FAILED INVALID TOKEN"})
+      res.status(403).send({message: "CHANGE USER QUERY FAILED INVALID TOKEN"})
+    }
+    else if (!usernamePattern.test(username)) {
+      console.log(chalk.red("USERNAME LENGTH INVALID"))
     }
     else {
-      const username = req.body.username
       const email = decoded
       const changeUsernameQuery = "UPDATE `usertable3` SET `username` = ? WHERE `email` = ? LIMIT 1"
       connection.query(changeUsernameQuery, [username, email], async (err, result) => {
