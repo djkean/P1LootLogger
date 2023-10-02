@@ -132,6 +132,42 @@ app.post("/changepassword", async (req, res) => {
       console.log(chalk.red("ERR 409 - PASSWORD - NEW PASSWORDS DO NOT MATCH"))
       res.status(409).send({ message: "CHANGE PASSWORD QUERY FAILED NEW PASSWORDS DO NOT MATCH" })
     }
+    else {
+      const email = decoded
+      const confirmPasswordQuery = "SELECT `email`, `password`, `salt` FROM `usertable3` WHERE `email` = ?"
+      connection.query(confirmPasswordQuery, [email], async (err, result) => {
+        if (typeof result[0]?.email === "undefined") {
+          console.log(chalk.red("ERR 403 - PASSWORD - NO MATCHING EMAIL"))
+          res.status(403).send({ message: "CHANGE PASSWORD QUERY FAILED BECAUSE EMAIL DID NOT MATCH" })
+          return
+        }
+        const { email, password, salt } = result[0]
+        const comparedPass = crypto.pbkdf2Sync(oldPassword, salt, 1000, 64, "sha256").toString("hex")
+        if (err) {
+          console.log(chalk.red("ERR 500 - PASSWORD - QUERY ERROR"))
+          res.status(500).send({ message: "CHANGE PASSWORD QUERY FAILED - ERROR WITH SERVER" })
+        }
+        else if (password === comparedPass) {
+          const salt = crypto.randomBytes(16).toString("hex")
+          const hash = crypto.pbkdf2Sync(newPassword1, salt, 1000, 64, "sha256").toString("hex")
+          const changePasswordQuery = "UPDATE `usertable3` SET `password` = ?, `salt` = ? WHERE `email` = ? LIMIT 1"
+          connection.query(changePasswordQuery, [hash, salt, email], async (err, results) => {
+            if (err) {
+              console.log(chalk.red("ERR 500 - PASSWORD - SOMETHING WENT WRONG"))
+              res.status(500).send({ message: "CHANGE PASSWORD QUERY FAILED - SOMETHING WENT WRONG" })
+            }
+            else {
+              console.log(chalk.green("CHANGE PASSWORD SUCCESS!"))
+              res.status(200).send({ message: "YOU HAVE SUCCESSFULLY CHANGED YOUR PASSWORD" })
+            }
+          })
+        }
+        else {
+          console.log(chalk.red("ERR 403 - PASSWORD - INCORRECT PASSWORD"))
+          res.status(403).send({ message: "CHANGE PASSWORD QUERY FAILED - INCORRECT PASSWORD" })
+        }
+      })
+    }
   })
 })
 
@@ -164,7 +200,7 @@ app.post("/changeusername", async (req, res) => {
               console.log(chalk.red("ERROR WITH CHANGE USER QUERY", err))
               res.status(500).send({ message: "CHANGE USER QUERY FAILED" })
             }
-            else if (res) {
+            else if (result) {
               console.log(chalk.green("CHANGED USERNAME!"))
               res.status(200).send({ message: "YOUR USERNAME WAS CHANGED" })
             }
