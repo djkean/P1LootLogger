@@ -84,7 +84,7 @@ app.post("/createaccount", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const typedPassword = req.body.password
-  const loginQuery = "SELECT `email`, `password`, `salt` FROM `usertable3` WHERE `email` = ? LIMIT 1"
+  const loginQuery = "SELECT `email`,`password`,`salt` FROM `usertable3` WHERE `email` = ? LIMIT 1"
   connection.query(loginQuery, [req.body.email], async (err, result) => {
     if (typeof result[0]?.email === "undefined") {
       console.log(chalk.red("LOGIN UNSUCCESSFUL, INVALID EMAIL"))
@@ -109,6 +109,32 @@ app.post("/login", async (req, res) => {
   })
 })
 
+app.post("/changepassword", async (req, res) => {
+  const header = req.headers['authorization']
+  const token = header && header.split(" ")[1]
+  const secret = process.env.P1LL_SECRETTOKEN
+  const { oldPassword, newPassword1, newPassword2 } = req.body
+  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) {
+      console.log(chalk.red("ERR 403 - TOKEN - INVALID"))
+      res.status(403).send({ message: "CHANGE PASSWORD QUERY FAILED INVALID TOKEN" })
+    }
+    else if (!passwordPattern.test(oldPassword) || !passwordPattern.test(newPassword1) || !passwordPattern.test(newPassword2)) {
+      console.log(chalk.red("ERR 409 - PASSWORD - CHECK FOR REGEX"))
+      res.status(409).send({ message: "CHANGE PASSWORD QUERY FAILED INVALID FIELDS" })
+    } 
+    else if (oldPassword === newPassword1 || oldPassword === newPassword2) {
+      console.log(chalk.red("ERR 409 - PASSWORD - OLD PASSWORD MATCHES NEW"))
+      res.status(409).send({ message: "CHANGE PASSWORD QUERY FAILED OLD PASSWORD MATCHES NEW PASSWORD" })
+    }
+    else if (newPassword1 !== newPassword2) {
+      console.log(chalk.red("ERR 409 - PASSWORD - NEW PASSWORDS DO NOT MATCH"))
+      res.status(409).send({ message: "CHANGE PASSWORD QUERY FAILED NEW PASSWORDS DO NOT MATCH" })
+    }
+  })
+})
+
 app.post("/changeusername", async (req, res) => {
   const header = req.headers['authorization']
   const token = header && header.split(" ")[1]
@@ -118,7 +144,7 @@ app.post("/changeusername", async (req, res) => {
   jwt.verify(token, secret, (err, decoded) => {
     if (err) {
       console.log(chalk.red("TOKEN AUTH FAIL - INVALID TOKEN"))
-      res.status(403).send({message: "CHANGE USER QUERY FAILED INVALID TOKEN"})
+      res.status(403).send({ message: "CHANGE USER QUERY FAILED INVALID TOKEN" })
     }
     else if (!usernamePattern.test(username)) {
       console.log(chalk.red("USERNAME LENGTH INVALID"))

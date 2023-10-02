@@ -31,7 +31,8 @@ export function SettingsPage() {
     console.log(error.username)
     if (error.username === "") {
       axios.post("/changeusername", newUsername, 
-    { headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" } })
+    { headers: { "Authorization": `Bearer ${getToken()}`, 
+    "Content-Type": "application/json" } })
       .then(console.log("NAME CHANGE OK (AXIOS)"))
       .catch(err => console.log("ERROR CHANGING USERNAME (AXIOS)", err))
     console.log(newUsername)
@@ -41,6 +42,15 @@ export function SettingsPage() {
   const submitPassword = (event) => {
     event.preventDefault();
     setpasswordError(checkPasswordRegex(newPassword))
+    let error = checkPasswordRegex(newPassword)
+    setpasswordError(error)
+    if (error.oldPassword === "" && error.newPassword1 === "" && error.newPassword2 === "") {
+      axios.post("/changepassword", newPassword, 
+      { headers: { "Authorization": `Bearer ${getToken()}`, 
+      "Content-Type": "application/json" } })
+      .then(console.log("PASSWORD CHANGE OK (AXIOS)"))
+      .catch(err => console.log("ERROR CHANGING PASSWORD (AXIOS)", err))
+    }
   }
 
   return (
@@ -67,10 +77,13 @@ export function SettingsPage() {
                 <FormLabel color={"#FDCA40"}>Change Password:</FormLabel>
                 <Text sx={FormContext}>Type your current Password:</Text>
                 <Input type="password" sx={InputFieldColors} id="oldPassword" name="oldPassword" onChange={changePassword}/>
+                {passwordError.oldPassword && <Text>{passwordError.oldPassword}</Text>}
                 <Text sx={FormContext}>Type your new Password: </Text>
                 <Input type="password" sx={InputFieldColors} id="newPassword1" name="newPassword1" onChange={changePassword}/>
+                {passwordError.newPassword1 && <Text>{passwordError.newPassword1}</Text>}
                 <Text sx={FormContext}>Re-type your new Password: </Text>
                 <Input type="password" sx={InputFieldColors} id="newPassword2" name="newPassword2" onChange={changePassword}/>
+                {passwordError.newPassword2 && <Text>{passwordError.newPassword2}</Text>}
                 <Center>
                   <Input type="submit" sx={FormButton} value="Change Password"/>
                 </Center>
