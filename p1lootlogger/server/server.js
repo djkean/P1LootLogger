@@ -109,6 +109,58 @@ app.post("/login", async (req, res) => {
   })
 })
 
+app.post("/deleteaccount", async (req, res) => {
+  const header = req.headers['authorization']
+  const token = header && header.split(" ")[1]
+  const secret = process.env.P1LL_SECRETTOKEN
+  const typedPassword = req.body.delAccount
+  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) {
+      console.log(chalk.red("ERR 403 - TOKEN - INVALID"))
+      res.status(403).send({ message: "DELETE ACCOUNT QUERY FAILED INVALID TOKEN" })
+    }
+    else if (!passwordPattern.test(typedPassword)) {
+      console.log(chalk.red("ERR 409 - ACCOUNT - CHECK FOR REGEX"))
+      res.status(409).send({ message: "DELETE ACCOUNT QUERY FAILED PASSWORD INVALID" })
+    }
+    else {
+      const email = decoded
+      const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable3` WHERE `email` = ?"
+      connection.query(confirmPasswordQuery, [email], async (err, result) => {
+        if (typeof result[0]?.email === "undefined") {
+          console.log(chalk.red("ERR 403 - ACCOUNT - NO MATCHING EMAIL"))
+          res.status(403).send({ message: "DELETE ACCOUNT QUERY FAILED - NO ACCOUNTS MATCHED EMAIL" })
+          return
+        }
+        const { email, password, salt } = result[0]
+        const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
+        if (err) {
+          console.log(chalk.red("ERR 500 - ACCOUNT - QUERY ERROR"))
+          res.status(500).send({ message: "DELETE ACCOUNT QUERY FAILED - SERVER ERROR" })
+        }
+        else if (password === comparedPass) {
+          const deleteAccountQuery = "DELETE FROM `usertable3` WHERE `email` = ?"
+          connection.query(deleteAccountQuery, [email], async (err, results) => {
+            if (err) {
+              console.log(chalk.red("ERR 500 - ACCOUNT - SOMETHING WENT WRONG"))
+              res.status(500).send({ message: "DELETE ACCOUNT QUERY FAILED - AN ERROR OCCURRED" })
+            }
+            else {
+              console.log(chalk.green("ACCOUNT SUCCESSFULLY DELETED"))
+              res.status(200).send({ message: "YOUR ACCOUNT HAS BEEN DELETED" })
+            }
+          })
+        }
+        else {
+          console.log(chalk.red("ERR 403 - ACCOUNT - INCORRECT PASSWORD"))
+          res.status("DELETE ACCOUNT QUERY FAILED - INVALID PASSWORD")
+        }
+      })
+    }
+  })
+})
+
 app.post("/changepassword", async (req, res) => {
   const header = req.headers['authorization']
   const token = header && header.split(" ")[1]
@@ -134,7 +186,7 @@ app.post("/changepassword", async (req, res) => {
     }
     else {
       const email = decoded
-      const confirmPasswordQuery = "SELECT `email`, `password`, `salt` FROM `usertable3` WHERE `email` = ?"
+      const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable3` WHERE `email` = ?"
       connection.query(confirmPasswordQuery, [email], async (err, result) => {
         if (typeof result[0]?.email === "undefined") {
           console.log(chalk.red("ERR 403 - PASSWORD - NO MATCHING EMAIL"))

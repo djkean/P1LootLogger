@@ -14,6 +14,21 @@ export function checkUsernameRegex(newUsername) {
   return error
 }
 
+export function deleteAccountRegex(deleteAccount) {
+  let error = {}
+  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
+  if (deleteAccount === "") {
+    error.delAccount = "This field cannot be blank"
+  }
+  else if (!passwordPattern.test(deleteAccount.delAccount)) {
+    error.delAccount = "The Password you typed doesn't match requirements (Upper & Lowercase characters, and numbers are required)"
+  }
+  else {
+    error.delAccount = ""
+  }
+  return error
+}
+
 export function checkPasswordRegex(newPassword) {
   let error = {}
   const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
