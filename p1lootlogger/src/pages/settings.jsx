@@ -73,12 +73,12 @@ export function SettingsPage() {
       "Content-Type": "application/json" } })
       .then( res => {
         console.log("DELETE ACCOUNT FIELD OK (AXIOS)")
+        localStorage.removeItem("P1LL_TOKEN")
         navigate("/home")
       })
       .catch(err => console.log("ERROR IN DELETING ACCOUNT (AXIOS)", err))
     }
   }
-  
 
   return (
     <Flex sx={LoginFlex} align={"center"}>
