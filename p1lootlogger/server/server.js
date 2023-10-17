@@ -10,6 +10,10 @@ const connection = require("./connect");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
+const secret = process.env.P1LL_SECRETTOKEN
+const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
+const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
+
 const optOut = ["/", "/home", "/login", "/createaccount"];
 const verifyUser = (req, res, next) => {
   const path = req.path
@@ -20,7 +24,6 @@ const verifyUser = (req, res, next) => {
     console.log(chalk.yellow("CHECKING TOKEN..."));
     const header = req.headers['authorization']
     const token = header && header.split(" ")[1]
-    const secret = process.env.P1LL_SECRETTOKEN
     if (token == null) {
       console.log(chalk.red("TOKEN CHECK FAIL - NO TOKEN"))
       return res.status(403).json({ message: "Invalid Token" });
@@ -112,9 +115,7 @@ app.post("/login", async (req, res) => {
 app.post("/deleteaccount", async (req, res) => {
   const header = req.headers['authorization']
   const token = header && header.split(" ")[1]
-  const secret = process.env.P1LL_SECRETTOKEN
   const typedPassword = req.body.delAccount
-  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
   jwt.verify(token, secret, (err, decoded) => {
     if (err) {
       console.log(chalk.red("ERR 403 - TOKEN - INVALID"))
@@ -164,9 +165,7 @@ app.post("/deleteaccount", async (req, res) => {
 app.post("/changepassword", async (req, res) => {
   const header = req.headers['authorization']
   const token = header && header.split(" ")[1]
-  const secret = process.env.P1LL_SECRETTOKEN
   const { oldPassword, newPassword1, newPassword2 } = req.body
-  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
   jwt.verify(token, secret, (err, decoded) => {
     if (err) {
       console.log(chalk.red("ERR 403 - TOKEN - INVALID"))
@@ -226,9 +225,7 @@ app.post("/changepassword", async (req, res) => {
 app.post("/changeusername", async (req, res) => {
   const header = req.headers['authorization']
   const token = header && header.split(" ")[1]
-  const secret = process.env.P1LL_SECRETTOKEN
   const username = req.body.username
-  const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
   jwt.verify(token, secret, (err, decoded) => {
     if (err) {
       console.log(chalk.red("TOKEN AUTH FAIL - INVALID TOKEN"))
@@ -261,6 +258,10 @@ app.post("/changeusername", async (req, res) => {
       })
     }
   })
+})
+
+app.post("/logout", async (req, res) => {
+
 })
 
 app.listen(port);
