@@ -1,4 +1,4 @@
-import { Box, Button, Container, Heading, SimpleGrid, Text, Center, HStack, Image, Input} from "@chakra-ui/react";
+import { Box, Button, Container, Heading, SimpleGrid, Text, Center, HStack, Image, Input } from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState, useMemo } from "react";
 import { PageButtonUI, ListGridUI, GridRowUI, SearchBarUI } from "../components/pagestyles";
