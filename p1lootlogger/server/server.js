@@ -2,13 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const chalk = require("chalk");
 const path = require("path");
+const app = express();
 const testApi = require("./routes/test");
 const cors = require("cors");
 const connection = require("./connect");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-const app = express();
 const port = process.env.P1LL_SERVER || 8080;
 const secret = process.env.P1LL_SECRETTOKEN
 const salt = crypto.randomBytes(16).toString("hex")
@@ -33,7 +33,7 @@ const verifyUser = (req, res, next) => {
         return res.status(403).json({ message: "403: Invalid Token" });
       }
       else {
-        res.status(200).json({ message: "200: Success" })
+        console.log(chalk.green("TOKEN OK"))
         next();
       }
     })
@@ -229,7 +229,8 @@ app.post("/changeusername", async (req, res) => {
 })
 
 /* app.post("/logout", async (req, res) => {
-
+  const header = req.headers['authorization']
+  const token = header && header.split(" ")[1]
 }) */
 
 app.listen(port);
