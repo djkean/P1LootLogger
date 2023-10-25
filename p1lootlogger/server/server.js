@@ -15,6 +15,7 @@ const salt = crypto.randomBytes(16).toString("hex")
 const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 const currentUnixTime = Math.floor(Date.now() / 1000)
+const tokenExpiration = currentUnixTime + 10000
 
 const optOut = ["/", "/home", "/login", "/createaccount"];
 const verifyUser = (req, res, next) => {
@@ -30,6 +31,7 @@ const verifyUser = (req, res, next) => {
       return res.status(403).json({ message: "403: Invalid Token" });
     }
     jwt.verify(token, secret, (err, decoded) => {
+      console.log(token)
       if (err) {
         return res.status(403).json({ message: "403: Invalid Token" });
       }
@@ -93,7 +95,7 @@ app.post("/login", async (req, res) => {
       res.status(500).send({ message: "500: Something went wrong" });
     }
     else if (password === comparedPass) {
-      const loginToken = jwt.sign({ email: email, expires: currentUnixTime }, process.env.P1LL_SECRETTOKEN)
+      const loginToken = jwt.sign({ email: email, expires: tokenExpiration, iat: currentUnixTime }, process.env.P1LL_SECRETTOKEN)
       res.status(200).send({ message: "200: Success", loginToken: loginToken });
     }
     else {
