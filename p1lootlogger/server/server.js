@@ -14,8 +14,12 @@ const secret = process.env.P1LL_SECRETTOKEN
 const salt = crypto.randomBytes(16).toString("hex")
 const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
+const getCurrentTime = () => {
+  return Math.floor(Date.now() / 1000)
+}
+const currentTime = getCurrentTime()
 const currentUnixTime = Math.floor(Date.now() / 1000)
-const tokenExpiration = currentUnixTime + 10000
+const tokenExpiration = currentTime + 10000
 
 const optOut = ["/", "/home", "/login", "/createaccount"];
 const verifyUser = (req, res, next) => {
@@ -63,11 +67,16 @@ app.get("/*", (req, res, next) => {
 
 app.post("/createaccount", async (req, res) => {
   try {
+    const createAccountTime = () => {
+      return Math.floor(Date.now() / 1000)
+    }  
+    const accountCreatedTime = Math.floor(Date.now() / 1000)
+
     const { username, email, password } = req.body
     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha256").toString("hex")
     connection.query(
-      "INSERT INTO `usertable3` (`username`,`email`,`password`,`salt`,`status`) VALUES (?,?,?,?,'4')",
-      [username, email, hash, salt],
+      "INSERT INTO `usertable3` (`username`,`email`,`password`,`salt`,`timestamp`,`status`) VALUES (?,?,?,?,?,'4')",
+      [username, email, hash, salt, accountCreatedTime],
       (err, result) => {
         if (err) {
           res.status(500).json({ message: "500: Error with query" });
@@ -95,7 +104,7 @@ app.post("/login", async (req, res) => {
       res.status(500).send({ message: "500: Something went wrong" });
     }
     else if (password === comparedPass) {
-      const loginToken = jwt.sign({ email: email, expires: tokenExpiration, iat: currentUnixTime }, process.env.P1LL_SECRETTOKEN)
+      const loginToken = jwt.sign({ email: email, expires: tokenExpiration, iat: currentTime }, process.env.P1LL_SECRETTOKEN)
       res.status(200).send({ message: "200: Success", loginToken: loginToken });
     }
     else {
