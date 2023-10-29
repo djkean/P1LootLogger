@@ -11,7 +11,6 @@ const crypto = require("crypto");
 
 const port = process.env.P1LL_SERVER || 8080;
 const secret = process.env.P1LL_SECRETTOKEN
-//const salt = crypto.randomBytes(16).toString("hex")
 const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 
@@ -29,9 +28,12 @@ const verifyUser = (req, res, next) => {
       return res.status(403).json({ message: "403: Invalid Token" });
     }
     jwt.verify(token, secret, (err, decoded) => {
-      console.log(token)
+      req.email = decoded.email
+      console.log(decoded)
       if (err) {
-        return res.status(403).json({ message: "403: Invalid Token" });
+        return res.status(400).json({ message: "400: Invalid Token" });
+      } else if (decoded.expires <= Math.floor(Date.now() / 1000)) {
+
       }
       else {
         console.log(chalk.green("TOKEN OK"))
@@ -109,57 +111,44 @@ app.post("/login", async (req, res) => {
 })
 
 app.post("/deleteaccount", async (req, res) => {
-  const header = req.headers['authorization']
-  const token = header && header.split(" ")[1]
   const typedPassword = req.body.delAccount
-  jwt.verify(token, secret, (err, decoded) => {
-    if (err) {
-      res.status(403).send({ message: "403: Invalid token" })
+  //replace jwt verify with req.decoded values
+  const tokenEmail = req.email
+  const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable3` WHERE `email` = ?"
+  connection.query(confirmPasswordQuery, [tokenEmail], async (err, result) => {
+    if (typeof result[0]?.email === "undefined") {
+      res.status(403).send({ message: "403: Invalid email" })
+      return
     }
     else if (!passwordPattern.test(typedPassword)) {
       res.status(409).send({ message: "409: Illegal password" })
     }
-    else {
-      const email = decoded
-      const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable3` WHERE `email` = ?"
-      connection.query(confirmPasswordQuery, [email], async (err, result) => {
-        if (typeof result[0]?.email === "undefined") {
-          res.status(403).send({ message: "403: Invalid email" })
-          return
-        }
-        const { email, password, salt } = result[0]
-        const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
+    const { email, password, salt } = result[0]
+    const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
+    if (err) {
+      res.status(500).send({ message: "500: Something went wrong - (Query)" })
+    }
+    else if (password === comparedPass) {
+      const deleteAccountQuery = "DELETE FROM `usertable3` WHERE `email` = ?"
+      connection.query(deleteAccountQuery, [email], async (err, results) => {
         if (err) {
-          res.status(500).send({ message: "500: Something went wrong - (Query)" })
-        }
-        else if (password === comparedPass) {
-          const deleteAccountQuery = "DELETE FROM `usertable3` WHERE `email` = ?"
-          connection.query(deleteAccountQuery, [email], async (err, results) => {
-            if (err) {
-              res.status(500).send({ message: "500: Something went wrong - Query" })
-            }
-            else {
-              res.status(200).send({ message: "200: Success" })
-            }
-          })
+          res.status(500).send({ message: "500: Something went wrong - Query" })
         }
         else {
-          res.status(403).send({ message: "403: Invalid password" })
+          res.status(200).send({ message: "200: Success" })
         }
       })
+    }
+    else {
+      res.status(403).send({ message: "403: Invalid password" })
     }
   })
 })
 
 app.post("/changepassword", async (req, res) => {
-  const header = req.headers['authorization']
-  const token = header && header.split(" ")[1]
   const { oldPassword, newPassword1, newPassword2 } = req.body
-  jwt.verify(token, secret, (err, decoded) => {
-    if (err) {
-      res.status(403).send({ message: "403: Invalid token" })
-    }
-    else if (!passwordPattern.test(oldPassword) || !passwordPattern.test(newPassword1) || !passwordPattern.test(newPassword2)) {
+  const tokenEmail = req.email
+  if (!passwordPattern.test(oldPassword) || !passwordPattern.test(newPassword1) || !passwordPattern.test(newPassword2)) {
       res.status(409).send({ message: "409: Illegal password" })
     } 
     else if (oldPassword === newPassword1 || oldPassword === newPassword2) {
@@ -169,9 +158,8 @@ app.post("/changepassword", async (req, res) => {
       res.status(409).send({ message: "409: New password fields do not match" })
     }
     else {
-      const email = decoded
       const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable3` WHERE `email` = ?"
-      connection.query(confirmPasswordQuery, [email], async (err, result) => {
+      connection.query(confirmPasswordQuery, [tokenEmail], async (err, result) => {
         if (typeof result[0]?.email === "undefined") {
           res.status(403).send({ message: "403: Invalid email" })
           return
@@ -199,7 +187,6 @@ app.post("/changepassword", async (req, res) => {
         }
       })
     }
-  })
 })
 
 app.post("/changeusername", async (req, res) => {
