@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormContext, FormControlColors, InputFieldColors, LoginStack, SettingsBox } from "../components/pagestyles"; 
+import { FormButton, FormContext, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, SettingsBox } from "../components/pagestyles"; 
 import { checkEmailRegex } from "../components/emailVerification";
 
 export function ForgotPassword() {
@@ -19,7 +19,7 @@ export function ForgotPassword() {
     setForgotPasswordError(checkEmailRegex(confirmEmail))
     let error = checkEmailRegex(confirmEmail)
     setForgotPasswordError(error)
-    console.log(error.email)
+    console.log(forgotPasswordError, confirmEmail)
     if (error.email === "") {
       axios.post("/forgotpassword", confirmEmail)
       .then(res => {
@@ -32,21 +32,22 @@ export function ForgotPassword() {
   }
 
   return (
-    <Flex sx={LoginStack} align={"center"}>
+    <Flex sx={LoginFlex} align={"center"}>
       <Stack sx={LoginStack} spacing={6} align="center">
-        <Stack as="form" paddingTop={"2em"} onSubmit={submitEmail}>
-          <Heading fontSize={"3xl"} py={3}>Forgot Password</Heading>
+      <Heading fontSize={"3xl"} py={3}>Forgot Password</Heading>
+        <Stack sx={LoginBox} as="form" paddingTop={"2em"} onSubmit={submitEmail}>
           <FormControl id="forgot--password" sx={FormControlColors}>
             <FormLabel color={"#FDCA40"}>Forgot your Password?:</FormLabel>
             <Text sx={FormContext}>Enter your email:</Text>
-            <Input type="email" sx={InputFieldColors} id="forgot--email" name="email" onChange={emailField()}/>
-            {forgotPasswordError.error && <Text>{forgotPasswordError.error}</Text>}
+            <Input type="email" sx={InputFieldColors} id="forgot--email" name="email" onChange={emailField}/>
+            {forgotPasswordError.email && <Text>{forgotPasswordError.email}</Text>}
             <Center>
               <Input type="submit" sx={FormButton} value="Submit"/>
             </Center>
+            <Text color={"#BFA55C"} align={"center"}>We will send you a confirmation email</Text>
           </FormControl>
         </Stack>
       </Stack>
     </Flex>
-  )
+  ) 
 }

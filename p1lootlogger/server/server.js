@@ -13,8 +13,9 @@ const port = process.env.P1LL_SERVER || 8080;
 const secret = process.env.P1LL_SECRETTOKEN
 const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
+const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
 
-const optOut = ["/", "/home", "/login", "/createaccount"];
+const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword"];
 const verifyUser = (req, res, next) => {
   const path = req.path
   if (optOut.includes(path)) {
@@ -110,9 +111,27 @@ app.post("/login", async (req, res) => {
   })
 })
 
+app.post("/forgotpassword", async (req, res) => {
+  const typedEmail = req.body.email
+  const confirmEmailQuery = "SELECT `email` from `usertable3` where `email` = ?"
+  connection.query(confirmEmailQuery, [typedEmail], async (err, result) => {
+    if (err) {
+      res.status(500).send({ message: "500: Something went wrong (Query)" })
+    }
+    else if (!emailPattern.test(typedEmail)) {
+      res.status(409).send({ message: "409: Illegal email" })
+    }
+    else if (typeof result[0]?.email === "underfined") {
+      res.status(403).send({ message: "403: Invalid email" })
+    }
+    else {
+      res.status(200).send({ message: "200: typed email matches, this would send an email to further verify" })
+    }
+  })
+})
+
 app.post("/deleteaccount", async (req, res) => {
   const typedPassword = req.body.delAccount
-  //replace jwt verify with req.decoded values
   const tokenEmail = req.email
   const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable3` WHERE `email` = ?"
   connection.query(confirmPasswordQuery, [tokenEmail], async (err, result) => {

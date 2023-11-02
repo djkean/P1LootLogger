@@ -2,10 +2,10 @@ export function checkEmailRegex(confirmEmail) {
   let error = {}
   const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
 
-  if (confirmEmail === "") {
+  if (confirmEmail.email === "") {
     error.email = "This field cannot be left blank"
   }
-  else if (!emailPattern.test(confirmEmail)) {
+  else if (!emailPattern.test(confirmEmail.email)) {
     error.email = "Please input a valid Email"
   }
   else {

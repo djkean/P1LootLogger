@@ -1,9 +1,9 @@
-import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles"
 import { React, useState } from "react";
 import { loginVerification } from "../components/loginVerification";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export function LoginPage() {
   const [loginDetails, setLoginDetails] = useState({
@@ -56,7 +56,9 @@ export function LoginPage() {
               <Center>
                 <Input type="submit" sx={FormButton} value="Sign In"/>
               </Center>
-              <Text color={"#BFA55C"} align={"center"}>Forgot Password? Click here</Text>
+              <Link to="/forgotpassword">
+                <Text color={"#BFA55C"} align={"center"}>Forgot Password? Click here</Text>
+              </Link>
             </FormControl>
           </Stack>
         </Box>
