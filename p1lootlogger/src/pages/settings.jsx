@@ -121,6 +121,7 @@ export function SettingsPage() {
                 <FormLabel color={"#FDCA40"}>Delete Account:</FormLabel>
                 <Text sx={FormContext}>Re-type your Password to confirm:</Text>
                 <Input type="password" sx={InputFieldColors} id="delAccount" name="delAccount" onChange={deleteAccountField}/>
+                {deleteError.delAccount && <Text>{deleteError.delAccount}</Text>}
                 <Center>
                   <Input type="submit" sx={FormButton} value="Delete my Account"/>
                 </Center>

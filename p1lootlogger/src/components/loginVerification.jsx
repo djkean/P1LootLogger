@@ -4,10 +4,10 @@ export function loginVerification(loginDetails) {
   const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
   const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 
-  if(loginDetails.email === "") {
+  if (loginDetails.email === "") {
     error.email = "Please enter an Email"
   }
-  else if(!emailPattern.test(loginDetails.email)) {
+  else if (!emailPattern.test(loginDetails.email)) {
     error.email = "Please check that your Email is correct"
   }
   else {
