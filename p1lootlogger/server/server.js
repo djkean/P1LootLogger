@@ -69,7 +69,7 @@ app.post("/createaccount", async (req, res) => {
     const salt = crypto.randomBytes(16).toString("hex")
     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha256").toString("hex")
     connection.query(
-      "INSERT INTO `usertable3` (`username`,`email`,`password`,`salt`,`timestamp`,`status`) VALUES (?,?,?,?,?,'4')",
+      "INSERT INTO `usertable4` (`username`,`email`,`password`,`salt`,`timestamp`,`status`) VALUES (?,?,?,?,?,'4')",
       [username, email, hash, salt, accountCreatedTime],
       (err, result) => {
         if (err) {
@@ -86,7 +86,7 @@ app.post("/createaccount", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const typedPassword = req.body.password
-  const loginQuery = "SELECT `email`,`password`,`salt` FROM `usertable3` WHERE `email` = ? LIMIT 1"
+  const loginQuery = "SELECT `email`,`password`,`salt` FROM `usertable4` WHERE `email` = ? LIMIT 1"
   connection.query(loginQuery, [req.body.email], async (err, result) => {
     if (typeof result[0]?.email === "undefined") {
       res.status(403).send({ message: "403: Invalid email" })
@@ -113,7 +113,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/forgotpassword", async (req, res) => {
   const typedEmail = req.body.email
-  const confirmEmailQuery = "SELECT `email` from `usertable3` where `email` = ?"
+  const confirmEmailQuery = "SELECT `email` from `usertable4` where `email` = ?"
   connection.query(confirmEmailQuery, [typedEmail], async (err, result) => {
     if (err) {
       res.status(500).send({ message: "500: Something went wrong (Query)" })
@@ -133,7 +133,7 @@ app.post("/forgotpassword", async (req, res) => {
 app.post("/deleteaccount", async (req, res) => {
   const typedPassword = req.body.delAccount
   const tokenEmail = req.email
-  const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable3` WHERE `email` = ?"
+  const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable4` WHERE `email` = ?"
   connection.query(confirmPasswordQuery, [tokenEmail], async (err, result) => {
     if (typeof result[0]?.email === "undefined") {
       res.status(403).send({ message: "403: Invalid email" })
@@ -148,7 +148,7 @@ app.post("/deleteaccount", async (req, res) => {
       res.status(500).send({ message: "500: Something went wrong - (Query)" })
     }
     else if (password === comparedPass) {
-      const deleteAccountQuery = "DELETE FROM `usertable3` WHERE `email` = ?"
+      const deleteAccountQuery = "DELETE FROM `usertable4` WHERE `email` = ?"
       connection.query(deleteAccountQuery, [email], async (err, results) => {
         if (err) {
           res.status(500).send({ message: "500: Something went wrong - Query" })
@@ -177,7 +177,7 @@ app.post("/changepassword", async (req, res) => {
     res.status(409).send({ message: "409: New password fields do not match" })
   }
   else {
-    const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable3` WHERE `email` = ?"
+    const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable4` WHERE `email` = ?"
     connection.query(confirmPasswordQuery, [tokenEmail], async (err, result) => {
       if (typeof result[0]?.email === "undefined") {
         res.status(403).send({ message: "403: Invalid email" })
@@ -191,7 +191,7 @@ app.post("/changepassword", async (req, res) => {
       else if (password === comparedPass) {
         const salt = crypto.randomBytes(16).toString("hex")
         const hash = crypto.pbkdf2Sync(newPassword1, salt, 1000, 64, "sha256").toString("hex")
-        const changePasswordQuery = "UPDATE `usertable3` SET `password` = ?, `salt` = ? WHERE `email` = ? LIMIT 1"
+        const changePasswordQuery = "UPDATE `usertable4` SET `password` = ?, `salt` = ? WHERE `email` = ? LIMIT 1"
         connection.query(changePasswordQuery, [hash, salt, email], async (err, results) => {
           if (err) {
             res.status(500).send({ message: "500: Something went wrong - Query" })
@@ -215,13 +215,13 @@ app.post("/changeusername", async (req, res) => {
     res.status(409).send({ message: "409: Illegal username" })
   }
   else {
-    const isUsernameUnique = "SELECT `username` FROM `usertable3` WHERE `username` = ?"
+    const isUsernameUnique = "SELECT `username` FROM `usertable4` WHERE `username` = ?"
     connection.query(isUsernameUnique, [username], async (err, usernames) => {
       if (usernames.length !== 0) {
         res.status(409).send({ message: "409: Username already taken" })
       }
       else {
-        const changeUsernameQuery = "UPDATE `usertable3` SET `username` = ? WHERE `email` = ? LIMIT 1"
+        const changeUsernameQuery = "UPDATE `usertable4` SET `username` = ? WHERE `email` = ? LIMIT 1"
         connection.query(changeUsernameQuery, [username, tokenEmail], async (err, result) => {
           if (err) {
             res.status(500).send({ message: "500: Something went wrong - (Query)" })
