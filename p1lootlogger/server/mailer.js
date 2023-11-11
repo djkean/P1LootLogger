@@ -2,24 +2,29 @@ require("dotenv").config();
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  host: "",
+  //host: "",
+  service: "gmail",
   port: process.env.P1LL_MAILPORT || 465,
   secure: true,
   auth: {
-    user: "",
-    pass: ""
+    user: process.env.P1LL_MAIL,
+    pass: process.env.P1LL_AUTH
   },
 })
 
-
-//user variables for to/from values
+//use variables for to/from values
 //look into switch cases for subject or content?
-async function mailerInfo() {
-  const info = await transporter.sendMail({
-    from: "",
-    to: "",
-    subject: "",
-    text: "",
-    html: "",
-  })
+const mailerInfo = {
+  from: process.env.P1LL_MAIL,
+  to: process.env.P1LL_TESTMAIL,
+  subject: "hello, testing nodemailer",
+  text: "this is an automated email using nodemailer!"
 }
+
+transporter.sendMail(mailerInfo, function(err, info) {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log(`email sent to ${process.env.P1LL_TESTMAIL}`)
+  }
+})

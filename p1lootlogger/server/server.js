@@ -26,7 +26,10 @@ const verifyUser = (req, res, next) => {
     const header = req.headers['authorization']
     const token = header && header.split(" ")[1]
     if (token == null) {
-      return res.status(403).json({ message: "403: Invalid Token" });
+      return (
+        //res.status(403).json({ message: "403: Invalid Token" })
+        res.redirect(403, "/login")
+      )
     }
     jwt.verify(token, secret, (err, decoded) => {
       req.email = decoded.email
@@ -44,9 +47,9 @@ const verifyUser = (req, res, next) => {
   }
 } 
 
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(verifyUser);
 app.use("/api", testApi);
-app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
 const static_dir = path.resolve(path.join(__dirname, "../build"));
