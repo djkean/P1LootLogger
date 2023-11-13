@@ -12,6 +12,7 @@ import { CreateAccountPage } from "./pages/createaccount.jsx";
 import { LoginPage } from "./pages/login.jsx";
 import { SettingsPage } from "./pages/settings.jsx";
 import { ForgotPassword } from "./pages/forgotpassword.jsx";
+import { SubmitLootPage } from "./pages/submitloot.jsx";
 
 export function App() {
   return (
@@ -29,6 +30,7 @@ export function App() {
           <Route path="/createaccount" element={<CreateAccountPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/submitloot" element={<SubmitLootPage />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
