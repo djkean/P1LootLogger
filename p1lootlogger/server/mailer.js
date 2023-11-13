@@ -21,10 +21,13 @@ const mailerInfo = {
   text: "this is an automated email using nodemailer!"
 }
 
-transporter.sendMail(mailerInfo, function(err, info) {
+/* transporter.sendMail(mailerInfo, function(err, info) {
   if (err) {
     console.log(err)
-  } else {
+  } 
+  else {
     console.log(`email sent to ${process.env.P1LL_TESTMAIL}`)
   }
-})
+})*/
+
+module.exports = transporter

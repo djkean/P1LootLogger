@@ -6,8 +6,10 @@ const app = express();
 const testApi = require("./routes/test");
 const cors = require("cors");
 const connection = require("./connect");
+const transporter = require("./mailer");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 const port = process.env.P1LL_SERVER || 8080;
 const secret = process.env.P1LL_SECRETTOKEN
@@ -35,9 +37,11 @@ const verifyUser = (req, res, next) => {
       req.email = decoded.email
       console.log(decoded)
       if (err) {
+        //once redirect proxy error is solved, also change this to redirect as well
         return res.status(400).json({ message: "400: Invalid Token" });
-      } else if (decoded.expires <= Math.floor(Date.now() / 1000)) {
-
+      } 
+      else if (decoded.expires <= Math.floor(Date.now() / 1000)) {
+        res.redirect(403, "/login")
       }
       else {
         console.log(chalk.green("TOKEN OK"))
@@ -78,7 +82,22 @@ app.post("/createaccount", async (req, res) => {
         if (err) {
           res.status(500).json({ message: "500: Error with query" });
         } else if (res) {
-          res.status(200).json({ message: "200: Success" });
+          // send an email for confirmation about account creation
+          const emailInfo = {
+            from: process.env.P1LL_MAIL,
+            to: email,
+            subject: "Confirm Registration",
+            text: "Welcome to PokeOneLootLogger. If you wish to confirm your registration, click here. If you did not create an account with us, you can click here or safely ignore this email."
+          }
+          transporter.sendMail(emailInfo, function(err, info) {
+            if (err) {
+              console.log(err)
+            } 
+            else {
+              console.log(`email sent to ${email}`)
+            }
+          })
+          //res.status(200).json({ message: "200: Success" });
         }
       }
     );
