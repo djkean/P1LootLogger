@@ -95,9 +95,9 @@ app.post("/createaccount", async (req, res) => {
             } 
             else {
               console.log(`email sent to ${email}`)
+              res.status(200).json({ message: "200: Success" });
             }
           })
-          //res.status(200).json({ message: "200: Success" });
         }
       }
     );
@@ -143,12 +143,26 @@ app.post("/forgotpassword", async (req, res) => {
     else if (!emailPattern.test(typedEmail)) {
       res.status(409).send({ message: "409: Illegal email" })
     }
-    else if (typeof result[0]?.email === "underfined") {
+    else if (typeof result[0]?.email === "undefined") {
       res.status(403).send({ message: "403: Invalid email" })
     }
     else {
-      res.status(200).send({ message: "200: typed email matches, this would send an email to further verify" })
-    }
+      const emailInfo = {
+        from: process.env.P1LL_MAIL,
+        to: typedEmail,
+        subject: "Confirm Password Reset",
+        text: "We received a request to reset the password for the PokeOneLootLogger account tied to this email. To verify you were the one who requested a password reset, you can click here. If you did not request this, you can safely ignore this email."
+      }
+      transporter.sendMail(emailInfo, function(err, info) {
+        if (err) {
+          console.log(err)
+        } 
+        else {
+          console.log(`email sent to ${typedEmail}`)
+          res.status(200).json({ message: "200: Success" });
+        }
+      })
+     }
   })
 })
 
