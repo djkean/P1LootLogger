@@ -87,7 +87,7 @@ app.post("/createaccount", async (req, res) => {
             from: process.env.P1LL_MAIL,
             to: email,
             subject: "Confirm Registration",
-            text: "Welcome to PokeOneLootLogger. If you wish to confirm your registration, click here. If you did not create an account with us, you can click here or safely ignore this email."
+            text: process.env.P1LL_REGISTER_TEXT
           }
           transporter.sendMail(emailInfo, function(err, info) {
             if (err) {
@@ -151,7 +151,7 @@ app.post("/forgotpassword", async (req, res) => {
         from: process.env.P1LL_MAIL,
         to: typedEmail,
         subject: "Confirm Password Reset",
-        text: "We received a request to reset the password for the PokeOneLootLogger account tied to this email. To verify you were the one who requested a password reset, you can click here. If you did not request this, you can safely ignore this email."
+        text: process.env.P1LL_RESETPASS_TEXT
       }
       transporter.sendMail(emailInfo, function(err, info) {
         if (err) {
