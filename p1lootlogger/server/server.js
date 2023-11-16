@@ -9,7 +9,6 @@ const connection = require("./connect");
 const transporter = require("./mailer");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
 
 const port = process.env.P1LL_SERVER || 8080;
 const secret = process.env.P1LL_SECRETTOKEN
@@ -29,19 +28,17 @@ const verifyUser = (req, res, next) => {
     const token = header && header.split(" ")[1]
     if (token == null) {
       return (
-        //res.status(403).json({ message: "403: Invalid Token" })
-        res.redirect(403, "/login")
+        res.status(403).json({ message: "403: Invalid Token" })
       )
     }
     jwt.verify(token, secret, (err, decoded) => {
       req.email = decoded.email
       console.log(decoded)
       if (err) {
-        //once redirect proxy error is solved, also change this to redirect as well
         return res.status(400).json({ message: "400: Invalid Token" });
       } 
       else if (decoded.expires <= Math.floor(Date.now() / 1000)) {
-        res.redirect(403, "/login")
+        res.status(403).json({ message: "403: Token Expired" })
       }
       else {
         console.log(chalk.green("TOKEN OK"))
@@ -82,7 +79,6 @@ app.post("/createaccount", async (req, res) => {
         if (err) {
           res.status(500).json({ message: "500: Error with query" });
         } else if (res) {
-          // send an email for confirmation about account creation
           const emailInfo = {
             from: process.env.P1LL_MAIL,
             to: email,
@@ -270,11 +266,6 @@ app.post("/changeusername", async (req, res) => {
     })
   }
 })
-
-/* app.post("/logout", async (req, res) => {
-  const header = req.headers['authorization']
-  const token = header && header.split(" ")[1]
-}) */
 
 app.listen(port);
 console.log(chalk.bgCyan(`LISTENING ON (${port})`));

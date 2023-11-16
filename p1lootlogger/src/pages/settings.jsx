@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormContext, FormControlColors, FormWarning, InputFieldColors, LoginFlex, LoginStack, SettingsBox } from "../components/pagestyles"; 
 import { checkUsernameRegex, checkPasswordRegex, deleteAccountRegex } from "../components/settingsVerification";
@@ -18,6 +18,7 @@ export function SettingsPage() {
   const [usernameError, setUsernameError] = useState({})
   const [passwordError, setPasswordError] = useState({})
   const [deleteError, setDeleteError] = useState({})
+  const [backendRes, setBackendRes] = useState("")
 
   const changeUsername = (event) => {
     setNewUsername(_ => ({..._, [event.target.name]: event.target.value}))
@@ -41,7 +42,11 @@ export function SettingsPage() {
       axios.post("/changeusername", newUsername, 
     { headers: { "Authorization": `Bearer ${getToken()}`, 
     "Content-Type": "application/json" } })
-      .then(console.log("NAME CHANGE OK (AXIOS)"))
+      .then(res => {
+        console.log("NAME CHANGE OK (AXIOS)", res.data.message)
+        setBackendRes(res.data.message)
+        console.log(backendRes, newUsername)
+      })
       .catch(err => console.log("ERROR CHANGING USERNAME (AXIOS)", err))
     console.log(newUsername)
     }
@@ -79,6 +84,10 @@ export function SettingsPage() {
       .catch(err => console.log("ERROR IN DELETING ACCOUNT (AXIOS)", err))
     }
   }
+
+  useEffect(() => {
+    setBackendRes()
+  }, []);
 
   return (
     <Flex sx={LoginFlex} align={"center"}>
