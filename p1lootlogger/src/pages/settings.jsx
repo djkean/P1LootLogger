@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormContext, FormControlColors, FormWarning, InputFieldColors, LoginFlex, LoginStack, SettingsBox } from "../components/pagestyles"; 
+import { FormButton, FormContext, FormControlColors, FormWarning, InputFieldColors, LoginFlex, LoginStack, ResFeedback, SettingsBox } from "../components/pagestyles"; 
 import { checkUsernameRegex, checkPasswordRegex, deleteAccountRegex } from "../components/settingsVerification";
 import axios from "axios";
 import { getToken } from "../shared/getToken";
@@ -18,7 +18,7 @@ export function SettingsPage() {
   const [usernameError, setUsernameError] = useState({})
   const [passwordError, setPasswordError] = useState({})
   const [deleteError, setDeleteError] = useState({})
-  const [backendRes, setBackendRes] = useState("")
+  const [backendRes, setBackendRes] = useState({})
 
   const changeUsername = (event) => {
     setNewUsername(_ => ({..._, [event.target.name]: event.target.value}))
@@ -43,11 +43,14 @@ export function SettingsPage() {
     { headers: { "Authorization": `Bearer ${getToken()}`, 
     "Content-Type": "application/json" } })
       .then(res => {
-        console.log("NAME CHANGE OK (AXIOS)", res.data.message)
-        setBackendRes(res.data.message)
+        console.log("NAME CHANGE OK (AXIOS)", res.data)
+        setBackendRes(res.data)
         console.log(backendRes, newUsername)
       })
-      .catch(err => console.log("ERROR CHANGING USERNAME (AXIOS)", err))
+      .catch(err => {
+        console.log("ERROR CHANGING USERNAME (AXIOS)", err.response.data)
+        setBackendRes(err.response.data)
+      })
     console.log(newUsername)
     }
   } 
@@ -85,15 +88,14 @@ export function SettingsPage() {
     }
   }
 
-  useEffect(() => {
-    setBackendRes()
-  }, []);
-
   return (
     <Flex sx={LoginFlex} align={"center"}>
       <Stack sx={LoginStack} spacing={6}>
         <Stack align={"center"}>
           <Heading fontSize={"3xl"} py={3}>User Settings</Heading>
+          {backendRes.message && <Stack align={"center"} sx={ResFeedback}>
+            <Text color={backendRes.code}>{backendRes.message}</Text>
+          </Stack>}
         </Stack>
         <Box sx={SettingsBox} id="settings--form">
           <Stack spacing={3}>
@@ -134,7 +136,7 @@ export function SettingsPage() {
                 <Center>
                   <Input type="submit" sx={FormButton} value="Delete my Account"/>
                 </Center>
-                <Text sx={FormWarning}>This will permanently delete your account!</Text>
+                <Text align={"center"} sx={FormWarning}>This will permanently delete your account!</Text>
               </FormControl>
             </Stack>
           </Stack>

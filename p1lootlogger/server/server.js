@@ -244,22 +244,22 @@ app.post("/changeusername", async (req, res) => {
   const username = req.body.username
   const tokenEmail = req.email 
   if (!usernamePattern.test(username)) {
-    res.status(409).send({ message: "409: Illegal username" })
+    res.status(409).send({ message: "Illegal username", code: "red" })
   }
   else {
     const isUsernameUnique = "SELECT `username` FROM `usertable4` WHERE `username` = ?"
     connection.query(isUsernameUnique, [username], async (err, usernames) => {
       if (usernames.length !== 0) {
-        res.status(409).send({ message: "409: Username already taken" })
+        res.status(409).send({ message: "Username already taken", code: "red" })
       }
       else {
         const changeUsernameQuery = "UPDATE `usertable4` SET `username` = ? WHERE `email` = ? LIMIT 1"
         connection.query(changeUsernameQuery, [username, tokenEmail], async (err, result) => {
           if (err) {
-            res.status(500).send({ message: "500: Something went wrong - (Query)" })
+            res.status(500).send({ message: "Something went wrong - (Query)", code: "green" })
           }
           else if (result) {
-            res.status(200).send({ message: "200: Success" })
+            res.status(200).send({ message: "Success", code: "green" })
           }
         })
       }

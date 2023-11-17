@@ -49,7 +49,6 @@ export const FormContext = {
 }
 
 export const FormWarning = {
-  align: "left",
   color: "#A00C00",
 }
 
@@ -213,4 +212,13 @@ export const SettingsBox = {
 export const TitleTheme = {
   color: "#FDCA40",
   fontWeight: "600",
+}
+
+
+export const ResFeedback = {
+  bg: "#2A2823",
+  px: "2em",
+  py: "1em",
+  rounded: "lg",
+  w: "28em"
 }
