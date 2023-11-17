@@ -64,8 +64,14 @@ export function SettingsPage() {
       axios.post("/changepassword", newPassword, 
       { headers: { "Authorization": `Bearer ${getToken()}`, 
       "Content-Type": "application/json" } })
-      .then(console.log("PASSWORD CHANGE OK (AXIOS)"))
-      .catch(err => console.log("ERROR CHANGING PASSWORD (AXIOS)", err))
+      .then(res => { 
+        console.log("PASSWORD CHANGE OK (AXIOS)")
+        setBackendRes(res.data)
+      })
+      .catch(err => {
+        console.log("ERROR CHANGING PASSWORD (AXIOS)", err)
+        setBackendRes(err.response.data)
+      })
     }
   }
 
@@ -81,10 +87,14 @@ export function SettingsPage() {
       "Content-Type": "application/json" } })
       .then( res => {
         console.log("DELETE ACCOUNT FIELD OK (AXIOS)")
+        setBackendRes(res.data)
         localStorage.removeItem("P1LL_TOKEN")
         navigate("/home")
       })
-      .catch(err => console.log("ERROR IN DELETING ACCOUNT (AXIOS)", err))
+      .catch(err => {
+        console.log("ERROR IN DELETING ACCOUNT (AXIOS)", err)
+        setBackendRes(err.response.data)
+      })
     }
   }
 
