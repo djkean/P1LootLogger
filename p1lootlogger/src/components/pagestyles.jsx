@@ -158,7 +158,7 @@ export const LoginFlex = {
 }
 
 export const LoginStack = {
-  maxW: "lg",
+  //maxW: "lg",
   mx: "auto",
   py: 12,
   px: 6,
@@ -221,4 +221,12 @@ export const ResFeedback = {
   py: "1em",
   rounded: "lg",
   w: "28em"
+}
+
+export const LoginFeedback = {
+  bg: "#2A2823",
+  px: "2em",
+  py: "1em",
+  rounded: "lg",
+  w: "22em"
 }

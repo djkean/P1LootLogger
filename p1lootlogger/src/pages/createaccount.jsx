@@ -1,7 +1,7 @@
 import { React, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles"
+import { useNavigate, Link } from "react-router-dom";
+import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback } from "../components/pagestyles"
 import { regVerification } from "../components/regVerification";
 import axios from "axios";
 
@@ -13,6 +13,7 @@ export function CreateAccountPage() {
   })
 
   const [regError, setRegError] = useState({})
+  const [createdAccRes, setCreateAccRes] = useState({})
 
   const handleFields = (event) => {
     setRegDetails(_ => ({ ..._, [event.target.name]: event.target.value }))
@@ -26,10 +27,17 @@ export function CreateAccountPage() {
     setRegError(error)
     console.log(error.username, error.email, error.password)
     if (error.username === "" && error.email === "" && error.password === "") {
-      console.log("Account Created")
+      console.log("Form submitted")
       await axios.post("http://localhost:8080/createaccount", regDetails)
-      .then((res => navigate("/login")))
-      .catch((err => console.log(err)))
+      .then((res => {
+        setCreateAccRes(res.data)
+        console.log(res.data.message, res.data.code)
+        navigate("/login")
+      }))
+      .catch((err =>{ 
+        setCreateAccRes(err.response.data)
+        console.log(err, `Backend returned with error ${err.response.status}`)
+      }))
     }
   }
 
@@ -41,6 +49,9 @@ export function CreateAccountPage() {
           <Text fontSize={"lg"}>Already have an account? Log in {" "}
             <Link to="/createaccount" color="#FDCA40">here</Link>
           </Text>
+         {createdAccRes.message && <Stack align={"center"} sx={LoginFeedback}>
+            <Text color={createdAccRes.code}>{createdAccRes.message}</Text>
+          </Stack>}
         </Stack>
         <Box sx={LoginBox} as="form" id="reg--form" onSubmit={submitFields}>
           <Stack spacing={3}>

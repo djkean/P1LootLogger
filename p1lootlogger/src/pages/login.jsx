@@ -1,5 +1,5 @@
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles"
+import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback } from "../components/pagestyles"
 import { React, useState } from "react";
 import { loginVerification } from "../components/loginVerification";
 import axios from "axios";
@@ -13,6 +13,7 @@ export function LoginPage() {
   })
   
   const [loginError, setLoginError] = useState({})
+  const [loginRes, setLoginRes] = useState({})
 
   const handleFields = (event) => {
     setLoginDetails(_ => ({..._, [event.target.name]: event.target.value}))
@@ -25,10 +26,14 @@ export function LoginPage() {
     axios.post("http://localhost:8080/login", loginDetails)
     .then(res => {
       localStorage.setItem("P1LL_TOKEN", res.data.loginToken)
-      console.log("SUCCESS (AXIOS)")
+      console.log("SUCCESS (AXIOS)", res.data)
+      setLoginRes(res.data)
       navigate("/itemtable")
     })
-    .catch(err => console.log("ERROR (AXIOS)", err))
+    .catch(err => {
+      setLoginRes(err.response.data)
+      console.log("ERROR (AXIOS)", err)
+    })
   }
  
   return (
@@ -39,6 +44,9 @@ export function LoginPage() {
           <Text fontSize={"lg"}>Don't have an account? Create one {" "}
             <Link to="/createaccount" color="#FDCA40">here</Link>
           </Text>
+          { loginRes.message && <Stack align={"center"} sx={LoginFeedback}>
+            <Text color={loginRes.code}>{loginRes.message}</Text>
+          </Stack>}
         </Stack>
         <Box sx={LoginBox} as="form" id="login--form" onSubmit={submitFields}>
           <Stack spacing={3}>

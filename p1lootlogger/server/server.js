@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 const port = process.env.P1LL_SERVER || 8080;
-const secret = process.env.P1LL_SECRETTOKEN
+const secret = process.env.P1LL_SECRETTOKEN;
 const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
@@ -28,17 +28,17 @@ const verifyUser = (req, res, next) => {
     const token = header && header.split(" ")[1]
     if (token == null) {
       return (
-        res.status(403).json({ message: "403: Invalid Token" })
+        res.status(403).send({ message: "Invalid Token", code: "yellow" })
       )
     }
     jwt.verify(token, secret, (err, decoded) => {
       req.email = decoded.email
       console.log(decoded)
       if (err) {
-        return res.status(400).json({ message: "400: Invalid Token" });
+        return res.status(400).send({ message: "Invalid Token", code: "yellow" });
       } 
       else if (decoded.expires <= Math.floor(Date.now() / 1000)) {
-        res.status(403).json({ message: "403: Token Expired" })
+        res.status(403).send({ message: "Token Expired", code: "yellow" })
       }
       else {
         console.log(chalk.green("TOKEN OK"))
@@ -77,7 +77,7 @@ app.post("/createaccount", async (req, res) => {
       [username, email, hash, salt, accountCreatedTime],
       (err, result) => {
         if (err) {
-          res.status(500).json({ message: "500: Error with query" });
+          res.status(500).send({ message: "Error with Query", code: "red" });
         } else if (res) {
           const emailInfo = {
             from: process.env.P1LL_MAIL,
@@ -88,17 +88,18 @@ app.post("/createaccount", async (req, res) => {
           transporter.sendMail(emailInfo, function(err, info) {
             if (err) {
               console.log(err)
+              res.status(500).send({ message: "Error when sending email" , code: "red" })
             } 
             else {
               console.log(`email sent to ${email}`)
-              res.status(200).json({ message: "200: Success" });
+              res.status(200).json({ message: `Confirmation email sent to ${email}`, code: "green" });
             }
           })
         }
       }
     );
   } catch (err) {
-    res.status(500).json({ message: "500: Something went wrong" });
+    res.status(500).json({ message: "Something went wrong", code: "red" });
   }
 });
 
@@ -107,13 +108,13 @@ app.post("/login", async (req, res) => {
   const loginQuery = "SELECT `email`,`password`,`salt` FROM `usertable4` WHERE `email` = ? LIMIT 1"
   connection.query(loginQuery, [req.body.email], async (err, result) => {
     if (typeof result[0]?.email === "undefined") {
-      res.status(403).send({ message: "403: Invalid email" })
+      res.status(403).send({ message: "Invalid email", code: "red" })
       return
     }
     const { email, password, salt } = result[0]
     const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
     if (err) {
-      res.status(500).send({ message: "500: Something went wrong" });
+      res.status(500).send({ message: "Something went wrong - (Query)", code: "red" });
     }
     else if (password === comparedPass) {
       const currentTime = Math.floor(Date.now() / 1000)
@@ -121,10 +122,10 @@ app.post("/login", async (req, res) => {
       const loginToken = jwt.sign({ 
         email: email, expires: tokenExpires, iat: currentTime 
       }, process.env.P1LL_SECRETTOKEN)
-      res.status(200).send({ message: "200: Success", loginToken: loginToken });
+      res.status(200).send({ message: "You have logged in", code: "green", loginToken: loginToken });
     }
     else {
-      res.status(403).send({ message: "403: Invalid Credentials" });
+      res.status(403).send({ message: "Invalid Credentials", code: "red" });
     }
   })
 })
@@ -134,13 +135,13 @@ app.post("/forgotpassword", async (req, res) => {
   const confirmEmailQuery = "SELECT `email` from `usertable4` where `email` = ?"
   connection.query(confirmEmailQuery, [typedEmail], async (err, result) => {
     if (err) {
-      res.status(500).send({ message: "Something went wrong (Query)" })
+      res.status(500).send({ message: "Something went wrong (Query)", code: "red" })
     }
     else if (!emailPattern.test(typedEmail)) {
-      res.status(409).send({ message: "Illegal email" })
+      res.status(409).send({ message: "Invalid email", code: "red" })
     }
     else if (typeof result[0]?.email === "undefined") {
-      res.status(403).send({ message: "Invalid email" })
+      res.status(403).send({ message: "Invalid email", code: "red" })
     }
     else {
       const emailInfo = {
@@ -154,8 +155,7 @@ app.post("/forgotpassword", async (req, res) => {
           console.log(err)
         } 
         else {
-          console.log(`email sent to ${typedEmail}`)
-          res.status(200).json({ message: "Success" });
+          res.status(200).json({ message: `Email sent to ${typedEmail}`, code: "green" });
         }
       })
      }
@@ -172,7 +172,7 @@ app.post("/deleteaccount", async (req, res) => {
       return
     }
     else if (!passwordPattern.test(typedPassword)) {
-      res.status(409).send({ message: "Illegal password", code: "red" })
+      res.status(409).send({ message: "Invalid password", code: "red" })
     }
     const { email, password, salt } = result[0]
     const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
@@ -200,10 +200,10 @@ app.post("/changepassword", async (req, res) => {
   const { oldPassword, newPassword1, newPassword2 } = req.body
   const tokenEmail = req.email
   if (!passwordPattern.test(oldPassword) || !passwordPattern.test(newPassword1) || !passwordPattern.test(newPassword2)) {
-    res.status(409).send({ message: "Illegal password", code: "red" })
+    res.status(409).send({ message: "Invalid password", code: "red" })
   } 
   else if (oldPassword === newPassword1 || oldPassword === newPassword2) {
-    res.status(409).send({ message: "Old password matches new", code: "red" })
+    res.status(409).send({ message: "Your new password must be different", code: "red" })
   }
   else if (newPassword1 !== newPassword2) {
     res.status(409).send({ message: "New password fields do not match", code: "red" })
@@ -244,7 +244,7 @@ app.post("/changeusername", async (req, res) => {
   const username = req.body.username
   const tokenEmail = req.email 
   if (!usernamePattern.test(username)) {
-    res.status(409).send({ message: "Illegal username", code: "red" })
+    res.status(409).send({ message: "Invalid username", code: "red" })
   }
   else {
     const isUsernameUnique = "SELECT `username` FROM `usertable4` WHERE `username` = ?"
@@ -259,7 +259,7 @@ app.post("/changeusername", async (req, res) => {
             res.status(500).send({ message: "Something went wrong - (Query)", code: "red" })
           }
           else if (result) {
-            res.status(200).send({ message: "Username changed Successfully", code: "green" })
+            res.status(200).send({ message: "Username changed successfully", code: "green" })
           }
         })
       }
