@@ -16,13 +16,13 @@ const secret = process.env.P1LL_SECRETTOKEN;
 const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
-const client = createClient()
+/* const client = createClient()
 
 await client.connect()
-await client.ping()
+await client.ping() */
 
 const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword"];
-const verifyUser = async (req, res, next) => {
+const verifyUser = (req, res, next) => {
   const path = req.path
   if (optOut.includes(path)) {
     next()

@@ -28,7 +28,7 @@ export function LoginPage() {
       localStorage.setItem("P1LL_TOKEN", res.data.loginToken)
       console.log("SUCCESS (AXIOS)", res.data)
       setLoginRes(res.data)
-      navigate("/itemtable")
+      //navigate("/itemtable")
     })
     .catch(err => {
       setLoginRes(err.response.data)

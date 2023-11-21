@@ -44,7 +44,7 @@ export function ForgotPassword() {
       </Stack>}
         <Stack sx={LoginBox} as="form" paddingTop={"2em"} onSubmit={submitEmail}>
           <FormControl id="forgot--password" sx={FormControlColors}>
-            <FormLabel color={"#FDCA40"}>Forgot your Password?:</FormLabel>
+            <FormLabel color={"#FDCA40"}>Forgot your Password?</FormLabel>
             <Text sx={FormContext}>Enter your email:</Text>
             <Input type="email" sx={InputFieldColors} id="forgot--email" name="email" onChange={emailField}/>
             {forgotPasswordError.email && <Text>{forgotPasswordError.email}</Text>}
