@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Nav } from "./shared/components/Nav/Nav.jsx";
 import { HomePage } from "./pages/home";
@@ -13,13 +13,11 @@ import { LoginPage } from "./pages/login.jsx";
 import { SettingsPage } from "./pages/settings.jsx";
 import { ForgotPassword } from "./pages/forgotpassword.jsx";
 import { SubmitLootPage } from "./pages/submitloot.jsx";
-
-export const LoginContext = React.createContext()
+import { LoginProvider } from "./LoginContext.js";
 
 export function App() {
-  const [loggedIn, setLoggedIn] = useState(true)
-
   return (
+  <LoginProvider>
     <ChakraProvider>
       <BrowserRouter>
         <Nav />
@@ -38,5 +36,6 @@ export function App() {
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
+  </LoginProvider>
   );
 }
