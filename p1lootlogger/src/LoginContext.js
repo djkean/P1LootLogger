@@ -27,6 +27,14 @@ export function LoginProvider({ children }) {
     }
   }
 
+  function logUserOut() {
+    setLoggedIn("out")
+  }
+
+  function logUserIn() {
+    setLoggedIn("in")
+  }
+
   return (
     <LoginContext.Provider value={loggedIn}>
       <LoginUpdateContext.Provider value={changeLoginValue}>
