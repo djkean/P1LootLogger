@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState } from "react";
 
 const LoginContext = React.createContext()
 const LoginUpdateContext = React.createContext()
@@ -17,10 +17,12 @@ export function LoginProvider({ children }) {
   function changeLoginValue() {
     if (loggedIn === "out") {
       setLoggedIn("in")
+
     }
     else if (loggedIn === "in") 
     {
       setLoggedIn("out")
+      localStorage.removeItem("P1LL_TOKEN")
     }
     else {
       console.log("how did you even manage this??")

@@ -64,7 +64,7 @@ export function Nav() {
             </Link>
           </Box>
           <Box>
-            <Button sx={AccountButton} onClick={logUserOut}>Log Out</Button>
+            <Button sx={AccountButton} onClick={logUserOut()}>Log Out</Button>
           </Box>
         </>
        }
