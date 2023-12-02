@@ -2,8 +2,7 @@ import { Box, Flex, Button, Spacer, HStack, Menu, MenuButton, MenuList, MenuItem
 import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "../Chevron";
-import { AccountButton, NavButton, MenuStyles, TitleTheme } from "../../../components/pagestyles";
-import { getToken } from "../../../shared/getToken";
+import { NavButton, MenuStyles, TitleTheme } from "../../../components/pagestyles";
 import { useLogin, useLoginUpdate } from "../../../LoginContext";
 
 export function Nav() {
@@ -60,11 +59,11 @@ export function Nav() {
         <>
           <Box>
             <Link to="/settings">
-              <Button sx={AccountButton}>Username</Button>
+              <Button sx={NavButton}>Settings</Button>
             </Link>
           </Box>
           <Box>
-            <Button sx={AccountButton} onClick={logUserOut()}>Log Out</Button>
+            <Button sx={NavButton} onClick={logUserOut()}>Log Out</Button>
           </Box>
         </>
        }

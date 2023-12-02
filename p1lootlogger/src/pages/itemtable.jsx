@@ -42,6 +42,7 @@ export const ItemTable = () => {
     }
     catch(err) {
       console.log(err, "Something went wrong")
+      navigate("/login")
     }
   }
 

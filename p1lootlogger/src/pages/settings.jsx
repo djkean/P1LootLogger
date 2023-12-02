@@ -5,6 +5,7 @@ import { checkUsernameRegex, checkPasswordRegex, deleteAccountRegex } from "../c
 import axios from "axios";
 import { getToken } from "../shared/getToken";
 import { useNavigate } from "react-router-dom"; 
+import { useLogin, useLoginUpdate } from "../LoginContext";
 
 export function SettingsPage() {
   const [newUsername, setNewUsername] = useState({ username: "", })
@@ -19,6 +20,9 @@ export function SettingsPage() {
   const [passwordError, setPasswordError] = useState({})
   const [deleteError, setDeleteError] = useState({})
   const [backendRes, setBackendRes] = useState({})
+
+  const loggedIn = useLogin()
+  const changeLoginValue = useLoginUpdate()
 
   const changeUsername = (event) => {
     setNewUsername(_ => ({..._, [event.target.name]: event.target.value}))
@@ -89,7 +93,8 @@ export function SettingsPage() {
         console.log("DELETE ACCOUNT FIELD OK (AXIOS)")
         setBackendRes(res.data)
         localStorage.removeItem("P1LL_TOKEN")
-        navigate("/home")
+        changeLoginValue()
+        navigate("/createaccount")
       })
       .catch(err => {
         console.log("ERROR IN DELETING ACCOUNT (AXIOS)", err)
