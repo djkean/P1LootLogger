@@ -34,7 +34,7 @@ export function LoginPage() {
       setLoginRes(res.data)
       changeLoginValue()
       console.log(loggedIn)
-      navigate("/itemtable")
+      //navigate("/itemtable")
     })
     .catch(err => {
       setLoginRes(err.response.data)

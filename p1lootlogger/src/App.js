@@ -13,7 +13,9 @@ import { LoginPage } from "./pages/login.jsx";
 import { SettingsPage } from "./pages/settings.jsx";
 import { ForgotPassword } from "./pages/forgotpassword.jsx";
 import { SubmitLootPage } from "./pages/submitloot.jsx";
+import { VerifyEmailPage } from "./pages/verifyemail.jsx";
 import { LoginProvider } from "./LoginContext.js";
+
 
 export function App() {
   return (
@@ -33,6 +35,7 @@ export function App() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/submitloot" element={<SubmitLootPage />} />
+          <Route path="/verifyemail" element={<VerifyEmailPage/>} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

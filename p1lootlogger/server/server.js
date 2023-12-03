@@ -9,6 +9,7 @@ const connection = require("./connect");
 const transporter = require("./mailer");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const querystring = require("querystring");
 
 const port = process.env.P1LL_SERVER || 8080;
 const secret = process.env.P1LL_SECRETTOKEN;
@@ -16,6 +17,11 @@ const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
 const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword"];
+const forgotPasswordUrl = "http://localhost:3000/forgotpassword";
+const forgotPasswordBody = `Click <a href=${forgotPasswordUrl}>here</a> to confirm.`;
+//const verifyEmailUrl = `http://localhost:3000/confirmemail?token=${querystring.escape(accountToken)}`;
+//const verifyEmailBody = `Click <a href=${verifyEmailUrl}>here</a> to confirm.`;
+
 
 const verifyUser = (req, res, next) => {
   const path = req.path
@@ -70,11 +76,14 @@ app.post("/createaccount", async (req, res) => {
   try {
     const accountCreatedTime = Math.floor(Date.now() / 1000)
     const { username, email, password } = req.body
+    const accountToken = crypto.randomBytes(16).toString("hex")
+    const verifyEmailUrl = `http://localhost:3000/verifyemail?token=${querystring.escape(accountToken)}&email=${querystring.escape(email)}`;
+    const verifyEmailBody = `Click <a href=${verifyEmailUrl}>here</a> to confirm.`;
     const salt = crypto.randomBytes(16).toString("hex")
     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha256").toString("hex")
     connection.query(
-      "INSERT INTO `usertable4` (`username`,`email`,`password`,`salt`,`timestamp`,`status`) VALUES (?,?,?,?,?,'4')",
-      [username, email, hash, salt, accountCreatedTime],
+      "INSERT INTO `usertable4` (`username`,`email`,`password`,`salt`,`timestamp`,`token`,`status`) VALUES (?,?,?,?,?,?,'5')",
+      [username, email, hash, salt, accountCreatedTime, accountToken],
       (err, result) => {
         if (err) {
           res.status(500).send({ message: "Error with Query", code: "red" });
@@ -83,7 +92,8 @@ app.post("/createaccount", async (req, res) => {
             from: process.env.P1LL_MAIL,
             to: email,
             subject: "Confirm Registration",
-            text: process.env.P1LL_REGISTER_TEXT
+            text: /*process.env.P1LL_REGISTER_TEXT*/ verifyEmailUrl ,
+            html: `<b>${verifyEmailBody}</b>`,
           }
           transporter.sendMail(emailInfo, function(err, info) {
             if (err) {
@@ -102,6 +112,19 @@ app.post("/createaccount", async (req, res) => {
     res.status(500).json({ message: "Something went wrong", code: "red" });
   }
 });
+
+app.get("verifyemail", (req, res) => {
+  let {token, email} = req.query
+  const verifyEmailQuery = "SELECT `email`, `token` FROM `usertable4` WHERE `email` = ? LIMIT 1"
+  connection.query(verifyEmailQuery, [email], (err, result) => {
+    if (err) {
+      console.log(chalk.red("ERROR!", err))
+    }
+    if (res) {
+      console.log(chalk.green("RESULT!", result))
+    }
+  })
+})
 
 app.post("/login", async (req, res) => {
   const typedPassword = req.body.password
