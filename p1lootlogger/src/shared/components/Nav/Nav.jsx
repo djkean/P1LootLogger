@@ -43,7 +43,7 @@ export function Nav() {
       </Box>
       <Spacer/>
       <HStack align={"right"}>
-        {loggedIn === "in" && <>
+        {loggedIn === "out" && <>
           <Box>
             <Link to="/createaccount">
               <Button sx={NavButton}>Create Account</Button>
@@ -55,7 +55,7 @@ export function Nav() {
             </Link>
           </Box>
         </>}
-        {loggedIn === "out" && 
+        {loggedIn === "in" && 
         <>
           <Box>
             <Link to="/settings">

@@ -34,7 +34,7 @@ export function CreateAccountPage() {
         console.log(res.data.message, res.data.code)
         navigate("/login")
       }))
-      .catch((err =>{ 
+      .catch((err => { 
         setCreateAccRes(err.response.data)
         console.log(err, `Backend returned with error ${err.response.status}`)
       }))
