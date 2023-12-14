@@ -16,7 +16,7 @@ const secret = process.env.P1LL_SECRETTOKEN;
 const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
-const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword", "/api/verifyemail2"];
+const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword", "/api/verifyemail", "/verifyemail"];
 const forgotPasswordUrl = "http://localhost:3000/forgotpassword";
 const forgotPasswordBody = `Click <a href=${forgotPasswordUrl}>here</a> to confirm.`;
 //const verifyEmailUrl = `http://localhost:3000/confirmemail?token=${querystring.escape(accountToken)}`;
@@ -57,8 +57,8 @@ const verifyUser = (req, res, next) => {
 
 app.use(cors({ origin: "http://localhost:3000" }));
 app.use(verifyUser);
-app.use("/api", testApi);
 app.use(express.json());
+app.use("/api", testApi);
 
 const static_dir = path.resolve(path.join(__dirname, "../build"));
 console.log(chalk.bgGreen("BUILD SUCCESSFUL"));
@@ -78,7 +78,7 @@ app.post("/createaccount", async (req, res) => {
     const accountCreatedTime = Math.floor(Date.now() / 1000)
     const { username, email, password } = req.body
     const accountToken = crypto.randomBytes(16).toString("hex")
-    const verifyEmailUrl = `http://localhost:8080/api/verifyemail2?token=${querystring.escape(accountToken)}&email=${querystring.escape(email)}`;
+    const verifyEmailUrl = `http://localhost:3000/verifyemail?token=${querystring.escape(accountToken)}&email=${querystring.escape(email)}`;
     const verifyEmailBody = `Click <a href=${verifyEmailUrl}>here</a> to confirm.`;
     const salt = crypto.randomBytes(16).toString("hex")
     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha256").toString("hex")
@@ -113,25 +113,6 @@ app.post("/createaccount", async (req, res) => {
     res.status(500).json({ message: "Something went wrong", code: "red" });
   }
 });
-
-app.get("verifyemail", (req, res) => {
-  let {token, email} = req.query
-  const verifyEmailQuery = "SELECT `email`, `token` FROM `usertable4` WHERE `email` = ? LIMIT 1"
-  connection.query(verifyEmailQuery, [email], (err, result) => {
-    if (err) {
-      console.log(chalk.red("ERROR!", err))
-    }
-    if (res) {
-      console.log(chalk.green("RESULT!", result))
-    }
-  })
-})
-
-app.get("/api/verifyemail2", (req, res) => {
-  console.log(req.query)
-  console.log("hello world")
-  res.redirect("http://localhost:3000/")
-})
 
 app.post("/login", async (req, res) => {
   const typedPassword = req.body.password

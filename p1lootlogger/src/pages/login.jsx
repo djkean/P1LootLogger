@@ -33,8 +33,9 @@ export function LoginPage() {
       console.log("SUCCESS (AXIOS)", res.data)
       setLoginRes(res.data)
       changeLoginValue()
-      console.log(loggedIn)
-      //navigate("/itemtable")
+      let loginStatus = loggedIn
+      console.log(loginStatus)
+      navigate("/itemtable")
     })
     .catch(err => {
       setLoginRes(err.response.data)
