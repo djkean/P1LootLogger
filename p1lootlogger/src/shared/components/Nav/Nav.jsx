@@ -1,17 +1,23 @@
 import { Box, Flex, Button, Spacer, HStack, Menu, MenuButton, MenuList, MenuItem, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "../Chevron";
 import { NavButton, MenuStyles, TitleTheme } from "../../../components/pagestyles";
 import { useLogin, useLoginUpdate } from "../../../LoginContext";
 
-export function Nav() {
-
-  const loggedIn = useLogin()
-  const changeLoginValue = useLoginUpdate()
-
-  const logUserOut = () => {
+export function Nav({loggedIn, setLoggedIn}) {
+  //const [_, setLoggedIn] = useState("out")
+  //const loggedIn = useLogin()
+  //const changeLoginValue = useLoginUpdate()
+  //const [loggedIn, setLoggedIn] = useState("out")
+ /* const logUserOut = () => {
     return changeLoginValue
+  } */
+
+  const stringLog = () => {
+    console.log("hello from stringLog")
+    setLoggedIn("out")
+    localStorage.removeItem("P1LL_TOKEN")
   }
 
   return ( 
@@ -63,7 +69,7 @@ export function Nav() {
             </Link>
           </Box>
           <Box>
-            <Button sx={NavButton} onClick={logUserOut()}>Log Out</Button>
+            <Button sx={NavButton} onClick={stringLog}>Log Out</Button>
           </Box>
         </>
        }

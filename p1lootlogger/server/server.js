@@ -22,7 +22,6 @@ const forgotPasswordBody = `Click <a href=${forgotPasswordUrl}>here</a> to confi
 //const verifyEmailUrl = `http://localhost:3000/confirmemail?token=${querystring.escape(accountToken)}`;
 //const verifyEmailBody = `Click <a href=${verifyEmailUrl}>here</a> to confirm.`;
 
-
 const verifyUser = (req, res, next) => {
   const path = req.path
   console.log(path)
@@ -40,10 +39,11 @@ const verifyUser = (req, res, next) => {
     }
     jwt.verify(token, secret, (err, decoded) => {
       req.email = decoded.email
-      console.log(decoded)
       if (err) {
         return res.status(400).send({ message: "Invalid Token", code: "yellow" });
-      } 
+      } else if (!decoded.eail) {
+       res.status(400).send({ message: "There is no token", code: "yellow" });
+      }
       else if (decoded.expires <= Math.floor(Date.now() / 1000)) {
         res.status(403).send({ message: "Token Expired", code: "yellow" })
       }

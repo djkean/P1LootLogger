@@ -17,10 +17,12 @@ export function LoginProvider({ children }) {
   function changeLoginValue() {
     if (loggedIn === "out") {
       setLoggedIn("in")
+      console.log("was out, now in")
     }
     else if (loggedIn === "in") 
     {
       setLoggedIn("out")
+      console.log("was in, now out")
       //localStorage.removeItem("P1LL_TOKEN")
     }
     else {

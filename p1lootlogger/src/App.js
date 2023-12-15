@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Nav } from "./shared/components/Nav/Nav.jsx";
 import { HomePage } from "./pages/home";
@@ -18,11 +18,24 @@ import { LoginProvider } from "./LoginContext.js";
 
 
 export function App() {
+
+  const [loggedIn, setLoggedIn] = useState("out")
+
+
+  useEffect(() => {
+    console.log("hello from app")
+    if (localStorage.getItem("P1LL_TOKEN")) {
+      setLoggedIn("in")
+      console.log("you hit this")
+    }
+    console.log(loggedIn)
+  }, [])
+
   return (
-  <LoginProvider>
+  <LoginProvider loggedIn={loggedIn} setLoggedIn={setLoggedIn} >
     <ChakraProvider>
       <BrowserRouter>
-        <Nav />
+        <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
         <Routes>
           <Route path="/home" element={<HomePage />} />
           <Route path="/tables" element={<TablesPage />} />
@@ -30,7 +43,7 @@ export function App() {
           <Route path="/bosstable" element={<BossTable />} />
           <Route path="/bossinfo" element={<BossInfo />} />
           <Route path="/bossdetails" element={<BossDetails />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
           <Route path="/createaccount" element={<CreateAccountPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
@@ -40,5 +53,7 @@ export function App() {
       </BrowserRouter>
     </ChakraProvider>
   </LoginProvider>
+
+
   );
 }

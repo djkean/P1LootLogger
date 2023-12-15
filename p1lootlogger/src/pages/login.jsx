@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useLogin, useLoginUpdate } from "../LoginContext";
 
-export function LoginPage() {
+export function LoginPage({loggedIn, setLoggedIn}) {
   const [loginDetails, setLoginDetails] = useState({
     username: "",
     email: "",
@@ -16,11 +16,15 @@ export function LoginPage() {
   const [loginError, setLoginError] = useState({})
   const [loginRes, setLoginRes] = useState({})
 
-  const loggedIn = useLogin()
+  //const loggedIn = useLogin()
   const changeLoginValue = useLoginUpdate()
 
   const handleFields = (event) => {
     setLoginDetails(_ => ({..._, [event.target.name]: event.target.value}))
+  }
+
+  const logMeIn = () => {
+    setLoggedIn("in")
   }
 
   const navigate = useNavigate()
@@ -32,9 +36,10 @@ export function LoginPage() {
       localStorage.setItem("P1LL_TOKEN", res.data.loginToken)
       console.log("SUCCESS (AXIOS)", res.data)
       setLoginRes(res.data)
-      changeLoginValue()
-      let loginStatus = loggedIn
-      console.log(loginStatus)
+      //changeLoginValue()
+      logMeIn()
+      //let loginStatus = loggedIn
+      //console.log(loginStatus)
       navigate("/itemtable")
     })
     .catch(err => {
