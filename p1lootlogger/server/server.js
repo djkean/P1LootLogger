@@ -41,7 +41,7 @@ const verifyUser = (req, res, next) => {
       req.email = decoded.email
       if (err) {
         return res.status(400).send({ message: "Invalid Token", code: "yellow" });
-      } else if (!decoded.eail) {
+      } else if (!decoded.email) {
        res.status(400).send({ message: "There is no token", code: "yellow" });
       }
       else if (decoded.expires <= Math.floor(Date.now() / 1000)) {
