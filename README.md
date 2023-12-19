@@ -14,5 +14,7 @@ Inspiration for this project came from a personal interest in information I coul
     - [Chakra UI](https://chakra-ui.com)
   - [Node](https://nodejs.org/en)
     - [ExpressJs](https://expressjs.com)
+    - [NodeMailer](https://nodemailer.com)
+    - JSON Webtokens
 - HTML
 - CSS
