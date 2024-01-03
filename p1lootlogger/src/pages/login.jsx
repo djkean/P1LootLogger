@@ -4,7 +4,6 @@ import { React, useState } from "react";
 import { loginVerification } from "../components/loginVerification";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { useLogin, useLoginUpdate } from "../LoginContext";
 
 export function LoginPage({loggedIn, setLoggedIn}) {
   const [loginDetails, setLoginDetails] = useState({
@@ -15,9 +14,6 @@ export function LoginPage({loggedIn, setLoggedIn}) {
   
   const [loginError, setLoginError] = useState({})
   const [loginRes, setLoginRes] = useState({})
-
-  //const loggedIn = useLogin()
-  const changeLoginValue = useLoginUpdate()
 
   const handleFields = (event) => {
     setLoginDetails(_ => ({..._, [event.target.name]: event.target.value}))
@@ -36,10 +32,7 @@ export function LoginPage({loggedIn, setLoggedIn}) {
       localStorage.setItem("P1LL_TOKEN", res.data.loginToken)
       console.log("SUCCESS (AXIOS)", res.data)
       setLoginRes(res.data)
-      //changeLoginValue()
       logMeIn()
-      //let loginStatus = loggedIn
-      //console.log(loginStatus)
       navigate("/itemtable")
     })
     .catch(err => {

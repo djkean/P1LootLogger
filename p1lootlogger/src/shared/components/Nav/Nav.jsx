@@ -6,16 +6,8 @@ import { NavButton, MenuStyles, TitleTheme } from "../../../components/pagestyle
 import { useLogin, useLoginUpdate } from "../../../LoginContext";
 
 export function Nav({loggedIn, setLoggedIn}) {
-  //const [_, setLoggedIn] = useState("out")
-  //const loggedIn = useLogin()
-  //const changeLoginValue = useLoginUpdate()
-  //const [loggedIn, setLoggedIn] = useState("out")
- /* const logUserOut = () => {
-    return changeLoginValue
-  } */
 
-  const stringLog = () => {
-    console.log("hello from stringLog")
+  const navLogout = () => {
     setLoggedIn("out")
     localStorage.removeItem("P1LL_TOKEN")
   }
@@ -69,7 +61,7 @@ export function Nav({loggedIn, setLoggedIn}) {
             </Link>
           </Box>
           <Box>
-            <Button sx={NavButton} onClick={stringLog}>Log Out</Button>
+            <Button sx={NavButton} onClick={navLogout}>Log Out</Button>
           </Box>
         </>
        }

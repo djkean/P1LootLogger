@@ -21,14 +21,11 @@ export function App() {
 
   const [loggedIn, setLoggedIn] = useState("out")
 
-
   useEffect(() => {
     console.log("hello from app")
     if (localStorage.getItem("P1LL_TOKEN")) {
       setLoggedIn("in")
-      console.log("you hit this")
     }
-    console.log(loggedIn)
   }, [])
 
   return (
@@ -45,7 +42,7 @@ export function App() {
           <Route path="/bossdetails" element={<BossDetails />} />
           <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
           <Route path="/createaccount" element={<CreateAccountPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/settings" element={<SettingsPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/submitloot" element={<SubmitLootPage />} />
           <Route path="/verifyemail" element={<VerifyEmailPage/>} />
