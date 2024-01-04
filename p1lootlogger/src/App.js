@@ -16,9 +16,7 @@ import { SubmitLootPage } from "./pages/submitloot.jsx";
 import { VerifyEmailPage } from "./pages/verifyemail.jsx";
 import { LoginProvider } from "./LoginContext.js";
 
-
 export function App() {
-
   const [loggedIn, setLoggedIn] = useState("out")
 
   useEffect(() => {
@@ -29,28 +27,26 @@ export function App() {
   }, [])
 
   return (
-  <LoginProvider loggedIn={loggedIn} setLoggedIn={setLoggedIn} >
-    <ChakraProvider>
-      <BrowserRouter>
-        <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-        <Routes>
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/tables" element={<TablesPage />} />
-          <Route path="/itemtable" element={<ItemTable />} />
-          <Route path="/bosstable" element={<BossTable />} />
-          <Route path="/bossinfo" element={<BossInfo />} />
-          <Route path="/bossdetails" element={<BossDetails />} />
-          <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
-          <Route path="/createaccount" element={<CreateAccountPage />} />
-          <Route path="/settings" element={<SettingsPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/submitloot" element={<SubmitLootPage />} />
-          <Route path="/verifyemail" element={<VerifyEmailPage/>} />
-        </Routes>
-      </BrowserRouter>
-    </ChakraProvider>
-  </LoginProvider>
-
-
+    <LoginProvider loggedIn={loggedIn} setLoggedIn={setLoggedIn} >
+      <ChakraProvider>
+        <BrowserRouter>
+          <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+          <Routes>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/tables" element={<TablesPage />} />
+            <Route path="/itemtable" element={<ItemTable />} />
+            <Route path="/bosstable" element={<BossTable />} />
+            <Route path="/bossinfo" element={<BossInfo />} />
+            <Route path="/bossdetails" element={<BossDetails />} />
+            <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
+            <Route path="/createaccount" element={<CreateAccountPage />} />
+            <Route path="/settings" element={<SettingsPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/submitloot" element={<SubmitLootPage />} />
+            <Route path="/verifyemail" element={<VerifyEmailPage/>} />
+          </Routes>
+        </BrowserRouter>
+      </ChakraProvider>
+    </LoginProvider>
   );
 }

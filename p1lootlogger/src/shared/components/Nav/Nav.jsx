@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "../Chevron";
 import { NavButton, MenuStyles, TitleTheme } from "../../../components/pagestyles";
-import { useLogin, useLoginUpdate } from "../../../LoginContext";
 
 export function Nav({loggedIn, setLoggedIn}) {
 
