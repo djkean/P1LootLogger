@@ -1,9 +1,9 @@
 import { React, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Center, Checkbox, Code, Container, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import { Center, Checkbox, Container, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormContext, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
-import { Select, CreateableSelect, AsyncSelect } from "chakra-react-select";
+import { Select } from "chakra-react-select";
 
 export function SubmitLootPage() {
   const [allItems, setAllItems] = useState([]);

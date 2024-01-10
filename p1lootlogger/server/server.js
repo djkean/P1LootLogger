@@ -49,6 +49,7 @@ const verifyUser = (req, res, next) => {
       }
       else {
         console.log(chalk.green("TOKEN OK"))
+        console.log(decoded)
         next();
       }
     })
@@ -116,13 +117,13 @@ app.post("/createaccount", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const typedPassword = req.body.password
-  const loginQuery = "SELECT `email`,`password`,`salt` FROM `usertable4` WHERE `email` = ? LIMIT 1"
+  const loginQuery = "SELECT `email`,`password`,`salt`,`status` FROM `usertable4` WHERE `email` = ? LIMIT 1"
   connection.query(loginQuery, [req.body.email], async (err, result) => {
     if (typeof result[0]?.email === "undefined") {
       res.status(403).send({ message: "Invalid email", code: "red" })
       return
     }
-    const { email, password, salt } = result[0]
+    const { email, password, salt, status } = result[0]
     const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
     if (err) {
       res.status(500).send({ message: "Something went wrong - (Query)", code: "red" });
@@ -131,7 +132,7 @@ app.post("/login", async (req, res) => {
       const currentTime = Math.floor(Date.now() / 1000)
       const tokenExpires = currentTime + 7200
       const loginToken = jwt.sign({ 
-        email: email, expires: tokenExpires, iat: currentTime 
+        email: email, expires: tokenExpires, iat: currentTime, status: status
       }, process.env.P1LL_SECRETTOKEN)
       res.status(200).send({ message: "You have logged in", code: "green", loginToken: loginToken });
     }
