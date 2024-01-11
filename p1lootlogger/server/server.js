@@ -17,8 +17,8 @@ const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
 const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword", "/api/verifyemail", "/verifyemail"];
-const forgotPasswordUrl = "http://localhost:3000/forgotpassword";
-const forgotPasswordBody = `Click <a href=${forgotPasswordUrl}>here</a> to confirm.`;
+//const forgotPasswordUrl = "http://localhost:3000/forgotpassword";
+//const forgotPasswordBody = `Click <a href=${forgotPasswordUrl}>here</a> to confirm.`;
 //const verifyEmailUrl = `http://localhost:3000/confirmemail?token=${querystring.escape(accountToken)}`;
 //const verifyEmailBody = `Click <a href=${verifyEmailUrl}>here</a> to confirm.`;
 
@@ -94,7 +94,7 @@ app.post("/createaccount", async (req, res) => {
             from: process.env.P1LL_MAIL,
             to: email,
             subject: "Confirm Registration",
-            text: /*process.env.P1LL_REGISTER_TEXT*/ verifyEmailUrl ,
+            text: /*process.env.P1LL_REGISTER_TEXT*/ verifyEmailUrl,
             html: `<b>${verifyEmailBody}</b>`,
           }
           transporter.sendMail(emailInfo, function(err, info) {
@@ -144,6 +144,9 @@ app.post("/login", async (req, res) => {
 
 app.post("/forgotpassword", async (req, res) => {
   const typedEmail = req.body.email
+  const forgotPasswordToken = crypto.randomBytes(16).toString("hex")
+  const forgotPasswordUrl = `http://localhost:3000/forgotpassword?token=${querystring.escape(forgotPasswordToken)}&email=${querystring.escape(typedEmail)}`;
+  const forgotPasswordBody = `If you requested this email, click <a href=${forgotPasswordUrl}>here</a> to change your password. If you didn't request this email, you can safely ignore this email.`;
   const confirmEmailQuery = "SELECT `email` from `usertable4` where `email` = ?"
   connection.query(confirmEmailQuery, [typedEmail], async (err, result) => {
     if (err) {
@@ -155,22 +158,39 @@ app.post("/forgotpassword", async (req, res) => {
     else if (typeof result[0]?.email === "undefined") {
       res.status(403).send({ message: "Invalid email", code: "red" })
     }
+    else if (result[0]?.status >= 7) {
+      res.status(403).send({ message: "This account is banned", code: "red" })
+    }
     else {
       const emailInfo = {
         from: process.env.P1LL_MAIL,
         to: typedEmail,
-        subject: "Confirm Password Reset",
-        text: process.env.P1LL_RESETPASS_TEXT
+        subject: "Forgot Password?",
+        text: /*process.env.P1LL_RESETPASS_TEXT*/ forgotPasswordUrl,
+        html: `<b>${forgotPasswordBody}</b>`,
       }
       transporter.sendMail(emailInfo, function(err, info) {
         if (err) {
           console.log(err)
+          res.status(500).send({ message: "Error when sending email", code: "red" })
         } 
         else {
-          res.status(200).json({ message: `Email sent to ${typedEmail}`, code: "green" });
+          console.log(`Sent to ${typedEmail}, issuing request timestamp...`)
+          //res.status(200).json({ message: `Email sent to ${typedEmail}`, code: "green" });
+          const currentTime = Math.floor(Date.now() / 1000)
+          const createRequestTimestampQuery = "UPDATE `usertable4` SET `requestedAt` = ? WHERE `email` = ? LIMIT 1"
+          connection.query(createRequestTimestampQuery, [currentTime, typedEmail], async (error, results) => {
+            if (error) {
+              res.status(500).json({ message: "An error occurred, please try again", code: "red" })
+            }
+            else {
+              console.log("Timestamp successfully issued")
+              res.status(500).json({ message: `Email sent to ${typedEmail}`, code: "green" });
+            }
+          })
         }
       })
-     }
+    }
   })
 })
 
