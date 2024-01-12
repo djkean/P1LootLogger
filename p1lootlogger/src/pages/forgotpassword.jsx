@@ -37,7 +37,7 @@ export function ForgotPassword() {
 
   return (
     <Flex sx={LoginFlex} align={"center"}>
-      <Stack sx={LoginStack} spacing={6} align="center">
+      <Stack sx={LoginStack} spacing={6} align={"center"}>
       <Heading fontSize={"3xl"} py={3}>Forgot Password</Heading>
       {forgotPasswordRes.message && <Stack align={"center"} sx={LoginFeedback}>
         <Text color={forgotPasswordRes.code}>{forgotPasswordRes.message}</Text>

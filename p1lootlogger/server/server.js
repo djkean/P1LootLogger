@@ -84,7 +84,7 @@ app.post("/createaccount", async (req, res) => {
     const salt = crypto.randomBytes(16).toString("hex")
     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha256").toString("hex")
     connection.query(
-      "INSERT INTO `usertable4` (`username`,`email`,`password`,`salt`,`timestamp`,`token`,`status`) VALUES (?,?,?,?,?,?,'5')",
+      "INSERT INTO `usertable4` (`username`,`email`,`password`,`salt`,`createdAt`,`token`,`status`) VALUES (?,?,?,?,?,?,'5')",
       [username, email, hash, salt, accountCreatedTime, accountToken],
       (err, result) => {
         if (err) {
@@ -158,9 +158,6 @@ app.post("/forgotpassword", async (req, res) => {
     else if (typeof result[0]?.email === "undefined") {
       res.status(403).send({ message: "Invalid email", code: "red" })
     }
-    else if (result[0]?.status >= 7) {
-      res.status(403).send({ message: "This account is banned", code: "red" })
-    }
     else {
       const emailInfo = {
         from: process.env.P1LL_MAIL,
@@ -176,17 +173,14 @@ app.post("/forgotpassword", async (req, res) => {
         } 
         else {
           console.log(`Sent to ${typedEmail}, issuing request timestamp...`)
-          //res.status(200).json({ message: `Email sent to ${typedEmail}`, code: "green" });
           const currentTime = Math.floor(Date.now() / 1000)
-          const createRequestTimestampQuery = "UPDATE `usertable4` SET `requestedAt` = ? WHERE `email` = ? LIMIT 1"
-          connection.query(createRequestTimestampQuery, [currentTime, typedEmail], async (error, results) => {
+          const createRequestTimestampQuery = "UPDATE `usertable4` SET `requestedAt` = ?, `token` = ? WHERE `email` = ? LIMIT 1"
+          connection.query(createRequestTimestampQuery, [currentTime, forgotPasswordToken, typedEmail], async (error, results) => {
             if (error) {
-              res.status(500).json({ message: "An error occurred, please try again", code: "red" })
+              return res.status(500).json({ message: "An error occurred, please try again", code: "red" })
             }
-            else {
-              console.log("Timestamp successfully issued")
-              res.status(500).json({ message: `Email sent to ${typedEmail}`, code: "green" });
-            }
+            console.log(`timestamp successfully issued - new timestamp is ${currentTime} and new token is ${forgotPasswordToken}`)
+            res.status(200).json({ message: `Email sent to ${typedEmail}`, code: "green" });
           })
         }
       })
@@ -271,6 +265,8 @@ app.post("/changepassword", async (req, res) => {
     })
   }
 })
+
+//changePasswordFunction(oldpass, newpass, retypednewpass)
 
 app.post("/changeusername", async (req, res) => {
   const username = req.body.username
