@@ -42,16 +42,14 @@ const verifyUser = (req, res, next) => {
       if (err) {
         return res.status(400).send({ message: "Invalid Token", code: "yellow" });
       } else if (!decoded.email) {
-       res.status(400).send({ message: "There is no token", code: "yellow" });
+        return res.status(400).send({ message: "There is no token", code: "yellow" });
       }
       else if (decoded.expires <= Math.floor(Date.now() / 1000)) {
-        res.status(403).send({ message: "Token Expired", code: "yellow" })
+        return res.status(403).send({ message: "Token Expired", code: "yellow" })
       }
-      else {
-        console.log(chalk.green("TOKEN OK"))
-        console.log(decoded)
-        next();
-      }
+      console.log(chalk.green("TOKEN OK"))
+      console.log(decoded)
+      next();
     })
   }
 } 
@@ -88,7 +86,7 @@ app.post("/createaccount", async (req, res) => {
       [username, email, hash, salt, accountCreatedTime, accountToken],
       (err, result) => {
         if (err) {
-          res.status(500).send({ message: "Error with Query", code: "red" });
+          return res.status(500).send({ message: "Error with Query", code: "red" });
         } else if (res) {
           const emailInfo = {
             from: process.env.P1LL_MAIL,
@@ -99,19 +97,15 @@ app.post("/createaccount", async (req, res) => {
           }
           transporter.sendMail(emailInfo, function(err, info) {
             if (err) {
-              console.log(err)
-              res.status(500).send({ message: "Error when sending email" , code: "red" })
-            } 
-            else {
-              console.log(`email sent to ${email}`)
-              res.status(200).json({ message: `Confirmation email sent to ${email}`, code: "green" });
+              return res.status(500).send({ message: "Error when sending email" , code: "red" })
             }
+            return res.status(200).json({ message: `Confirmation email sent to ${email}`, code: "green" });
           })
         }
       }
     );
   } catch (err) {
-    res.status(500).json({ message: "Something went wrong", code: "red" });
+    return res.status(500).json({ message: "Something went wrong", code: "red" });
   }
 });
 
@@ -120,13 +114,12 @@ app.post("/login", async (req, res) => {
   const loginQuery = "SELECT `email`,`password`,`salt`,`status` FROM `usertable4` WHERE `email` = ? LIMIT 1"
   connection.query(loginQuery, [req.body.email], async (err, result) => {
     if (typeof result[0]?.email === "undefined") {
-      res.status(403).send({ message: "Invalid email", code: "red" })
-      return
+      return res.status(403).send({ message: "Invalid email", code: "red" })
     }
     const { email, password, salt, status } = result[0]
     const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
     if (err) {
-      res.status(500).send({ message: "Something went wrong - (Query)", code: "red" });
+      return res.status(500).send({ message: "Something went wrong - (Query)", code: "red" });
     }
     else if (password === comparedPass) {
       const currentTime = Math.floor(Date.now() / 1000)
@@ -134,11 +127,9 @@ app.post("/login", async (req, res) => {
       const loginToken = jwt.sign({ 
         email: email, expires: tokenExpires, iat: currentTime, status: status
       }, process.env.P1LL_SECRETTOKEN)
-      res.status(200).send({ message: "You have logged in", code: "green", loginToken: loginToken });
+      return res.status(200).send({ message: "You have logged in", code: "green", loginToken: loginToken });
     }
-    else {
-      res.status(403).send({ message: "Invalid Credentials", code: "red" });
-    }
+      return res.status(403).send({ message: "Invalid Credentials", code: "red" });
   })
 })
 
@@ -150,13 +141,13 @@ app.post("/forgotpassword", async (req, res) => {
   const confirmEmailQuery = "SELECT `email` from `usertable4` where `email` = ?"
   connection.query(confirmEmailQuery, [typedEmail], async (err, result) => {
     if (err) {
-      res.status(500).send({ message: "Something went wrong (Query)", code: "red" })
+      return res.status(500).send({ message: "Something went wrong (Query)", code: "red" })
     }
     else if (!emailPattern.test(typedEmail)) {
-      res.status(409).send({ message: "Invalid email", code: "red" })
+      return res.status(409).send({ message: "Invalid email", code: "red" })
     }
     else if (typeof result[0]?.email === "undefined") {
-      res.status(403).send({ message: "Invalid email", code: "red" })
+      return res.status(403).send({ message: "Invalid email", code: "red" })
     }
     else {
       const emailInfo = {
@@ -169,7 +160,7 @@ app.post("/forgotpassword", async (req, res) => {
       transporter.sendMail(emailInfo, function(err, info) {
         if (err) {
           console.log(err)
-          res.status(500).send({ message: "Error when sending email", code: "red" })
+          return res.status(500).send({ message: "Error when sending email", code: "red" })
         } 
         else {
           console.log(`Sent to ${typedEmail}, issuing request timestamp...`)
@@ -180,7 +171,7 @@ app.post("/forgotpassword", async (req, res) => {
               return res.status(500).json({ message: "An error occurred, please try again", code: "red" })
             }
             console.log(`timestamp successfully issued - new timestamp is ${currentTime} and new token is ${forgotPasswordToken}`)
-            res.status(200).json({ message: `Email sent to ${typedEmail}`, code: "green" });
+            return res.status(200).json({ message: `Email sent to ${typedEmail}`, code: "green" });
           })
         }
       })
