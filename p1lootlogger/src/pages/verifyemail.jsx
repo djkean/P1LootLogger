@@ -12,8 +12,6 @@ export const VerifyEmailPage = (res) => {
   const tokenFromQueryString = params.get("token")
   const emailFromQueryString = params.get("email")
 
-  console.log(tokenFromQueryString, emailFromQueryString)
-
   const compareStringsToDb = async () => {
     if (typeof tokenFromQueryString === "undefined" || typeof emailFromQueryString === "undefined") {
       return

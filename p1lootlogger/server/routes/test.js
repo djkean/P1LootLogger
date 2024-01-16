@@ -69,4 +69,21 @@ router.post("/verifyemail", (req, res) => {
   })
 })
 
+// reset password
+router.post("/resetpassword", (req, res) => {
+  console.log(req.body)
+  const {token, email} = req.body
+  const approveResetQuery = "SELECT `email`, `token`, `requestedAt` FROM usertable4` WHERE `email` = ? LIMIT 1"
+  connection.query(approveResetQuery, [email], (err, result) => {
+    const currentTime = Math.floor(Date.now() / 1000)
+    if (err) {
+      return res.json({ status: 500, error: "Request failed, please try again", response: null })
+    }
+    else if (currentTime > (result[0].requestedAt + 600)) {
+      return res.json({ status: 409, error: "Reset link expired: Please resend your forgot password request", response: null })
+    }
+    //redirect to another url using the same querystrings?
+  })
+})
+
 module.exports = router;
