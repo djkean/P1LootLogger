@@ -82,6 +82,7 @@ router.post("/resetpassword", (req, res) => {
     else if (currentTime > (result[0].requestedAt + 600)) {
       return res.json({ status: 409, error: "Reset link expired: Please resend your forgot password request", response: null })
     }
+    res.json({ status: 200, error: null, response: "Enter and confirm your new password" })
     //redirect to another url using the same querystrings?
   })
 })

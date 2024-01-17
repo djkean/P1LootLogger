@@ -16,11 +16,7 @@ const secret = process.env.P1LL_SECRETTOKEN;
 const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
-const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword", "/api/verifyemail", "/verifyemail"];
-//const forgotPasswordUrl = "http://localhost:3000/forgotpassword";
-//const forgotPasswordBody = `Click <a href=${forgotPasswordUrl}>here</a> to confirm.`;
-//const verifyEmailUrl = `http://localhost:3000/confirmemail?token=${querystring.escape(accountToken)}`;
-//const verifyEmailBody = `Click <a href=${verifyEmailUrl}>here</a> to confirm.`;
+const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword", "/api/verifyemail", "/verifyemail", "/api/resetpassword", "/resetpassword"];
 
 const verifyUser = (req, res, next) => {
   const path = req.path

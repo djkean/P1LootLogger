@@ -15,6 +15,7 @@ import { ForgotPassword } from "./pages/forgotpassword.jsx";
 import { SubmitLootPage } from "./pages/submitloot.jsx";
 import { VerifyEmailPage } from "./pages/verifyemail.jsx";
 import { LoginProvider } from "./LoginContext.js";
+import { ResetPasswordPage } from "./pages/resetpassword.jsx";
 
 export function App() {
   const [loggedIn, setLoggedIn] = useState("out")
@@ -44,6 +45,7 @@ export function App() {
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/submitloot" element={<SubmitLootPage />} />
             <Route path="/verifyemail" element={<VerifyEmailPage/>} />
+            <Route path="/resetpassword" element={<ResetPasswordPage/>} />
           </Routes>
         </BrowserRouter>
       </ChakraProvider>
