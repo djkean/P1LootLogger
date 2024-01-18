@@ -16,7 +16,7 @@ const secret = process.env.P1LL_SECRETTOKEN;
 const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
-const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword", "/api/verifyemail", "/verifyemail", "/api/resetpassword", "/resetpassword"];
+const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword", "/api/verifyemail", "/verifyemail", "/api/resetpassword", "/resetpassword", "/createnewpassword"];
 
 const verifyUser = (req, res, next) => {
   const path = req.path
@@ -278,7 +278,7 @@ app.post("/changeusername", async (req, res) => {
   }
 })
 
-app.post("/resetpassword", async (req, res) => {
+app.post("/createnewpassword", async (req, res) => {
   //dont forget to also add email and token into consideration
   const {firstField, secondField, email, token} = req.body
   const authenticateUserQuery = "SELECT `email`, `token`, `requestedAt` FROM `usertable4` WHERE `email` = ? LIMIT 1"
@@ -295,7 +295,7 @@ app.post("/resetpassword", async (req, res) => {
     else if (email !== result[0].email || token !== result[0]?.token) {
       return res.status(403).send({ message: "Authentication of request failed", code: "red" })
     }
-    if (!passwordPattern.test(firstField) || !passwordPattern.test(secondField)) {
+    else if (!passwordPattern.test(firstField) || !passwordPattern.test(secondField)) {
       return res.status(409).send({ message: "Invalid password", code: "red" })
     }
     else if (firstField !== secondField) {

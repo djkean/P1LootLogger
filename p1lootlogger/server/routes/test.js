@@ -77,6 +77,7 @@ router.post("/resetpassword", (req, res) => {
   connection.query(approveResetQuery, [email], (err, result) => {
     const currentTime = Math.floor(Date.now() / 1000)
     if (err) {
+      console.log(err)
       return res.json({ status: 500, error: "Request failed, please try again", response: null })
     }
     else if (currentTime > (result[0].requestedAt + 600)) {

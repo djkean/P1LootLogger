@@ -41,6 +41,8 @@ export function ResetPasswordPage() {
         const responseData = await resetPasswordResponse.json()
         setResetPasswordRes(responseData)
         console.log("looks good!")
+        console.log(resetPasswordResponse)
+        console.log(responseData)
       }
       else {
         console.log("Error in POST request")
@@ -61,12 +63,11 @@ export function ResetPasswordPage() {
     event.preventDefault();
     console.log(newPassword)
     setPasswordFieldError(checkResetPasswordRegex(newPassword))
-    axios.post("http://localhost:8080/resetpassword", newPassword)
+    axios.post("http://localhost:8080/createnewpassword", newPassword)
     .then(res => {
       console.log("SUCCESS (AXIOS)", res.data)
       console.log(newPassword)
     })
-    //need to make query for this first - dont forget!
   }
 
   useEffect(() => {
@@ -80,6 +81,14 @@ export function ResetPasswordPage() {
           <Heading fontSize={"3xl"} py={3}>Reset Password</Heading>
         </Stack>
         <Box sx={LoginBox} id="reset--form" onSubmit={submitPassword}>
+          {resetPasswordRes.response && 
+          <Stack align={"center"}>
+            <Text>{resetPasswordRes.response}</Text>
+          </Stack>}
+          {resetPasswordRes.error && 
+          <Stack align={"center"}>
+            <Text color={"#FDCA40"}>{resetPasswordRes.error}</Text>
+          </Stack>}
         <Stack as="form" spacing={3}>
           <FormControl id="password" sx={FormControlColors}>
             <FormLabel color={"#FDCA40"}>Create your new password</FormLabel>
