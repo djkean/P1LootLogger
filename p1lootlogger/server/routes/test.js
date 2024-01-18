@@ -73,7 +73,7 @@ router.post("/verifyemail", (req, res) => {
 router.post("/resetpassword", (req, res) => {
   console.log(req.body)
   const {token, email} = req.body
-  const approveResetQuery = "SELECT `email`, `token`, `requestedAt` FROM usertable4` WHERE `email` = ? LIMIT 1"
+  const approveResetQuery = "SELECT `email`, `requestToken`, `requestedAt` FROM `usertable4` WHERE `email` = ?"
   connection.query(approveResetQuery, [email], (err, result) => {
     const currentTime = Math.floor(Date.now() / 1000)
     if (err) {
@@ -81,10 +81,12 @@ router.post("/resetpassword", (req, res) => {
       return res.json({ status: 500, error: "Request failed, please try again", response: null })
     }
     else if (currentTime > (result[0].requestedAt + 600)) {
-      return res.json({ status: 409, error: "Reset link expired: Please resend your forgot password request", response: null })
+      return res.json({ status: 403, error: "Reset link expired: Please resend your forgot password request", response: null })
+    }
+    else if (result[0]?.requestToken !== token) {
+      return res.json({ status: 403, error: "Unexpected token", response: null })
     }
     res.json({ status: 200, error: null, response: "Enter and confirm your new password" })
-    //redirect to another url using the same querystrings?
   })
 })
 

@@ -159,7 +159,7 @@ app.post("/forgotpassword", async (req, res) => {
       }
       console.log(`Sent to ${typedEmail}, issuing request timestamp...`)
       const currentTime = Math.floor(Date.now() / 1000)
-      const createRequestTimestampQuery = "UPDATE `usertable4` SET `requestedAt` = ?, `token` = ? WHERE `email` = ? LIMIT 1"
+      const createRequestTimestampQuery = "UPDATE `usertable4` SET `requestedAt` = ?, `requestToken` = ? WHERE `email` = ? LIMIT 1"
       connection.query(createRequestTimestampQuery, [currentTime, forgotPasswordToken, typedEmail], async (error, results) => {
         if (error) {
           return res.status(500).json({ message: "An error occurred, please try again", code: "red" })
@@ -279,9 +279,8 @@ app.post("/changeusername", async (req, res) => {
 })
 
 app.post("/createnewpassword", async (req, res) => {
-  //dont forget to also add email and token into consideration
   const {firstField, secondField, email, token} = req.body
-  const authenticateUserQuery = "SELECT `email`, `token`, `requestedAt` FROM `usertable4` WHERE `email` = ? LIMIT 1"
+  const authenticateUserQuery = "SELECT `email`, `requestedAt`, `requestToken` FROM `usertable4` WHERE `email` = ? LIMIT 1"
   connection.query(authenticateUserQuery, [email], async (err, result) => {
     if (err) {
       return res.status(500).send({ message: "A server error occured, please try again", code: "red" })
@@ -292,7 +291,7 @@ app.post("/createnewpassword", async (req, res) => {
     else if (result[0]?.requestedAt === null) {
       return res.status(403).send({ message: "Request could not be fulfilled", code: "red" })
     }
-    else if (email !== result[0].email || token !== result[0]?.token) {
+    else if (email !== result[0].email || token !== result[0]?.requestToken) {
       return res.status(403).send({ message: "Authentication of request failed", code: "red" })
     }
     else if (!passwordPattern.test(firstField) || !passwordPattern.test(secondField)) {
@@ -303,8 +302,8 @@ app.post("/createnewpassword", async (req, res) => {
     }
     const salt = crypto.randomBytes(16).toString("hex")
     const hash = crypto.pbkdf2Sync(firstField, salt, 1000, 64, "sha256").toString("hex")
-    const newPasswordQuery = "UPDATE `usertable4` SET `password` = ?, `salt` = ?, `requestedAt` = ? WHERE `email` = ? LIMIT 1"
-    connection.query(newPasswordQuery, [hash, salt, null, email], async (err, results) => {
+    const newPasswordQuery = "UPDATE `usertable4` SET `password` = ?, `salt` = ?, `requestedAt` = ?, `requestToken` = ? WHERE `email` = ? LIMIT 1"
+    connection.query(newPasswordQuery, [hash, salt, null, null, email], async (err, results) => {
       if (err) {
         return res.status(500).send({ message: "An error occured during the request", code: "red" })
       }

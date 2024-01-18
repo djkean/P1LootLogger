@@ -12,8 +12,6 @@ export function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState({
     firstField: "",
     secondField: "",
-    email: "",
-    token: "",
   })
 
   const location = useLocation();
@@ -56,7 +54,8 @@ export function ResetPasswordPage() {
   const handleFields = (event) => {
     setNewPassword(_ => ({ ..._, [event.target.name]: event.target.value, 
       email: emailFromQueryString, 
-      token: tokenFromQueryString}))
+      token: tokenFromQueryString
+    }))
   }
 
   const submitPassword = async (event) => {
@@ -67,6 +66,11 @@ export function ResetPasswordPage() {
     .then(res => {
       console.log("SUCCESS (AXIOS)", res.data)
       console.log(newPassword)
+      setAuthenticateResetRes(res.data)
+    })
+    .catch(err => {
+      setAuthenticateResetRes(err.response.data)
+      console.log("ERROR (AXIOS)")
     })
   }
 
@@ -76,18 +80,18 @@ export function ResetPasswordPage() {
 
   return (
     <Flex sx={LoginFlex} align={"center"}>
-      <Stack sx={LoginStack} spacing={6} align={"center"}>
+      {resetPasswordRes.response && <Stack sx={LoginStack} spacing={6} align={"center"}>
         <Stack align={"center"}>
           <Heading fontSize={"3xl"} py={3}>Reset Password</Heading>
         </Stack>
         <Box sx={LoginBox} id="reset--form" onSubmit={submitPassword}>
-          {resetPasswordRes.response && 
+          {authenticateResetRes.message && 
           <Stack align={"center"}>
-            <Text>{resetPasswordRes.response}</Text>
-          </Stack>}
-          {resetPasswordRes.error && 
-          <Stack align={"center"}>
-            <Text color={"#FDCA40"}>{resetPasswordRes.error}</Text>
+            <Text color={"#FDCA40"}>{authenticateResetRes.message}.</Text> 
+            {authenticateResetRes.code == "green" &&
+            <Link to="/login">
+              <Text color={"green"}>Click here to log in</Text>
+            </Link>}
           </Stack>}
         <Stack as="form" spacing={3}>
           <FormControl id="password" sx={FormControlColors}>
@@ -104,7 +108,16 @@ export function ResetPasswordPage() {
           </Center>
         </Stack>
       </Box>
-      </Stack>
+      </Stack>}
+      {resetPasswordRes.error && 
+       <Stack sx={LoginStack} align={"center"}>
+        <Box sx={LoginBox}>
+          <Stack align={"center"}>
+            <Text color={"#FDCA40"}>{resetPasswordRes.error}</Text> 
+          </Stack>
+        </Box>
+       </Stack>
+      }
     </Flex>
   )
 }
