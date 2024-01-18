@@ -132,7 +132,7 @@ app.post("/login", async (req, res) => {
 app.post("/forgotpassword", async (req, res) => {
   const typedEmail = req.body.email
   const forgotPasswordToken = crypto.randomBytes(16).toString("hex")
-  const forgotPasswordUrl = `http://localhost:3000/forgotpassword?token=${querystring.escape(forgotPasswordToken)}&email=${querystring.escape(typedEmail)}`;
+  const forgotPasswordUrl = `http://localhost:3000/resetpassword?token=${querystring.escape(forgotPasswordToken)}&email=${querystring.escape(typedEmail)}`;
   const forgotPasswordBody = `If you requested this email, click <a href=${forgotPasswordUrl}>here</a> to change your password. If you didn't request this email, you can safely ignore this email.`;
   const confirmEmailQuery = "SELECT `email` from `usertable4` where `email` = ?"
   connection.query(confirmEmailQuery, [typedEmail], async (err, result) => {
@@ -145,33 +145,29 @@ app.post("/forgotpassword", async (req, res) => {
     else if (typeof result[0]?.email === "undefined") {
       return res.status(403).send({ message: "Invalid email", code: "red" })
     }
-    else {
-      const emailInfo = {
-        from: process.env.P1LL_MAIL,
-        to: typedEmail,
-        subject: "Forgot Password?",
-        text: /*process.env.P1LL_RESETPASS_TEXT*/ forgotPasswordUrl,
-        html: `<b>${forgotPasswordBody}</b>`,
-      }
-      transporter.sendMail(emailInfo, function(err, info) {
-        if (err) {
-          console.log(err)
-          return res.status(500).send({ message: "Error when sending email", code: "red" })
-        } 
-        else {
-          console.log(`Sent to ${typedEmail}, issuing request timestamp...`)
-          const currentTime = Math.floor(Date.now() / 1000)
-          const createRequestTimestampQuery = "UPDATE `usertable4` SET `requestedAt` = ?, `token` = ? WHERE `email` = ? LIMIT 1"
-          connection.query(createRequestTimestampQuery, [currentTime, forgotPasswordToken, typedEmail], async (error, results) => {
-            if (error) {
-              return res.status(500).json({ message: "An error occurred, please try again", code: "red" })
-            }
-            console.log(`timestamp successfully issued - new timestamp is ${currentTime} and new token is ${forgotPasswordToken}`)
-            return res.status(200).json({ message: `Email sent to ${typedEmail}`, code: "green" });
-          })
-        }
-      })
+    const emailInfo = {
+      from: process.env.P1LL_MAIL,
+      to: typedEmail,
+      subject: "Forgot Password?",
+      text: /*process.env.P1LL_RESETPASS_TEXT*/ forgotPasswordUrl,
+      html: `<b>${forgotPasswordBody}</b>`,
     }
+    transporter.sendMail(emailInfo, function(err, info) {
+      if (err) {
+        console.log(err)
+        return res.status(500).send({ message: "Error when sending email", code: "red" })
+      }
+      console.log(`Sent to ${typedEmail}, issuing request timestamp...`)
+      const currentTime = Math.floor(Date.now() / 1000)
+      const createRequestTimestampQuery = "UPDATE `usertable4` SET `requestedAt` = ?, `token` = ? WHERE `email` = ? LIMIT 1"
+      connection.query(createRequestTimestampQuery, [currentTime, forgotPasswordToken, typedEmail], async (error, results) => {
+        if (error) {
+          return res.status(500).json({ message: "An error occurred, please try again", code: "red" })
+        }
+        console.log(`timestamp successfully issued - new timestamp is ${currentTime} and new token is ${forgotPasswordToken}`)
+        res.status(200).json({ message: `Email sent to ${typedEmail}`, code: "green" });
+      })
+    })
   })
 })
 
@@ -280,6 +276,10 @@ app.post("/changeusername", async (req, res) => {
       }
     })
   }
+})
+
+app.post("/resetpassword", async (req, res) => {
+  const {firstField, secondField} = req.body
 })
 
 app.listen(port);

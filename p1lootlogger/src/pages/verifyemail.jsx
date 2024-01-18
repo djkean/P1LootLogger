@@ -21,8 +21,9 @@ export const VerifyEmailPage = (res) => {
         headers: {"Content-Type": "application/json"},
         method: "POST",
         body: JSON.stringify({ 
-            token: tokenFromQueryString, email: emailFromQueryString 
-          })
+          token: tokenFromQueryString, 
+          email: emailFromQueryString 
+        })
       })
       if (verificationResponse.ok) {
         const responseData = await verificationResponse.json()
