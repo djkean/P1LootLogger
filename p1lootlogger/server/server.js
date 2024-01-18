@@ -279,7 +279,38 @@ app.post("/changeusername", async (req, res) => {
 })
 
 app.post("/resetpassword", async (req, res) => {
-  const {firstField, secondField} = req.body
+  //dont forget to also add email and token into consideration
+  const {firstField, secondField, email, token} = req.body
+  const authenticateUserQuery = "SELECT `email`, `token`, `requestedAt` FROM `usertable4` WHERE `email` = ? LIMIT 1"
+  connection.query(authenticateUserQuery, [email], async (err, result) => {
+    if (err) {
+      return res.status(500).send({ message: "A server error occured, please try again", code: "red" })
+    }
+    else if (typeof result[0]?.email === "undefined") {
+      return res.status(403).send({ message: "We were unable to validate your request", code: "red" })
+    }
+    else if (result[0]?.requestedAt === null) {
+      return res.status(403).send({ message: "Request could not be fulfilled", code: "red" })
+    }
+    else if (email !== result[0].email || token !== result[0]?.token) {
+      return res.status(403).send({ message: "Authentication of request failed", code: "red" })
+    }
+    if (!passwordPattern.test(firstField) || !passwordPattern.test(secondField)) {
+      return res.status(409).send({ message: "Invalid password", code: "red" })
+    }
+    else if (firstField !== secondField) {
+      return res.status(409).send({ message: "Passwords do not match", code: "red" })
+    }
+    const salt = crypto.randomBytes(16).toString("hex")
+    const hash = crypto.pbkdf2Sync(firstField, salt, 1000, 64, "sha256").toString("hex")
+    const newPasswordQuery = "UPDATE `usertable4` SET `password` = ?, `salt` = ?, `requestedAt` = ? WHERE `email` = ? LIMIT 1"
+    connection.query(newPasswordQuery, [hash, salt, null, email], async (err, results) => {
+      if (err) {
+        return res.status(500).send({ message: "An error occured during the request", code: "red" })
+      }
+      res.status(200).send({ message: "You have successfully changed your password", code: "green" })
+    })
+  })
 })
 
 app.listen(port);

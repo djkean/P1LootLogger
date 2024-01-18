@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormContext, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback, SettingsBox } from "../components/pagestyles";
@@ -12,6 +12,8 @@ export function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState({
     firstField: "",
     secondField: "",
+    email: "",
+    token: "",
   })
 
   const location = useLocation();
@@ -38,6 +40,7 @@ export function ResetPasswordPage() {
       if (resetPasswordResponse.ok) {
         const responseData = await resetPasswordResponse.json()
         setResetPasswordRes(responseData)
+        console.log("looks good!")
       }
       else {
         console.log("Error in POST request")
@@ -49,18 +52,26 @@ export function ResetPasswordPage() {
   }
 
   const handleFields = (event) => {
-    setNewPassword(_ => ({ ..._, [event.target.name]: event.target.value }))
+    setNewPassword(_ => ({ ..._, [event.target.name]: event.target.value, 
+      email: emailFromQueryString, 
+      token: tokenFromQueryString}))
   }
 
   const submitPassword = async (event) => {
     event.preventDefault();
+    console.log(newPassword)
     setPasswordFieldError(checkResetPasswordRegex(newPassword))
     axios.post("http://localhost:8080/resetpassword", newPassword)
     .then(res => {
-      
+      console.log("SUCCESS (AXIOS)", res.data)
+      console.log(newPassword)
     })
     //need to make query for this first - dont forget!
   }
+
+  useEffect(() => {
+    compareStringsToDb()
+  }, []);
 
   return (
     <Flex sx={LoginFlex} align={"center"}>
@@ -73,9 +84,11 @@ export function ResetPasswordPage() {
           <FormControl id="password" sx={FormControlColors}>
             <FormLabel color={"#FDCA40"}>Create your new password</FormLabel>
             <Text sx={FormContext}>Type your new password</Text>
-            <Input type="password" sx={InputFieldColors} id="firstField" name="firstField" onChange={handleFields}></Input>
+            <Input type="password" sx={InputFieldColors} id="firstField" name="firstField" onChange={handleFields}/>
+            {passwordFieldError.firstField && <Text>{passwordFieldError.firstField}</Text>}
             <Text sx={FormContext}>Re-type your new password</Text>
-            <Input type="password" sx={InputFieldColors} id="secondField" name="secondField" onChange={handleFields}></Input>
+            <Input type="password" sx={InputFieldColors} id="secondField" name="secondField" onChange={handleFields}/>
+            {passwordFieldError.secondField && <Text>{passwordFieldError.secondField}</Text>}
           </FormControl>
           <Center>
             <Input type="submit" sx={FormButton} value="Change Password"></Input>
@@ -85,5 +98,4 @@ export function ResetPasswordPage() {
       </Stack>
     </Flex>
   )
-
 }
