@@ -29,15 +29,14 @@ const verifyUser = (req, res, next) => {
     const header = req.headers['authorization']
     const token = header && header.split(" ")[1]
     if (token == null) {
-      return (
-        res.status(403).send({ message: "Invalid Token", code: "yellow" })
-      )
+      return (res.status(403).send({ message: "Invalid token", code: "yellow" }))
     }
     jwt.verify(token, secret, (err, decoded) => {
       req.email = decoded.email
       if (err) {
-        return res.status(400).send({ message: "Invalid Token", code: "yellow" });
-      } else if (!decoded.email) {
+        return res.status(400).send({ message: "Invalid token", code: "yellow" });
+      } 
+      else if (!decoded.email) {
         return res.status(400).send({ message: "There is no token", code: "yellow" });
       }
       else if (decoded.expires <= Math.floor(Date.now() / 1000)) {
@@ -83,7 +82,8 @@ app.post("/createaccount", async (req, res) => {
       (err, result) => {
         if (err) {
           return res.status(500).send({ message: "Error with Query", code: "red" });
-        } else if (res) {
+        } 
+        else if (res) {
           const emailInfo = {
             from: process.env.P1LL_MAIL,
             to: email,
@@ -164,7 +164,6 @@ app.post("/forgotpassword", async (req, res) => {
         if (error) {
           return res.status(500).json({ message: "An error occurred, please try again", code: "red" })
         }
-        console.log(`timestamp successfully issued - new timestamp is ${currentTime} and new token is ${forgotPasswordToken}`)
         res.status(200).json({ message: `Email sent to ${typedEmail}`, code: "green" });
       })
     })
@@ -177,30 +176,27 @@ app.post("/deleteaccount", async (req, res) => {
   const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable4` WHERE `email` = ?"
   connection.query(confirmPasswordQuery, [tokenEmail], async (err, result) => {
     if (typeof result[0]?.email === "undefined") {
-      res.status(403).send({ message: "Invalid email", code: "red" })
-      return
+      return res.status(403).send({ message: "Invalid email", code: "red" })
     }
     else if (!passwordPattern.test(typedPassword)) {
-      res.status(409).send({ message: "Invalid password", code: "red" })
+      return res.status(409).send({ message: "Invalid password", code: "red" })
     }
     const { email, password, salt } = result[0]
     const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
     if (err) {
-      res.status(500).send({ message: "Something went wrong - (Query)", code: "red" })
+      return res.status(500).send({ message: "Something went wrong - (Query)", code: "red" })
     }
     else if (password === comparedPass) {
       const deleteAccountQuery = "DELETE FROM `usertable4` WHERE `email` = ?"
       connection.query(deleteAccountQuery, [email], async (err, results) => {
         if (err) {
-          res.status(500).send({ message: "Something went wrong - Query", code: "red" })
+          return res.status(500).send({ message: "Something went wrong - Query", code: "red" })
         }
-        else {
-          res.status(200).send({ message: "Your account has been successfully deleted", code: "green" })
-        }
+        return res.status(200).send({ message: "Your account has been successfully deleted", code: "green" })
       })
     }
     else {
-      res.status(403).send({ message: "Invalid password", code: "red" })
+      return res.status(403).send({ message: "Invalid password", code: "red" })
     }
   })
 })
@@ -209,13 +205,13 @@ app.post("/changepassword", async (req, res) => {
   const { oldPassword, newPassword1, newPassword2 } = req.body
   const tokenEmail = req.email
   if (!passwordPattern.test(oldPassword) || !passwordPattern.test(newPassword1) || !passwordPattern.test(newPassword2)) {
-    res.status(409).send({ message: "Invalid password", code: "red" })
+    return res.status(409).send({ message: "Invalid password", code: "red" })
   } 
   else if (oldPassword === newPassword1 || oldPassword === newPassword2) {
-    res.status(409).send({ message: "Your new password must be different", code: "red" })
+    return res.status(409).send({ message: "Your new password must be different", code: "red" })
   }
   else if (newPassword1 !== newPassword2) {
-    res.status(409).send({ message: "New password fields do not match", code: "red" })
+    return res.status(409).send({ message: "New password fields do not match", code: "red" })
   }
   else {
     const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable4` WHERE `email` = ?"
@@ -227,7 +223,7 @@ app.post("/changepassword", async (req, res) => {
       const { email, password, salt } = result[0]
       const comparedPass = crypto.pbkdf2Sync(oldPassword, salt, 1000, 64, "sha256").toString("hex")
       if (err) {
-        res.status(500).send({ message: "Something went wrong (Query)", code: "red" })
+        return res.status(500).send({ message: "Something went wrong (Query)", code: "red" })
       }
       else if (password === comparedPass) {
         const salt = crypto.randomBytes(16).toString("hex")
@@ -235,16 +231,12 @@ app.post("/changepassword", async (req, res) => {
         const changePasswordQuery = "UPDATE `usertable4` SET `password` = ?, `salt` = ? WHERE `email` = ? LIMIT 1"
         connection.query(changePasswordQuery, [hash, salt, email], async (err, results) => {
           if (err) {
-            res.status(500).send({ message: "Something went wrong - Query", code: "red" })
+            return res.status(500).send({ message: "Something went wrong - Query", code: "red" })
           }
-          else {
-            res.status(200).send({ message: "You have successfully changed your password", code: "green" })
-          }
+          res.status(200).send({ message: "You have successfully changed your password", code: "green" })
         })
       }
-      else {
-        res.status(403).send({ message: "Invalid Password", code: "red" })
-      }
+      res.status(403).send({ message: "Invalid Password", code: "red" })
     })
   }
 })
@@ -255,7 +247,7 @@ app.post("/changeusername", async (req, res) => {
   const username = req.body.username
   const tokenEmail = req.email 
   if (!usernamePattern.test(username)) {
-    res.status(409).send({ message: "Invalid username", code: "red" })
+    return res.status(409).send({ message: "Invalid username", code: "red" })
   }
   else {
     const isUsernameUnique = "SELECT `username` FROM `usertable4` WHERE `username` = ?"
@@ -267,11 +259,9 @@ app.post("/changeusername", async (req, res) => {
         const changeUsernameQuery = "UPDATE `usertable4` SET `username` = ? WHERE `email` = ? LIMIT 1"
         connection.query(changeUsernameQuery, [username, tokenEmail], async (err, result) => {
           if (err) {
-            res.status(500).send({ message: "Something went wrong - (Query)", code: "red" })
+            return res.status(500).send({ message: "Something went wrong - (Query)", code: "red" })
           }
-          else if (result) {
-            res.status(200).send({ message: "Username changed successfully", code: "green" })
-          }
+          res.status(200).send({ message: "Username changed successfully", code: "green" })
         })
       }
     })
@@ -291,7 +281,7 @@ app.post("/createnewpassword", async (req, res) => {
     else if (result[0]?.requestedAt === null) {
       return res.status(403).send({ message: "Request could not be fulfilled", code: "red" })
     }
-    else if (email !== result[0].email || token !== result[0]?.requestToken) {
+    else if (email !== result[0]?.email || token !== result[0]?.requestToken) {
       return res.status(403).send({ message: "Authentication of request failed", code: "red" })
     }
     else if (!passwordPattern.test(firstField) || !passwordPattern.test(secondField)) {
