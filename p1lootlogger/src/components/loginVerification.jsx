@@ -25,16 +25,3 @@ export function loginVerification(loginDetails) {
   }
   return error
 }
-
-/*  
-  //checking username for errors
-  if(loginDetails.username === "") {
-    error.username = "Please enter a Username"
-  }
-  else if (!usernamePattern.test(loginDetails.username)) (
-    error.username = "Username must be 3-16 characters long & is restricted to alphanumeric characters (A-Z, 0-9), - and _"
-  )
-  else {
-    error.username = ""
-  }
-  */

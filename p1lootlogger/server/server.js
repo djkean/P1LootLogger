@@ -278,7 +278,8 @@ app.post("/createnewpassword", async (req, res) => {
     else if (typeof result[0]?.email === "undefined") {
       return res.status(403).send({ message: "We were unable to validate your request", code: "red" })
     }
-    else if (result[0]?.requestedAt === null) {
+    //const {email, requestedAt, requestToken} = result[0]
+    else if (requestToken === null) {
       return res.status(403).send({ message: "Request could not be fulfilled", code: "red" })
     }
     else if (email !== result[0]?.email || token !== result[0]?.requestToken) {

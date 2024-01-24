@@ -20,8 +20,6 @@ export function ResetPasswordPage() {
   const tokenFromQueryString = params.get("token")
   const emailFromQueryString = params.get("email")
 
-  console.log(tokenFromQueryString, emailFromQueryString)
-
   const compareStringsToDb = async () => {
     if (typeof tokenFromQueryString === "undefined" || typeof emailFromQueryString == "undefined") {
       return
@@ -38,9 +36,6 @@ export function ResetPasswordPage() {
       if (resetPasswordResponse.ok) {
         const responseData = await resetPasswordResponse.json()
         setResetPasswordRes(responseData)
-        console.log("looks good!")
-        console.log(resetPasswordResponse)
-        console.log(responseData)
       }
       else {
         console.log("Error in POST request")
@@ -60,12 +55,10 @@ export function ResetPasswordPage() {
 
   const submitPassword = async (event) => {
     event.preventDefault();
-    console.log(newPassword)
     setPasswordFieldError(checkResetPasswordRegex(newPassword))
     axios.post("http://localhost:8080/createnewpassword", newPassword)
     .then(res => {
-      console.log("SUCCESS (AXIOS)", res.data)
-      console.log(newPassword)
+      console.log("SUCCESS (AXIOS)")
       setAuthenticateResetRes(res.data)
     })
     .catch(err => {
