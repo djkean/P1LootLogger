@@ -2,14 +2,16 @@ import { React, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback } from "../components/pagestyles"
-import { regVerification } from "../components/regexChecks";
+//import { regVerification } from "../components/regexChecks";
+import { comparePasswords } from "../components/regexChecks";
 import axios from "axios";
 
 export function CreateAccountPage() {
   const [regDetails, setRegDetails] = useState({
     username: "",
     email: "",
-    password: "",
+    firstField: "",
+    secondField: "",
   })
 
   const [regError, setRegError] = useState({})
@@ -22,11 +24,13 @@ export function CreateAccountPage() {
   const navigate = useNavigate();
   const submitFields = async (event) => {
     event.preventDefault();
-    setRegError(regVerification(regDetails))
-    let error = regVerification(regDetails)
+    //setRegError(regVerification(regDetails))
+    //let error = regVerification(regDetails)
+    setRegError(comparePasswords(regDetails.firstField, regDetails.secondField))
+    let error = comparePasswords(regDetails.firstField, regDetails.secondField)
     setRegError(error)
-    console.log(error.username, error.email, error.password)
-    if (error.username === "" && error.email === "" && error.password === "") {
+    console.log(error.username, error.email, error.firstField, error.secondField)
+    if (error.username === "" && error.email === "" && error.firstField === "" && error.secondField === "") {
       console.log("Form submitted")
       await axios.post("http://localhost:8080/createaccount", regDetails)
       .then((res => {
@@ -70,12 +74,17 @@ export function CreateAccountPage() {
             <FormControl id="password" sx={FormControlColors}>
               <FormLabel color={"#FDCA40"}>Password:</FormLabel>
               <Input type="password" sx={InputFieldColors}
-              id="reg--password--1" name="password" onChange={handleFields}/>
-                {regError.password && <Text>{regError.password}</Text>}
+              id="reg--password--1" name="firstField" onChange={handleFields}/>
+                {regError.firstField && <Text>{regError.firstField}</Text>}
+            </FormControl>
+            <FormControl id="password2" sx={FormControlColors}>
+              <FormLabel color={"#FDCA40"}>Re-type Password:</FormLabel>
+              <Input type="password" sx={InputFieldColors}
+              id="reg--password--2" name="secondField" onChange={handleFields}/>
+                {regError.secondField && <Text>{regError.secondField}</Text>}
               <Center>
                 <Input type="submit" sx={FormButton} value="Create Account"/>
               </Center>
-              <Text color={"#BFA55C"} align={"center"}></Text>
             </FormControl>
           </Stack>
         </Box>

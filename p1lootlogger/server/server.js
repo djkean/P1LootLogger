@@ -70,12 +70,12 @@ app.get("/*", (req, res, next) => {
 app.post("/createaccount", async (req, res) => {
   try {
     const accountCreatedTime = Math.floor(Date.now() / 1000)
-    const { username, email, password } = req.body
+    const { username, email, firstField, secondField } = req.body
     const accountToken = crypto.randomBytes(16).toString("hex")
     const verifyEmailUrl = `http://localhost:3000/verifyemail?token=${querystring.escape(accountToken)}&email=${querystring.escape(email)}`;
     const verifyEmailBody = `Click <a href=${verifyEmailUrl}>here</a> to confirm.`;
     const salt = crypto.randomBytes(16).toString("hex")
-    const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha256").toString("hex")
+    const hash = crypto.pbkdf2Sync(firstField, salt, 1000, 64, "sha256").toString("hex")
     connection.query(
       "INSERT INTO `usertable4` (`username`,`email`,`password`,`salt`,`createdAt`,`token`,`status`) VALUES (?,?,?,?,?,?,'5')",
       [username, email, hash, salt, accountCreatedTime, accountToken],
