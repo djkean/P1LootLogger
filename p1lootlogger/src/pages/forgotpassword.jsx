@@ -1,9 +1,8 @@
 import { React, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormContext, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback } from "../components/pagestyles"; 
-import { checkEmailRegex } from "../components/emailVerification";
+import { checkEmailRegex } from "../components/regexChecks";
 
 export function ForgotPassword() {
   const [confirmEmail, setConfirmEmail] = useState({email: ""});
@@ -14,7 +13,6 @@ export function ForgotPassword() {
     setConfirmEmail(_ => ({..._, [event.target.name]: event.target.value}))
   }
 
-  const navigate = useNavigate()
   const submitEmail = (event) => {
     event.preventDefault();
     setForgotPasswordError(checkEmailRegex(confirmEmail))
@@ -26,7 +24,6 @@ export function ForgotPassword() {
       .then(res => {
         setForgotPasswordRes(res.data)
         console.log("EMAIL SENT (AXIOS)")
-        //navigate("/login")
       })
       .catch(err => {
         setForgotPasswordRes(err.response.data)

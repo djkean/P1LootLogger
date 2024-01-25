@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback } from "../components/pagestyles"
-import { regVerification } from "../components/regVerification";
+import { regVerification } from "../components/regexChecks";
 import axios from "axios";
 
 export function CreateAccountPage() {

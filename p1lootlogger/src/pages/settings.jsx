@@ -1,7 +1,7 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormContext, FormControlColors, FormWarning, InputFieldColors, LoginFlex, LoginStack, ResFeedback, SettingsBox } from "../components/pagestyles"; 
-import { checkUsernameRegex, checkPasswordRegex, deleteAccountRegex } from "../components/settingsVerification";
+import { checkUsernameRegex, checkPasswordRegex, deleteAccountRegex } from "../components/regexChecks";
 import axios from "axios";
 import { getToken } from "../shared/getToken";
 import { useNavigate } from "react-router-dom"; 

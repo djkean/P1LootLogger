@@ -1,7 +1,7 @@
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback } from "../components/pagestyles"
 import { React, useState } from "react";
-import { loginVerification } from "../components/loginVerification";
+import { loginVerification } from "../components/regexChecks"
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 

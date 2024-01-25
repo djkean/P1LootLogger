@@ -1,9 +1,40 @@
 //dont forget to change import paths before deleting the originals!!
+const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
+const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
+const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
+
+//new regex for all 2 field password checks
+export function comparePasswords(firstField, secondField) {
+  let error = {}
+  if (firstField === "") {
+    error.firstField = "This field cannot be blank"
+  } 
+  else if (!passwordPattern.test(firstField)) {
+    error.firstField = "Make sure your new password contains numbers, capital, and lowercase characters"
+  }
+  else {
+    error.firstField = ""
+  }
+  if (secondField == "") {
+    error.secondField = "This field cannot be blank"
+  }
+  else if (!passwordPattern.test(secondField)) {
+    error.secondField = "Make sure your new password contains numbers, capital, and lowercase characters"
+  }
+  else if (firstField !== secondField) {
+    error.firstField = "Make sure both passwords match"
+    error.secondField = "Make sure both passwords match"
+  }
+  else {
+    error.secondField = ""
+  }
+  return error
+}
+
+
 //used for /login
 export function loginVerification(loginDetails) {
   let error = {}
-  const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
-  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 
   if (loginDetails.email === "") {
     error.email = "Please enter an Email"
@@ -19,7 +50,7 @@ export function loginVerification(loginDetails) {
     error.password = "Please enter a Password"
   }
   else if (!passwordPattern.test(loginDetails.password)) {
-    error.password = "Please check that your Password is correct"
+    error.password = "Incorrect password"
   }
   else {
     error.password = ""
@@ -27,7 +58,7 @@ export function loginVerification(loginDetails) {
   return error
 }
 
-//used for verifyemail
+//used for forgotpassword
 export function checkEmailRegex(confirmEmail) {
   let error = {}
   const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
@@ -64,7 +95,6 @@ export function checkUsernameRegex(newUsername) {
 //used for settings.jsx, /deleteaccount
 export function deleteAccountRegex(deleteAccount) {
   let error = {}
-  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
   if (deleteAccount === "") {
     error.delAccount = "This field cannot be blank"
   }
@@ -80,7 +110,6 @@ export function deleteAccountRegex(deleteAccount) {
 //used for settings.jsx, /changepassword
 export function checkPasswordRegex(newPassword) {
   let error = {}
-  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
   if (newPassword.oldPassword === "") {
     error.oldPassword = "This field cannot be blank"
   }
@@ -128,11 +157,7 @@ export function checkPasswordRegex(newPassword) {
 
 //used for /createaccount
 export function regVerification(regDetails) {
-  let error = {}
-  const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
-  const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/ 
-  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
-
+  let error = {} 
   //checking username for errors
   if(regDetails.username === "") {
     error.username = "Please enter a Username"
@@ -169,7 +194,6 @@ export function regVerification(regDetails) {
 //used for /createnewpassword
 export function checkResetPasswordRegex(newPassword) {
   let error = {}
-  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
   if (newPassword.firstField === "") {
     error.firstField = "This field cannot be blank"
   } 
