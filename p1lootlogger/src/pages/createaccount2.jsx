@@ -28,7 +28,7 @@ export function CreateAccountPage() {
     console.log(error.firstField, error.secondField)
     if (error.firstField === "" && error.secondField === "")
     console.log("no errors found, submitting form...")
-    await axios.post("/login", accountFormData)
+    await axios.post("/createaccount2", accountFormData)
     .then(res => {
       setCreateAccountRes(res.data)
       console.log(res.data.message, res.data.code)
@@ -36,7 +36,7 @@ export function CreateAccountPage() {
     })
     .catch(err => {
       setCreateAccountRes(err.response.data)
-      console.log(err, `Backend returned with error ${err.response.stats}`)
+      console.log(err, `Backend returned with error ${err.response.status}`)
     })
   }
 

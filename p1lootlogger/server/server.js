@@ -105,6 +105,77 @@ app.post("/createaccount", async (req, res) => {
   }
 });
 
+app.post("/createaccount2", async (req, res) => {
+  const { username, email, firstField, secondField } = req.body
+  if (username === "" || email === "") {
+    return res.status(403).json({ error: "Please check that both the username and email fields are filled", response: null })
+  }
+  else if (!usernamePattern.test(username)) {
+    return res.status(403).json({ error: "Make sure that your username contains only Alphanumeric characters, and -_", response: null })
+  }
+  else if (!emailPattern.test(email)) {
+    return res.status(403).json({ error: "Invalid email", response: null })
+  }
+  else if (!passwordPattern.test(firstField) || !passwordPattern.test(secondField)) {
+    return res.status(403).json({ error: "Make sure your password contains numbers, capital, and lowercase characters", response: null })
+  }
+  else if (firstField !== secondField) {
+    return res.status(403).json({ error: "Both passwords do not match", response: null })
+  }
+  const checkUserEmailQuery = "SELECT `username`, `email` FROM `usertable4` WHERE `username` = ? OR `email` = ?"
+  connection.query(checkUserEmailQuery, [username, email], async (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "An error occurred, please try again", response: null })
+    }
+    else if (result.length !== 0) {
+      //change this into individual cases where i can tell the user if the name or email is the conflict
+      return res.status(403).json({ error: "Username and email must be unique", response: null })
+    }
+    const currentTimestamp = Math.floor(Date.now() / 1000)
+    const accountToken = crypto.randomBytes(16).toString("hex")
+    const verifyEmailUrl = `http://localhost:3000/verifyemail?token=${querystring.escape(accountToken)}&email=${querystring.escape(email)}`;
+    const verifyEmailBody = `Click <a href=${verifyEmailUrl}>here</a> to confirm.`;
+    const salt = crypto.randomBytes(16).toString("hex")
+    const hash = crypto.pbkdf2Sync(firstField, salt, 1000, 64, "sha256").toString("hex")
+    const createAccountQuery = "INSERT INTO `usertable4` (`username`, `email`, `password`, `salt`, `createdAt`, `token`, `status`) VALUES (?, ?, ?, ?, ?, ?, 5)"
+    connection.query(createAccountQuery, [username, email, hash, salt, currentTimestamp, accountToken], async (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: "An error has occurred, please try again", response: null })
+      }
+      //res.status(200).json({ error: null, response: "Account Created" })
+      //make mailinfo reusable for other email cases
+      const emailInfo = {
+        from: process.env.P1LL_MAIL,
+        to: email,
+        subject: "Confirm Registration",
+        text: verifyEmailUrl,
+        html: `<b>${verifyEmailBody}</b>`,
+      }
+      transporter.sendMail(emailInfo, function(err, info) {
+        if (err) {
+          return res.status(500).json({ error: "Error occurred during mailing, please try again", response: null });
+        }
+        res.status(200).json({ error: null, response: `Confirmation email has been sent to ${email}` });
+      })
+    })
+  })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.post("/login", async (req, res) => {
   const typedPassword = req.body.password
   const loginQuery = "SELECT `email`,`password`,`salt`,`status` FROM `usertable4` WHERE `email` = ? LIMIT 1"
@@ -249,23 +320,22 @@ app.post("/changeusername", async (req, res) => {
   if (!usernamePattern.test(username)) {
     return res.status(409).send({ message: "Invalid username", code: "red" })
   }
-  else {
-    const isUsernameUnique = "SELECT `username` FROM `usertable4` WHERE `username` = ?"
-    connection.query(isUsernameUnique, [username], async (err, usernames) => {
-      if (usernames.length !== 0) {
-        res.status(409).send({ message: "Username already taken", code: "red" })
+  const isUsernameUnique = "SELECT `username` FROM `usertable4` WHERE `username` = ?"
+  connection.query(isUsernameUnique, [username], async (err, usernames) => {
+    if (err) {
+      return res.status(500).send({ message: "An error occurred, please try again", code: "red" })
+    }
+    else if (usernames.length !== 0) {
+      return res.status(403).send({ message: "Username already taken", code: "red" })
+    }
+    const changeUsernameQuery = "UPDATE `usertable4` SET `username` = ? WHERE `email` = ? LIMIT 1"
+    connection.query(changeUsernameQuery, [username, tokenEmail], async (err, result) => {
+      if (err) {
+        return res.status(500).send({ message: "Something went wrong - (Query)", code: "red" })
       }
-      else {
-        const changeUsernameQuery = "UPDATE `usertable4` SET `username` = ? WHERE `email` = ? LIMIT 1"
-        connection.query(changeUsernameQuery, [username, tokenEmail], async (err, result) => {
-          if (err) {
-            return res.status(500).send({ message: "Something went wrong - (Query)", code: "red" })
-          }
-          res.status(200).send({ message: "Username changed successfully", code: "green" })
-        })
-      }
+      res.status(200).send({ message: "Username changed successfully", code: "green" })
     })
-  }
+  })
 })
 
 app.post("/createnewpassword", async (req, res) => {
