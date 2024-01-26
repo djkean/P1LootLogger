@@ -9,6 +9,7 @@ import { BossInfo } from "./pages/bossinfo.jsx";
 import { BossDetails } from "./pages/bossdetails.jsx";
 import { ChakraProvider } from "@chakra-ui/react";
 import { CreateAccountPage } from "./pages/createaccount.jsx";
+import { CreateAccountPage2 } from "./pages/createaccount2.jsx";
 import { LoginPage } from "./pages/login.jsx";
 import { SettingsPage } from "./pages/settings.jsx";
 import { ForgotPassword } from "./pages/forgotpassword.jsx";
@@ -41,6 +42,7 @@ export function App() {
             <Route path="/bossdetails" element={<BossDetails />} />
             <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
             <Route path="/createaccount" element={<CreateAccountPage />} />
+            <Route path="/createaccount2" element={<CreateAccountPage2 />} />
             <Route path="/settings" element={<SettingsPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/submitloot" element={<SubmitLootPage />} />
