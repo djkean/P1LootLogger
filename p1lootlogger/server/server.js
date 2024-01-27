@@ -16,7 +16,7 @@ const secret = process.env.P1LL_SECRETTOKEN;
 const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
-const optOut = ["/", "/home", "/login", "/createaccount", "/createaccount2", "/forgotpassword", "/api/verifyemail", "/verifyemail", "/api/resetpassword", "/resetpassword", "/createnewpassword"];
+const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword", "/api/verifyemail", "/verifyemail", "/api/resetpassword", "/resetpassword", "/createnewpassword"];
 
 const verifyUser = (req, res, next) => {
   const path = req.path
@@ -68,44 +68,6 @@ app.get("/*", (req, res, next) => {
 });
 
 app.post("/createaccount", async (req, res) => {
-  try {
-    const accountCreatedTime = Math.floor(Date.now() / 1000)
-    const { username, email, firstField, secondField } = req.body
-    const accountToken = crypto.randomBytes(16).toString("hex")
-    const verifyEmailUrl = `http://localhost:3000/verifyemail?token=${querystring.escape(accountToken)}&email=${querystring.escape(email)}`;
-    const verifyEmailBody = `Click <a href=${verifyEmailUrl}>here</a> to confirm.`;
-    const salt = crypto.randomBytes(16).toString("hex")
-    const hash = crypto.pbkdf2Sync(firstField, salt, 1000, 64, "sha256").toString("hex")
-    connection.query(
-      "INSERT INTO `usertable4` (`username`,`email`,`password`,`salt`,`createdAt`,`token`,`status`) VALUES (?,?,?,?,?,?,'5')",
-      [username, email, hash, salt, accountCreatedTime, accountToken],
-      (err, result) => {
-        if (err) {
-          return res.status(500).send({ message: "Error with Query", code: "red" });
-        } 
-        else if (res) {
-          const emailInfo = {
-            from: process.env.P1LL_MAIL,
-            to: email,
-            subject: "Confirm Registration",
-            text: /*process.env.P1LL_REGISTER_TEXT*/ verifyEmailUrl,
-            html: `<b>${verifyEmailBody}</b>`,
-          }
-          transporter.sendMail(emailInfo, function(err, info) {
-            if (err) {
-              return res.status(500).send({ message: "Error when sending email" , code: "red" })
-            }
-            return res.status(200).json({ message: `Confirmation email sent to ${email}`, code: "green" });
-          })
-        }
-      }
-    );
-  } catch (err) {
-    return res.status(500).json({ message: "Something went wrong", code: "red" });
-  }
-});
-
-app.post("/createaccount2", async (req, res) => {
   const { username, email, firstField, secondField } = req.body
   if (username === "" || email === "") {
     return res.status(403).json({ error: "Please check that both the username and email fields are filled", response: null })

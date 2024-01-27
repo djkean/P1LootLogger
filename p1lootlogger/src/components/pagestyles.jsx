@@ -151,6 +151,14 @@ export const LoginBox = {
   width: "22em"
 }
 
+export const ResCard = {
+  bg: "#2A2823",
+  boxShadow: "lg",
+  p: 4,
+  rounded: "lg",
+  width: "22em"
+}
+
 export const LoginFlex = {
   bg: "#5D5D5D",
   justify: "center",
