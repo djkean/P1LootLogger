@@ -150,15 +150,6 @@ export const LoginBox = {
   rounded: "lg",
   width: "22em"
 }
-
-export const ResCard = {
-  bg: "#2A2823",
-  boxShadow: "lg",
-  p: 4,
-  rounded: "lg",
-  width: "22em"
-}
-
 export const LoginFlex = {
   bg: "#5D5D5D",
   justify: "center",
@@ -222,6 +213,13 @@ export const TitleTheme = {
   fontWeight: "600",
 }
 
+export const ResCard = {
+  bg: "#2A2823",
+  boxShadow: "lg",
+  p: 4,
+  rounded: "lg",
+  width: "22em"
+}
 
 export const ResFeedback = {
   bg: "#2A2823",

@@ -156,30 +156,29 @@ app.post("/login", async (req, res) => {
 
 app.post("/forgotpassword", async (req, res) => {
   const typedEmail = req.body.email
+  if (!emailPattern.test(typedEmail)) {
+    return res.status(409).send({ message: "Invalid email", code: "red" })
+  }
   const forgotPasswordToken = crypto.randomBytes(16).toString("hex")
   const forgotPasswordUrl = `http://localhost:3000/resetpassword?token=${querystring.escape(forgotPasswordToken)}&email=${querystring.escape(typedEmail)}`;
   const forgotPasswordBody = `If you requested this email, click <a href=${forgotPasswordUrl}>here</a> to change your password. If you didn't request this email, you can safely ignore this email.`;
-  const confirmEmailQuery = "SELECT `email` from `usertable4` where `email` = ?"
+  const confirmEmailQuery = "SELECT `email` from `usertable4` where `email` = ? LIMIT 1"
   connection.query(confirmEmailQuery, [typedEmail], async (err, result) => {
     if (err) {
       return res.status(500).send({ message: "Something went wrong (Query)", code: "red" })
     }
-    else if (!emailPattern.test(typedEmail)) {
-      return res.status(409).send({ message: "Invalid email", code: "red" })
-    }
     else if (typeof result[0]?.email === "undefined") {
-      return res.status(403).send({ message: "Invalid email", code: "red" })
+      return res.status(403).send({ message: "Could not find an account tied to this email", code: "red" })
     }
     const emailInfo = {
       from: process.env.P1LL_MAIL,
       to: typedEmail,
       subject: "Forgot Password?",
-      text: /*process.env.P1LL_RESETPASS_TEXT*/ forgotPasswordUrl,
+      text: forgotPasswordUrl,
       html: `<b>${forgotPasswordBody}</b>`,
     }
     transporter.sendMail(emailInfo, function(err, info) {
       if (err) {
-        console.log(err)
         return res.status(500).send({ message: "Error when sending email", code: "red" })
       }
       console.log(`Sent to ${typedEmail}, issuing request timestamp...`)
