@@ -128,8 +128,6 @@ app.post("/createaccount", async (req, res) => {
   })
 })
 
-
-
 app.post("/login", async (req, res) => {
   const typedPassword = req.body.password
   const loginQuery = "SELECT `email`,`password`,`salt`,`status` FROM `usertable4` WHERE `email` = ? LIMIT 1"
@@ -194,7 +192,6 @@ app.post("/forgotpassword", async (req, res) => {
   })
 })
 
-//for 28th
 app.post("/deleteaccount", async (req, res) => {
   const typedPassword = req.body.delAccount
   const tokenEmail = req.email
@@ -292,32 +289,34 @@ app.post("/changeusername", async (req, res) => {
 })
 
 app.post("/createnewpassword", async (req, res) => {
-  const {firstField, secondField, email, token} = req.body
+  console.log(req.body)
+  const {firstField, secondField, stringEmail, stringToken} = req.body
   const authenticateUserQuery = "SELECT `email`, `requestedAt`, `requestToken` FROM `usertable4` WHERE `email` = ? LIMIT 1"
-  connection.query(authenticateUserQuery, [email], async (err, result) => {
+  connection.query(authenticateUserQuery, [stringEmail], async (err, result) => {
     if (err) {
+      console.log(err)
       return res.status(500).send({ message: "A server error occured, please try again", code: "red" })
     }
     else if (typeof result[0]?.email === "undefined") {
       return res.status(403).send({ message: "We were unable to validate your request", code: "red" })
     }
-    //const {email, requestedAt, requestToken} = result[0]
-    else if (result[0]?.requestToken === "undefined") {
+    else if (typeof result[0]?.requestToken === "undefined") {
       return res.status(403).send({ message: "Request could not be fulfilled", code: "red" })
     }
-    else if (email !== result[0]?.email || token !== result[0]?.requestToken) {
+    const {email, requestedAt, requestToken} = result[0]
+    if (stringEmail !== email || stringToken !== requestToken) {
       return res.status(403).send({ message: "Authentication of request failed", code: "red" })
-    }
-    else if (!passwordPattern.test(firstField) || !passwordPattern.test(secondField)) {
-      return res.status(409).send({ message: "Invalid password", code: "red" })
     }
     else if (firstField !== secondField) {
       return res.status(409).send({ message: "Passwords do not match", code: "red" })
     }
+    else if (!passwordPattern.test(firstField) || !passwordPattern.test(secondField)) {
+      return res.status(409).send({ message: "Invalid password", code: "red" })
+    }
     const salt = crypto.randomBytes(16).toString("hex")
     const hash = crypto.pbkdf2Sync(firstField, salt, 1000, 64, "sha256").toString("hex")
     const newPasswordQuery = "UPDATE `usertable4` SET `password` = ?, `salt` = ?, `requestedAt` = ?, `requestToken` = ? WHERE `email` = ? LIMIT 1"
-    connection.query(newPasswordQuery, [hash, salt, null, null, email], async (err, results) => {
+    connection.query(newPasswordQuery, [hash, salt, null, null, stringEmail], async (err, results) => {
       if (err) {
         return res.status(500).send({ message: "An error occured during the request", code: "red" })
       }

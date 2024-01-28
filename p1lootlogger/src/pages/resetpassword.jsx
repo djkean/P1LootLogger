@@ -48,8 +48,8 @@ export function ResetPasswordPage() {
 
   const handleFields = (event) => {
     setNewPassword(_ => ({ ..._, [event.target.name]: event.target.value, 
-      email: emailFromQueryString, 
-      token: tokenFromQueryString
+      stringEmail: emailFromQueryString, 
+      stringToken: tokenFromQueryString
     }))
   }
 
@@ -81,7 +81,7 @@ export function ResetPasswordPage() {
           {authenticateResetRes.message && 
           <Stack align={"center"}>
             <Text color={"#FDCA40"}>{authenticateResetRes.message}.</Text> 
-            {authenticateResetRes.code == "green" &&
+            {authenticateResetRes.code === "green" &&
             <Link to="/login">
               <Text color={"green"}>Click here to log in</Text>
             </Link>}
