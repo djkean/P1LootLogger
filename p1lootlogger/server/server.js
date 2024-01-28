@@ -194,17 +194,21 @@ app.post("/forgotpassword", async (req, res) => {
   })
 })
 
+//for 28th
 app.post("/deleteaccount", async (req, res) => {
   const typedPassword = req.body.delAccount
   const tokenEmail = req.email
+  if (!passwordPattern.test(typedPassword)) {
+    return res.status(409).send({ message: "Invalid password", code: "red" })
+  }
   const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable4` WHERE `email` = ?"
   connection.query(confirmPasswordQuery, [tokenEmail], async (err, result) => {
-    if (typeof result[0]?.email === "undefined") {
+    if (err) {
+      return res.status(500).send({ message: "An error occurred, please try again", code: "red" })
+    }
+    else if (typeof result[0]?.email === "undefined") {
       return res.status(403).send({ message: "Invalid email", code: "red" })
-    }
-    else if (!passwordPattern.test(typedPassword)) {
-      return res.status(409).send({ message: "Invalid password", code: "red" })
-    }
+    } 
     const { email, password, salt } = result[0]
     const comparedPass = crypto.pbkdf2Sync(typedPassword, salt, 1000, 64, "sha256").toString("hex")
     if (err) {
@@ -218,54 +222,50 @@ app.post("/deleteaccount", async (req, res) => {
         }
         return res.status(200).send({ message: "Your account has been successfully deleted", code: "green" })
       })
-    }
-    else {
-      return res.status(403).send({ message: "Invalid password", code: "red" })
-    }
+    } 
+    res.status(403).send({ message: "Invalid password", code: "red" })
   })
 })
 
 app.post("/changepassword", async (req, res) => {
   const { oldPassword, newPassword1, newPassword2 } = req.body
   const tokenEmail = req.email
-  if (!passwordPattern.test(oldPassword) || !passwordPattern.test(newPassword1) || !passwordPattern.test(newPassword2)) {
-    return res.status(409).send({ message: "Invalid password", code: "red" })
-  } 
+  if (newPassword1 !== newPassword2) {
+    return res.status(409).send({ message: "New passwords do not match", code: "red" })
+  }
   else if (oldPassword === newPassword1 || oldPassword === newPassword2) {
     return res.status(409).send({ message: "Your new password must be different", code: "red" })
   }
-  else if (newPassword1 !== newPassword2) {
-    return res.status(409).send({ message: "New password fields do not match", code: "red" })
-  }
-  else {
-    const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable4` WHERE `email` = ?"
-    connection.query(confirmPasswordQuery, [tokenEmail], async (err, result) => {
-      if (typeof result[0]?.email === "undefined") {
-        res.status(403).send({ message: "Invalid email", code: "red" })
-        return
-      }
-      const { email, password, salt } = result[0]
-      const comparedPass = crypto.pbkdf2Sync(oldPassword, salt, 1000, 64, "sha256").toString("hex")
-      if (err) {
-        return res.status(500).send({ message: "Something went wrong (Query)", code: "red" })
-      }
-      else if (password === comparedPass) {
-        const salt = crypto.randomBytes(16).toString("hex")
-        const hash = crypto.pbkdf2Sync(newPassword1, salt, 1000, 64, "sha256").toString("hex")
-        const changePasswordQuery = "UPDATE `usertable4` SET `password` = ?, `salt` = ? WHERE `email` = ? LIMIT 1"
-        connection.query(changePasswordQuery, [hash, salt, email], async (err, results) => {
-          if (err) {
-            return res.status(500).send({ message: "Something went wrong - Query", code: "red" })
-          }
-          res.status(200).send({ message: "You have successfully changed your password", code: "green" })
-        })
-      }
-      res.status(403).send({ message: "Invalid Password", code: "red" })
-    })
-  }
+  else if (!passwordPattern.test(oldPassword) || !passwordPattern.test(newPassword1) || !passwordPattern.test(newPassword2)) {
+    return res.status(409).send({ message: "Invalid password", code: "red" })
+  } 
+  const confirmPasswordQuery = "SELECT `email`,`password`,`salt` FROM `usertable4` WHERE `email` = ?"
+  connection.query(confirmPasswordQuery, [tokenEmail], async (err, result) => {
+    if (err) {
+      return res.status(500).send({ message: "An error has occurred, please try again", code: "red" })
+    }
+    else if (typeof result[0]?.email === "undefined") {
+      return res.status(403).send({ message: "Invalid email", code: "red" })
+    }
+    const { email, password, salt } = result[0]
+    const comparedPass = crypto.pbkdf2Sync(oldPassword, salt, 1000, 64, "sha256").toString("hex")
+    if (err) {
+      return res.status(500).send({ message: "Something went wrong (Query)", code: "red" })
+    }
+    else if (password === comparedPass) {
+      const salt = crypto.randomBytes(16).toString("hex")
+      const hash = crypto.pbkdf2Sync(newPassword1, salt, 1000, 64, "sha256").toString("hex")
+      const changePasswordQuery = "UPDATE `usertable4` SET `password` = ?, `salt` = ? WHERE `email` = ? LIMIT 1"
+      connection.query(changePasswordQuery, [hash, salt, email], async (err, results) => {
+        if (err) {
+          return res.status(500).send({ message: "Something went wrong - Query", code: "red" })
+        }
+        return res.status(200).send({ message: "You have successfully changed your password", code: "green" })
+      })
+    }
+    res.status(403).send({ message: "Invalid Password", code: "red" })
+  })
 })
-
-//changePasswordFunction(oldpass, newpass, retypednewpass)
 
 app.post("/changeusername", async (req, res) => {
   const username = req.body.username
