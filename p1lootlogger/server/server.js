@@ -61,8 +61,7 @@ app.use("/", express.static(static_dir));
 
 app.get("/*", (req, res, next) => {
   if (req.url.startsWith("/api/")) {
-    next();
-    return;
+    return next();
   }
   res.sendFile(path.join(static_dir, "index.html"));
 });
@@ -84,19 +83,18 @@ app.post("/createaccount", async (req, res) => {
   else if (!passwordPattern.test(firstField) || !passwordPattern.test(secondField)) {
     return res.status(403).json({ error: "Make sure your password contains numbers, capital, and lowercase characters", response: null })
   }
-  const checkUserEmailQuery = "SELECT CASE WHEN EXISTS (SELECT 1 FROM `usertable4` WHERE `username` = ?) THEN 'username is taken' WHEN EXISTS (SELECT 1 FROM `usertable4` WHERE `email` = ?) THEN 'email is already used' ELSE 'username and email are available' END AS result"
+  const checkUserEmailQuery = `SELECT CASE WHEN EXISTS (SELECT 1 FROM \`usertable4\` WHERE \`username\` = ?) 
+  THEN 'username is taken' WHEN EXISTS (SELECT 1 FROM \`usertable4\` WHERE \`email\` = ?) 
+    THEN 'email is already used' ELSE 'username and email are available' END AS result`
   connection.query(checkUserEmailQuery, [username, email], async (err, result) => {
     if (err) {
-      console.log(err)
       return res.status(500).json({ error: "An error occurred, please try again", response: null })
     }
     const resFromDb = result[0].result
     if (resFromDb == "email is already used") {
-      console.log(result)
       return res.status(403).json({ error: "This email is already in use", response: null })
     }
     else if (resFromDb == "username is taken") {
-      console.log(result)
       return res.status(403).json({ error: "This username is taken", response: null })
     }
     const currentTimestamp = Math.floor(Date.now() / 1000)
@@ -159,7 +157,8 @@ app.post("/forgotpassword", async (req, res) => {
   }
   const forgotPasswordToken = crypto.randomBytes(16).toString("hex")
   const forgotPasswordUrl = `http://localhost:3000/resetpassword?token=${querystring.escape(forgotPasswordToken)}&email=${querystring.escape(typedEmail)}`;
-  const forgotPasswordBody = `If you requested this email, click <a href=${forgotPasswordUrl}>here</a> to change your password. If you didn't request this email, you can safely ignore this email.`;
+  const forgotPasswordBody = `If you requested this email, click <a href=${forgotPasswordUrl}>here</a> to change your password. 
+  If you didn't request this email, you can safely ignore this email.`;
   const confirmEmailQuery = "SELECT `email` from `usertable4` where `email` = ? LIMIT 1"
   connection.query(confirmEmailQuery, [typedEmail], async (err, result) => {
     if (err) {
@@ -294,7 +293,6 @@ app.post("/createnewpassword", async (req, res) => {
   const authenticateUserQuery = "SELECT `email`, `requestedAt`, `requestToken` FROM `usertable4` WHERE `email` = ? LIMIT 1"
   connection.query(authenticateUserQuery, [stringEmail], async (err, result) => {
     if (err) {
-      console.log(err)
       return res.status(500).send({ message: "A server error occured, please try again", code: "red" })
     }
     else if (typeof result[0]?.email === "undefined") {

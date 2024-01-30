@@ -71,6 +71,8 @@ export function ResetPasswordPage() {
     compareStringsToDb()
   }, []);
 
+//fix the card for backend response!
+
   return (
     <Flex sx={LoginFlex} align={"center"}>
       {resetPasswordRes.response && <Stack sx={LoginStack} spacing={6} align={"center"}>
