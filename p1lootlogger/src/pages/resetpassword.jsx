@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormContext, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback, SettingsBox } from "../components/pagestyles";
+import { FormButton, FormContext, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback, SettingsBox, ResCard } from "../components/pagestyles";
 import { comparePasswords } from "../components/regexChecks";
 import axios from "axios";
 
@@ -71,10 +71,43 @@ export function ResetPasswordPage() {
     compareStringsToDb()
   }, []);
 
-//fix the card for backend response!
-
   return (
     <Flex sx={LoginFlex} align={"center"}>
+      {resetPasswordRes.response && <Stack sx={LoginStack} spacing={6} align={"center"}>
+        <Heading fontSize={"4xl"} py={3}>Reset Password</Heading>
+        <Text fontSize={"lg"}>Create your new password</Text>
+        {authenticateResetRes.message && <Stack align={"center"} sx={ResCard}>
+          <Text color={"#FDCA40"}>{authenticateResetRes.message}.</Text> 
+          {authenticateResetRes.code === "green" &&
+          <Link to="/login">
+            <Text color={"green"}>Click here to log in</Text>
+          </Link>}
+        </Stack>}
+        <Stack as="form" id="reset--form" sx={LoginBox} align={"center"} spacing={3} onSubmit={submitPassword}>
+          <FormControl id="password" sx={FormControlColors}>
+            <FormLabel color={"#FDCA40"}>Password:</FormLabel>
+            <Input type="password" sx={InputFieldColors} id="firstField" name="firstField" onChange={handleFields}/>
+            {passwordFieldError.firstField && <Text>{passwordFieldError.firstField}</Text>}
+            <FormLabel color={"#FDCA40"}>Re-type password:</FormLabel>
+            <Input type="password" sx={InputFieldColors} id="secondField" name="secondField" onChange={handleFields}/>
+            {passwordFieldError.secondField && <Text>{passwordFieldError.secondField}</Text>}
+          </FormControl>
+          <Center>
+            <Input type="submit" sx={FormButton} px={20} value="Change Password"></Input>
+          </Center>
+        </Stack>
+      </Stack>}
+      {resetPasswordRes.error && 
+      <Stack sx={LoginStack} align={"center"}>
+        <Stack sx={LoginBox} align={"center"}>
+          <Text color={"#FDCA40"}>{resetPasswordRes.error}</Text> 
+        </Stack>
+      </Stack>}
+    </Flex>
+  )
+}
+
+/*<Flex sx={LoginFlex} align={"center"}>
       {resetPasswordRes.response && <Stack sx={LoginStack} spacing={6} align={"center"}>
         <Stack align={"center"}>
           <Heading fontSize={"3xl"} py={3}>Reset Password</Heading>
@@ -113,6 +146,4 @@ export function ResetPasswordPage() {
         </Box>
        </Stack>
       }
-    </Flex>
-  )
-}
+    </Flex>*/
