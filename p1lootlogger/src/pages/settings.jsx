@@ -156,3 +156,19 @@ export function SettingsPage({loggedIn, setLoggedIn}) {
     </Flex>
   )
 }
+
+/* 
+ <Stack as="form" paddingTop={"2em"} onSubmit={submitDeleteAccount}>
+              <FormControl id="delete--account" sx={FormControlColors}>
+                <FormLabel color={"#FDCA40"}>Delete Account:</FormLabel>
+                <Text sx={FormContext}>Re-type your Password to confirm:</Text>
+                <Input type="password" sx={InputFieldColors} id="delAccount" name="delAccount" onChange={deleteAccountField}/>
+                {deleteError.delAccount && <Text>{deleteError.delAccount}</Text>}
+                <Center>
+                  <Input type="submit" sx={FormButton} value="Delete my Account"/>
+                </Center>
+                <Text align={"center"} sx={FormWarning}>This will permanently delete your account!</Text>
+              </FormControl>
+            </Stack>
+
+*/

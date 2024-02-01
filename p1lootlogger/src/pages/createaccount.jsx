@@ -42,7 +42,7 @@ export function CreateAccountPage() {
   return (
     <Flex sx={LoginFlex} align={"center"}>
       <Stack sx={LoginStack} spacing={6} align={"center"}> 
-      <Heading fontSize={"4xl"} py={3}>Create Account</Heading>
+        <Heading fontSize={"4xl"} py={3}>Create Account</Heading>
         {createAccountRes.error && <Stack sx={ResCard} align={"center"}>
           <Text color={"red"}>{createAccountRes.error} </Text>
         </Stack>}

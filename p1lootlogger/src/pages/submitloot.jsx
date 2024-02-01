@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Center, Checkbox, Container, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import { Center, Checkbox, Container, Flex, FormControl, FormLabel, Heading, Input, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Stack, Text } from "@chakra-ui/react";
 import { FormButton, FormContext, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
 import { Select } from "chakra-react-select";
@@ -34,6 +34,21 @@ export function SubmitLootPage() {
     getItems()
   }, []);
 
+  /* All fields that need to be filled by this form + headers + token
+  - Report ID - Auto incrementing
+  - Boss ID - user input - dropdown of names and name value is converted to ID
+  - User ID - Token Payload
+  - Trainer level - user input
+  - Submitted - Timestamp handled by backend request
+  - Buff - user input - checkmark
+  - Loot1 through 5 - user input - dropdown and hopefully search bar
+  - Money - user input - field number
+  - Boxes - user input - dropdown of 0-5? or jusr field number
+  - Gold - user input - field number
+  - Special - user input - checkmark
+  - Difficulty - user input - dropdown only if boss with difficulty settings is chosen preferably
+  */
+
   if (allItems?.length === 0) return <h2>Waiting on Response</h2>
   console.log(allItems)
   return (
@@ -45,7 +60,12 @@ export function SubmitLootPage() {
             <FormControl id="submit--loot" sx={FormControlColors}>
               <FormLabel color={"#FDCA40"}>Submit your Loot</FormLabel>
               <Text sx={FormContext}>Insert loot here or Something:</Text>
-              <Input type="text" sx={InputFieldColors} id="loot--submission" name="loot" />
+              <Input type="text" sx={InputFieldColors} id="loot--1" name="loot1" />
+              <Input type="text" sx={InputFieldColors} id="loot--2" name="loot2" />
+              <Input type="text" sx={InputFieldColors} id="loot--3" name="loot3" />
+              <Input type="text" sx={InputFieldColors} id="loot--4" name="loot4" />
+              <Input type="text" sx={InputFieldColors} id="loot--5" name="loot5" />
+              <Stack><Input/><Input/><Input/></Stack>
               <Stack>
                 <Checkbox size={"lg"} colorScheme={"yellow"} iconColor={"#2A2823"} paddingTop={"0.6em"}>
                   Rare Buff Active
