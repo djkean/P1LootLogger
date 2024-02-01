@@ -86,14 +86,10 @@ export function SubmitLootPage() {
               <Input type="text" sx={InputFieldColors} id="loot--3" name="loot3" />
               <Input type="text" sx={InputFieldColors} id="loot--4" name="loot4" />
               <Input type="text" sx={InputFieldColors} id="loot--5" name="loot5" />
-              <Stack py={2} flexDirection={"row"}>
-                <NumberInput id="boxes--field" name="boxes" defaultValue={0} maxW={24} min={0} max={3} step={1}>
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper/>
-                    <NumberDecrementStepper/>
-                  </NumberInputStepper>
-                </NumberInput>
+              <Stack flexDirection={"row"}>
+                <Input type="number" my={2} name="boxes--field" onChange={handleFields}/>
+                <Input type="number" name="gold--field" onChange={handleFields}/>
+                <Input type="number" name="money--field" onChange={handleFields}/>
               </Stack>
               <Stack>
                 <Checkbox size={"lg"} colorScheme={"yellow"} iconColor={"#2A2823"} paddingTop={"0.6em"}>
