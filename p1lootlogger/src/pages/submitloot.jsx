@@ -7,6 +7,27 @@ import { Select } from "chakra-react-select";
 
 export function SubmitLootPage() {
   const [allItems, setAllItems] = useState([]);
+  const [formData, setFormData] = useState({
+    boss: "",
+    level: "",
+    buffActive: "",
+    loot1: "",
+    loot2: "",
+    loot3: "",
+    loot4: "",
+    loot5: "",
+    money: "",
+    boxes: "",
+    gold: "",
+    specialLoot: "",
+    difficulty: "",
+
+  })
+
+  const handleFields = (event) => {
+    setFormData(_ => ({..._, [event.target.name]: event.target.value}))
+  }
+
   const navigate = useNavigate();
 
   const getItems = async () => {
@@ -65,7 +86,15 @@ export function SubmitLootPage() {
               <Input type="text" sx={InputFieldColors} id="loot--3" name="loot3" />
               <Input type="text" sx={InputFieldColors} id="loot--4" name="loot4" />
               <Input type="text" sx={InputFieldColors} id="loot--5" name="loot5" />
-              <Stack><Input/><Input/><Input/></Stack>
+              <Stack py={2} flexDirection={"row"}>
+                <NumberInput id="boxes--field" name="boxes" defaultValue={0} maxW={24} min={0} max={3} step={1}>
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper/>
+                    <NumberDecrementStepper/>
+                  </NumberInputStepper>
+                </NumberInput>
+              </Stack>
               <Stack>
                 <Checkbox size={"lg"} colorScheme={"yellow"} iconColor={"#2A2823"} paddingTop={"0.6em"}>
                   Rare Buff Active
