@@ -87,9 +87,9 @@ export function SubmitLootPage() {
               <Input type="text" sx={InputFieldColors} id="loot--4" name="loot4" />
               <Input type="text" sx={InputFieldColors} id="loot--5" name="loot5" />
               <Stack flexDirection={"row"}>
-                <Input type="number" my={2} name="boxes--field" onChange={handleFields}/>
-                <Input type="number" name="gold--field" onChange={handleFields}/>
-                <Input type="number" name="money--field" onChange={handleFields}/>
+                <Input type="number" my={2} name="boxes--field" placeholder="Boxes" onChange={handleFields}/>
+                <Input type="number" name="gold--field" placeholder="Gold" onChange={handleFields}/>
+                <Input type="number" name="money--field" placeholder="Money" onChange={handleFields}/>
               </Stack>
               <Stack>
                 <Checkbox size={"lg"} colorScheme={"yellow"} iconColor={"#2A2823"} paddingTop={"0.6em"}>

@@ -323,5 +323,11 @@ app.post("/createnewpassword", async (req, res) => {
   })
 })
 
+app.post("/submitloot", async (req, res) => {
+  const userid = req.id
+  const currentTime = Math.floor(Date.now() / 1000)
+  const submitLootQuery = "INSERT INTO `lootreports` (`boss_id`, `user_id`, `trainerlevel`, `submitted`, `buff`, `loot1`, `loot2`, `loot3`, `loot4`, `loot5`, `money`, `boxes`, `gold`, `special`, `difficulty`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+})
+
 app.listen(port);
 console.log(chalk.bgCyan(`LISTENING ON (${port})`));
