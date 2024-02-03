@@ -7,6 +7,7 @@ import { Select } from "chakra-react-select";
 
 export function SubmitLootPage() {
   const [allItems, setAllItems] = useState([]);
+  const [allBosses, setAllBosses] = useState([])
   const [formData, setFormData] = useState({
     boss: "",
     level: "",
@@ -30,7 +31,47 @@ export function SubmitLootPage() {
 
   const navigate = useNavigate();
 
-  const getItems = async () => {
+  const getItemsAndBosses = async () => {
+    try {
+      const [items, bosses] = await Promise.all([
+        fetch("/api/test", { 
+          headers: { 
+            "Authorization": `Bearer ${getToken()}`, 
+            "Content-Type": "application/json" 
+          }
+        }, { method: "GET" }),
+        fetch("/api/boss", { 
+          headers: { 
+            "Authorization": `Bearer ${getToken()}`, 
+            "Content-Type": "application/json" 
+           }
+        }, { method: "GET" })
+      ])
+      if (items.status !== 200) {
+        return console.log("item query failed")
+      }
+      else if (bosses.status !== 200) {
+        return console.log("boss query failed")
+      }
+      const itemsJson = await items.json()
+      const bossesJson = await bosses.json()
+      console.log(items, bosses)
+      const itemValues = itemsJson.response
+      const bossValues = bossesJson.response
+      itemValues.map(item => {
+        item.value = item.name
+        item.label = item.name
+      })
+      setAllItems(itemValues)
+      setAllBosses(bossValues)
+      return (itemValues, bossValues)
+    }
+    catch(err) {
+      console.log(err)
+    }
+  }
+
+   /* const getItems = async () => {
     try {
       const getItemRes = await fetch("/api/test", { headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" } }, { method: "GET" })
       if (getItemRes.status !== 200) {
@@ -49,10 +90,10 @@ export function SubmitLootPage() {
     catch(err) {
       console.log(err)
     }
-  }
+  } */
 
   useEffect(() => {
-    getItems()
+    getItemsAndBosses()
   }, []);
 
   /* All fields that need to be filled by this form + headers + token
@@ -70,8 +111,8 @@ export function SubmitLootPage() {
   - Difficulty - user input - dropdown only if boss with difficulty settings is chosen preferably
   */
 
-  if (allItems?.length === 0) return <h2>Waiting on Response</h2>
-  console.log(allItems)
+  if (allItems?.length === 0 || allBosses?.length === 0) return <h2>Waiting on Response</h2>
+  console.log(allItems, allBosses)
   return (
     <>
       <Flex sx={LoginFlex} align={"center"}>
