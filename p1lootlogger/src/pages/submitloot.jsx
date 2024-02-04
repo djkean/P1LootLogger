@@ -1,17 +1,18 @@
 import { React, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Center, Checkbox, Container, Flex, FormControl, FormLabel, Heading, Input, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormContext, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles";
+import { Center, Checkbox, Container, Flex, FormControl, FormLabel, Heading, Input, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Stack, Text, Select, Image } from "@chakra-ui/react";
+import { DropDownMenu, FormButton, FormContext, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
-import { Select } from "chakra-react-select";
+import axios from "axios"
 
 export function SubmitLootPage() {
   const [allItems, setAllItems] = useState([]);
-  const [allBosses, setAllBosses] = useState([])
+  const [allBosses, setAllBosses] = useState([]);
+  const [serverRes, setServerRes] = useState({});
   const [formData, setFormData] = useState({
     boss: "",
     level: "",
-    buffActive: "",
+    buffActive: 0,
     loot1: "",
     loot2: "",
     loot3: "",
@@ -20,17 +21,24 @@ export function SubmitLootPage() {
     money: "",
     boxes: "",
     gold: "",
-    specialLoot: "",
-    difficulty: "",
+  });
 
-  })
-
-  const handleFields = (event) => {
-    setFormData(_ => ({..._, [event.target.name]: event.target.value}))
-  }
+   /* All fields that need to be filled by this form + headers + token
+  - Report ID - Auto incrementing
+  - Boss ID - user input - dropdown of names and name value is converted to ID
+  - User ID - Token Payload
+  - Trainer level - user input
+  - Submitted - Timestamp handled by backend request
+  - Buff - user input - checkmark
+  - Loot1 through 5 - user input - dropdown and hopefully search bar
+  - Money - user input - field number
+  - Boxes - user input - dropdown of 0-5? or jusr field number
+  - Gold - user input - field number
+  - Special - user input - checkmark
+  - Difficulty - user input - dropdown only if boss with difficulty settings is chosen preferably
+  */
 
   const navigate = useNavigate();
-
   const getItemsAndBosses = async () => {
     try {
       const [items, bosses] = await Promise.all([
@@ -55,7 +63,6 @@ export function SubmitLootPage() {
       }
       const itemsJson = await items.json()
       const bossesJson = await bosses.json()
-      console.log(items, bosses)
       const itemValues = itemsJson.response
       const bossValues = bossesJson.response
       itemValues.map(item => {
@@ -71,93 +78,102 @@ export function SubmitLootPage() {
     }
   }
 
-   /* const getItems = async () => {
-    try {
-      const getItemRes = await fetch("/api/test", { headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" } }, { method: "GET" })
-      if (getItemRes.status !== 200) {
-        console.log("not 200")
-      }
-      const getItemResJson = await getItemRes.json();
-      console.log(getItemRes)
-      const items = getItemResJson.response
-      items.map(item => {
-        item.value = item.name
-        item.label = item.name
-      })
-      setAllItems(items)
-      return items
+  const handleFields = (event) => {
+    setFormData(_ => ({..._, [event.target.name]: event.target.value}))
+    console.log(formData)
+  }
+
+  const handleLootFields = (event) => {
+    setFormData(_ => ({..._, [event.target.name]: event.target.id}))
+    console.log(formData.loot1,formData.loot2, formData.loot3, formData.loot4, formData.loot5)
+  }
+
+  const toggleCheckbox = (event) => {
+    if (formData.buffActive === 0) {
+      setFormData(_ => ({..._, buffActive: 1}))
+      console.log("buff active set to yes")
     }
-    catch(err) {
-      console.log(err)
+    else if (formData.buffActive === 1) {
+      setFormData(_ => ({..._, buffActive: 0}))
+      console.log(" buffactive set to no")
     }
-  } */
+  }
+
+  const submitFormData = async (event) => {
+    event.preventDefault()
+    console.log(formData)
+    axios.post("http://localhost:8080/submitloot", formData)
+    .then(res => {
+      console.log(res)
+      console.log("SUCCESS (AXIOS)")
+      setServerRes(res.data)
+    })
+    .catch(err => {
+      setServerRes(err)
+      console.log("SOMETHING BAD HAPPENED", err)
+    })
+  }
 
   useEffect(() => {
     getItemsAndBosses()
   }, []);
 
-  /* All fields that need to be filled by this form + headers + token
-  - Report ID - Auto incrementing
-  - Boss ID - user input - dropdown of names and name value is converted to ID
-  - User ID - Token Payload
-  - Trainer level - user input
-  - Submitted - Timestamp handled by backend request
-  - Buff - user input - checkmark
-  - Loot1 through 5 - user input - dropdown and hopefully search bar
-  - Money - user input - field number
-  - Boxes - user input - dropdown of 0-5? or jusr field number
-  - Gold - user input - field number
-  - Special - user input - checkmark
-  - Difficulty - user input - dropdown only if boss with difficulty settings is chosen preferably
-  */
-
   if (allItems?.length === 0 || allBosses?.length === 0) return <h2>Waiting on Response</h2>
-  console.log(allItems, allBosses)
+
   return (
     <>
       <Flex sx={LoginFlex} align={"center"}>
         <Stack sx={LoginStack} spacing={6} align={"center"}>
           <Heading fontSize={"3xl"} py={3}>Loot Submission</Heading>
-          <Stack sx={LoginBox} as={"form"} paddingTop={"2em"}>
+          <Stack sx={LoginBox} as={"form"} paddingTop={"2em"} onSubmit={submitFormData}>
             <FormControl id="submit--loot" sx={FormControlColors}>
               <FormLabel color={"#FDCA40"}>Submit your Loot</FormLabel>
               <Text sx={FormContext}>Insert loot here or Something:</Text>
-              <Input type="text" sx={InputFieldColors} id="loot--1" name="loot1" />
-              <Input type="text" sx={InputFieldColors} id="loot--2" name="loot2" />
-              <Input type="text" sx={InputFieldColors} id="loot--3" name="loot3" />
-              <Input type="text" sx={InputFieldColors} id="loot--4" name="loot4" />
-              <Input type="text" sx={InputFieldColors} id="loot--5" name="loot5" />
+              <Select placeholder="Boss" name="boss" my={3} isRequired onChange={handleFields}>
+                {allBosses.map(boss => {
+                  return (<option key={boss?.ID} id={boss?.ID}>{boss?.bossName}</option>)
+                })}
+              </Select>
+              <Select placeholder="Select your drops" name="loot1" my={3} isRequired onChange={handleLootFields}>
+                {allItems.map(item => {
+                  return (<option key={item?.id} id={item?.id}>{item?.name}</option>)
+                })}
+              </Select>
+              <Select placeholder="Select your drops" name="loot2" my={3} onChange={handleLootFields}>
+                {allItems.map(item => {
+                  return (<option key={item?.id} id={item?.id}>{item?.name}</option>)
+                })}
+              </Select>
+              <Select placeholder="Select your drops" name="loot3" my={3} onChange={handleLootFields}>
+                {allItems.map(item => {
+                  return (<option key={item?.id} id={item?.id}>{item?.name}</option>)
+                })}
+              </Select>
+              <Select placeholder="Select your drops" name="loot4" my={3} onChange={handleLootFields}>
+                {allItems.map(item => {
+                  return (<option key={item?.id} id={item?.id}>{item?.name}</option>)
+                })}
+              </Select>
+              <Select placeholder="Select your drops" my={3} name="loot5">
+                {allItems.map(item => {
+                  return (<option key={item?.id} id={item?.id} name="loot5">{item?.name}</option>)
+                })}
+              </Select>
               <Stack flexDirection={"row"}>
-                <Input type="number" my={2} name="boxes--field" placeholder="Boxes" onChange={handleFields}/>
-                <Input type="number" name="gold--field" placeholder="Gold" onChange={handleFields}/>
-                <Input type="number" name="money--field" placeholder="Money" onChange={handleFields}/>
+                <Input type="number" my={2} name="boxes" placeholder="Boxes" isRequired onChange={handleFields}/>
+                <Input type="number" name="gold" placeholder="Gold" isRequired onChange={handleFields}/>
+                <Input type="number" name="money" placeholder="Money" isRequired onChange={handleFields}/>
+                <Input type="number" name="level" placeholder="Level" isRequired onChange={handleFields}/>
               </Stack>
               <Stack>
-                <Checkbox size={"lg"} colorScheme={"yellow"} iconColor={"#2A2823"} paddingTop={"0.6em"}>
+                <Checkbox size={"lg"} colorScheme={"yellow"} iconColor={"#2A2823"} paddingTop={"0.6em"} onChange={toggleCheckbox}>
                   Rare Buff Active
-                </Checkbox>
-                <Checkbox size={"lg"} colorScheme={"yellow"} iconColor={"#2A2823"} paddingBottom={"0.3em"}>
-                  Received Special Drop
                 </Checkbox>
               </Stack>
               <Center>
                 <Input type="submit" sx={FormButton} value="Submit"/>
               </Center>
             </FormControl>
-            <Container>
-              <FormControl>
-                <FormLabel>Drop down search multi</FormLabel>
-                <Text>Select up to 5 drops to submit</Text>
-                <Select
-                  options={allItems}
-                  placeholder="select up to five items..."
-                  closeMenuOnSelect={false}
-                  selectedOptionStyle="check"
-                  hideSelectedOptions={false}
-                  isMulti
-                />
-              </FormControl>
-            </Container>
           </Stack>
         </Stack>
       </Flex>
@@ -166,3 +182,12 @@ export function SubmitLootPage() {
 }
 
 //set up custom component to display images for the selected items about the select form
+
+/* <Select
+                  options={allItems}
+                  placeholder="select up to five items..."
+                  closeMenuOnSelect={false}
+                  selectedOptionStyle="check"
+                  hideSelectedOptions={false}
+                  isMulti
+                /> */
