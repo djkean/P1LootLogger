@@ -84,7 +84,8 @@ export function SettingsPage({loggedIn, setLoggedIn}) {
     if (error.delAccount === "") {
       axios.post("/deleteaccount", deleteAccount,
       { headers: { "Authorization": `Bearer ${getToken()}`, 
-      "Content-Type": "application/json" } })
+        "Content-Type": "application/json" } 
+      })
       .then( res => {
         console.log("DELETE ACCOUNT FIELD OK (AXIOS)")
         setBackendRes(res.data)

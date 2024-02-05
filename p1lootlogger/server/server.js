@@ -33,6 +33,8 @@ const verifyUser = (req, res, next) => {
     }
     jwt.verify(token, secret, (err, decoded) => {
       req.email = decoded.email
+      req.id = decoded.id
+      req.status = decoded.status
       if (err) {
         return res.status(400).send({ message: "Invalid token", code: "yellow" });
       } 
@@ -288,7 +290,6 @@ app.post("/changeusername", async (req, res) => {
 })
 
 app.post("/createnewpassword", async (req, res) => {
-  console.log(req.body)
   const {firstField, secondField, stringEmail, stringToken} = req.body
   const authenticateUserQuery = "SELECT `email`, `requestedAt`, `requestToken` FROM `usertable4` WHERE `email` = ? LIMIT 1"
   connection.query(authenticateUserQuery, [stringEmail], async (err, result) => {
@@ -324,9 +325,49 @@ app.post("/createnewpassword", async (req, res) => {
 })
 
 app.post("/submitloot", async (req, res) => {
+  /*
+  report_id: ai
+  boss_id: form 
+  user_id: token
+  trainerlevel: form
+  submitted: currentTime 
+  buff: form
+  loot1-5: form
+  money: form
+  boxes: form
+  gold: form
+  
+  */
+  console.log(req.body)
+  console.log(req.email)
+  console.log(req.id)
+  const {boss, level, buffActive, loot1, loot2, loot3, loot4, loot5, money, boxes, gold} = req.body
   const userid = req.id
   const currentTime = Math.floor(Date.now() / 1000)
-  const submitLootQuery = "INSERT INTO `lootreports` (`boss_id`, `user_id`, `trainerlevel`, `submitted`, `buff`, `loot1`, `loot2`, `loot3`, `loot4`, `loot5`, `money`, `boxes`, `gold`, `special`, `difficulty`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  if (typeof userid === "undefined") {
+    return res.status(409).json({ error: "Couldnt retrieve user information", response: null })
+  }
+  else if (boss === null || level === null || buffActive === null || loot1 === null || money === null) {
+    return res.status(400).json({ error: "Some important fields are left blank", response: null })
+  }
+  else if (level > 100 || level < 40) {
+    return res.status(400).json({ error: "Invalid Level value", response: null })
+  }
+  else if (boxes > 5) {
+    return res.status(400).json({ error: `you did not get ${boxes} boxes`, response: null })
+  }
+  else if (buffActive < 0 || buffActive > 2 || typeof buffActive !== "number") {
+    return res.status(400).json({ error: "Invalid value for buff", response: null })
+  }
+  const submitLootQuery = "INSERT INTO `lootreports` (`boss_id`, `user_id`, `trainerlevel`, `submitted`, `buff`, `loot1`, `loot2`, `loot3`, `loot4`, `loot5`, `money`, `boxes`, `gold`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  connection.query(submitLootQuery, [boss, userid, level, currentTime, buffActive, loot1, loot2, loot3, loot4, loot5, money, boxes, gold], (err, result) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).json({ error: "An error has occurred", response: null })
+    }
+    console.log(result)
+    return res.status(200).json({ error: null, response: "Submitted Loot" })
+  })
 })
 
 app.listen(port);

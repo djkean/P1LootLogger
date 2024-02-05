@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Center, Checkbox, Flex, FormControl, FormLabel, Heading, Input, Stack, Text, Select } from "@chakra-ui/react";
-import { FormButton, FormContext, FormControlColors, LoginBox, LoginFlex, LoginStack } from "../components/pagestyles";
+import { FormButton, FormContext, FormControlColors, LoginBox, LoginFlex, LoginStack, ResCard } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
 import axios from "axios"
 
@@ -105,16 +105,19 @@ export function SubmitLootPage() {
   const submitFormData = async (event) => {
     event.preventDefault()
     console.log(formData)
-    axios.post("http://localhost:8080/submitloot", formData)
+    axios.post("submitloot", formData, 
+    { headers: 
+      { "Authorization": `Bearer ${getToken()}`, 
+      "Content-Type": "application/json" 
+      } 
+    })
     .then(res => {
-      console.log(res)
       console.log("SUCCESS (AXIOS)")
       setServerRes(res.data)
     })
     .catch(err => {
-      setServerRes(err)
-      console.log("SOMETHING BAD HAPPENED", err)
-      console.log(formData)
+      console.log("SOMETHING BAD HAPPENED")
+      setServerRes(err.response.data)
     })
   }
 
@@ -128,6 +131,12 @@ export function SubmitLootPage() {
     <Flex sx={LoginFlex} align={"center"}>
       <Stack sx={LoginStack} spacing={6} align={"center"}>
         <Heading fontSize={"3xl"} py={3}>Loot Submission</Heading>
+        {serverRes.error && <Stack sx={ResCard} align={"center"}>
+          <Text color={"red"}>{serverRes.error}</Text>
+        </Stack>}
+        {serverRes.response && <Stack sx={ResCard} align={"center"}>
+          <Text color={"green"}>{serverRes.response}</Text>
+        </Stack>}
         <Stack sx={LoginBox} as={"form"} paddingTop={"2em"} onSubmit={submitFormData}>
           <FormControl id="submit--loot" sx={FormControlColors}>
             <FormLabel color={"#FDCA40"}>Submit your Loot</FormLabel>
