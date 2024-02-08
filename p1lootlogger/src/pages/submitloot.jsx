@@ -172,10 +172,20 @@ export function SubmitLootPage() {
               })}
             </Select>
             <Stack flexDirection={"row"}>
-              <Input type="number" my={2} name="boxes" placeholder="Boxes" isRequired onChange={handleFields}/>
-              <Input type="number" name="gold" placeholder="Gold" isRequired onChange={handleFields}/>
-              <Input type="number" name="money" placeholder="Money" isRequired onChange={handleFields}/>
-              <Input type="number" name="level" placeholder="Level" isRequired onChange={handleFields}/>
+              <FormLabel w={"11em"} marginTop={"0.75em"}>Boxes:</FormLabel>
+              <Input type="number" name="boxes" w={"6.1em"} isRequired onChange={handleFields}/>
+            </Stack>
+            <Stack flexDirection={"row"}>
+              <FormLabel w={"11em"} marginTop={"0.75em"}>PokeGold:</FormLabel>
+              <Input type="number" name="gold" w={"6.1em"} isRequired onChange={handleFields}/>
+            </Stack>
+            <Stack flexDirection={"row"}>
+              <FormLabel w={"11em"} marginTop={"0.75em"}>Money:</FormLabel>
+              <Input type="number" name="money" w={"6.1em"} isRequired onChange={handleFields}/>
+            </Stack>
+            <Stack flexDirection={"row"}>
+            <FormLabel w={"11em"} marginTop={"0.75em"}>Trainer Level:</FormLabel>
+              <Input type="number" name="level" w={"6.1em"} isRequired onChange={handleFields}/>
             </Stack>
             <Stack>
               <Checkbox size={"lg"} colorScheme={"yellow"} iconColor={"#2A2823"} paddingTop={"0.6em"} onChange={toggleCheckbox}>

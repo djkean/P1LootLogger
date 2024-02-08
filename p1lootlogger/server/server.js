@@ -325,22 +325,6 @@ app.post("/createnewpassword", async (req, res) => {
 })
 
 app.post("/submitloot", async (req, res) => {
-  /*
-  report_id: ai
-  boss_id: form 
-  user_id: token
-  trainerlevel: form
-  submitted: currentTime 
-  buff: form
-  loot1-5: form
-  money: form
-  boxes: form
-  gold: form
-  
-  */
-  console.log(req.body)
-  console.log(req.email)
-  console.log(req.id)
   const {boss, level, buffActive, loot1, loot2, loot3, loot4, loot5, money, boxes, gold} = req.body
   const userid = req.id
   const currentTime = Math.floor(Date.now() / 1000)
@@ -354,7 +338,10 @@ app.post("/submitloot", async (req, res) => {
     return res.status(400).json({ error: "Invalid Level value", response: null })
   }
   else if (boxes > 5) {
-    return res.status(400).json({ error: `you did not get ${boxes} boxes`, response: null })
+    return res.status(400).json({ error: `You did not get ${boxes} boxes`, response: null })
+  }
+  else if (gold > 500) {
+    return res.status(400).json({ error: `You did not receive ${gold} gold`, response: null })
   }
   else if (buffActive < 0 || buffActive > 2 || typeof buffActive !== "number") {
     return res.status(400).json({ error: "Invalid value for buff", response: null })
