@@ -9,7 +9,6 @@ import { getToken } from "../shared/getToken";
 
 export const BossDetails = () => {
   const [bossDetails, setBossDetails] = useState([]);
-  //const [bossListValues, setBossListValues] = useState([])
 
   const navigate = useNavigate()
   const getBossDetailsFromDb = async () => {
@@ -17,11 +16,7 @@ export const BossDetails = () => {
       const bossDetailsResponse = await fetch("/api/bossdetails", { headers: {
         "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json"
       } }, { method: "GET" });
-      /*if (bossDetailsResponse.status === 403) {
-        console.log("Invalid Token")
-        navigate("/login")
-      }
-      else*/ if (bossDetailsResponse.status !== 200) {
+      if (bossDetailsResponse.status !== 200) {
         console.log("You need to log in")
         navigate("/login")
       }
@@ -34,110 +29,61 @@ export const BossDetails = () => {
     }
   }
 
-  /*
-  const getBossListFromDb = async () => {
-    const bossDbResponse = await fetch("/api/boss", { method: "GET" })
-    const bossDbResponseJson = await bossDbResponse.json();
-    setBossListValues(bossDbResponseJson.response)
-    return bossDbResponseJson.response
-  } 
-  */
-
   useEffect(() => {
     getBossDetailsFromDb();
-    //getBossListFromDb();
   }, []);
 
   if (bossDetails.length === 0) return <h2>fetching Boss Details...</h2>;
   
- return (
-  <>
-  {bossDetails?.length > 0 && bossDetails.filter((boss => boss.ID === 101)).map((allinfo) => {
-    return (
-      <Center key={allinfo.ID} py={6} bg={"#2A2823"}>
-        <Stack sx={BossCardStack} w={{sm: '100%', md: '800px'}} height={{sm: '476px', md: '25rem'}} direction={{base: 'column', md: 'row'}}>
-          <Flex flex={1}>
-            <Image sx={InfoImageLayout} src={`/images/${allinfo.ID}.png`} />
-          </Flex>
-          <Stack sx={InfoSummaryCard}>
-            <Heading fontSize={'2xl'} fontFamily={'body'}> {allinfo.bossName} </Heading>
-            <Text fontWeight={600} color={'gray.700'} size="sm" mb={4}> {allinfo.region} / {allinfo.location} </Text>
-            <Text textAlign={'center'} px={3} fontWeight={400}> 
-              <Link to="/bossdetails">A comprehensive collection of all {allinfo.bossName}'s information. </Link>
-            </Text>
-            <Stack align={'center'} justify={'center'} direction={'row'} mt={4}>
-              <Badge sx={InfoDropBadge}> {allinfo.bossDrops[0]} </Badge>
-              <Badge sx={InfoDropBadge}> {allinfo.bossDrops[1]} </Badge>
-              <Badge sx={InfoDropBadge}> {allinfo.bossDrops[2]} </Badge>
-            </Stack>
-            <Stack align={'center'} justify={'center'} direction={'row'} mt={4}>
-              <Badge sx={InfoDropBadge}> {allinfo.bossDrops[3]} </Badge>
-              <Badge sx={InfoDropBadge}> {allinfo.bossDrops[4]} </Badge>
-            </Stack>
-            <Stack sx={InfoTabStack} direction={"row"}>
-              <Menu direction={"row"}>
-                <MenuButton sx={InfoTabButton}>View Loot</MenuButton>
-                <MenuList bg="#5D5D5D">
-                  {allinfo.bossDrops.map((drops, index) => {
-                    return (<MenuItem key={index} sx={DropDownMenu}>{drops}</MenuItem>)
-                  })}
-                </MenuList>
-              </Menu>
-            </Stack>
-            <Stack sx={InfoTabStack} direction={"row"}>
-              <Menu>
-                <MenuButton sx={InfoTabButton}>View Roster</MenuButton>
-                <MenuList bg="#5D5D5D">
-                  {allinfo.teamData.map((roster, index) => {
-                    return (<MenuItem key={index} sx={DropDownMenu}>{roster.Pokemon}</MenuItem>)
-                  })}
-                </MenuList>
-              </Menu>
-            </Stack>
-          </Stack>
-        </Stack>
-      </Center>
-    )
-  })}
-  </>
- )
-
-/*  return (
+  return (
     <>
-      {bossDetails?.length > 0 && bossDetails.filter((boss => boss.ID === 101))
-      .map((allInfo) => {
+      {bossDetails?.length > 0 && bossDetails.filter((boss => boss.ID === 101)).map((allinfo) => {
         return (
-          <table key={allInfo.ID}>
-            <tbody>
-              <tr>
-                <td>{allInfo.ID}</td>
-                <td>{allInfo.bossName}</td>
-                <td>{allInfo.bossDrops}</td>
-                <td>{allInfo.teamType}</td>
-                <td>{allInfo.teamSize}</td>
-                <td>{allInfo.region}</td>
-                <td>{allInfo.subRegion}</td>
-                <td>{allInfo.location}</td>
-              </tr>
-              <tr>
-                <td colSpan='8'>
-                  {allInfo.teamData.map(pokemon => { return (
-                    <>
-                      <div>{pokemon.Pokemon}</div>
-                      <div>{pokemon.Nature}</div>
-                      <div>
-                        <b>Moves</b>
-                        {pokemon['Move-1']}, {pokemon['Move-2']}, 
-                        {pokemon['Move-3']}, {pokemon['Move-4']}
-                      </div>
-                    </>
-                  )})}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <Center key={allinfo.ID} py={6} bg={"#2A2823"}>
+            <Stack sx={BossCardStack} w={{sm: '100%', md: '800px'}} height={{sm: '476px', md: '25rem'}} direction={{base: 'column', md: 'row'}}>
+              <Flex flex={1}>
+                <Image sx={InfoImageLayout} src={`/images/${allinfo.ID}.png`} />
+              </Flex>
+              <Stack sx={InfoSummaryCard}>
+                <Heading fontSize={'2xl'} fontFamily={'body'}> {allinfo.bossName} </Heading>
+                <Text fontWeight={600} color={'gray.700'} size="sm" mb={4}> {allinfo.region} / {allinfo.location} </Text>
+                <Text textAlign={'center'} px={3} fontWeight={400}> 
+                  <Link to="/bossdetails">A comprehensive collection of all {allinfo.bossName}'s information. </Link>
+                </Text>
+                <Stack align={'center'} justify={'center'} direction={'row'} mt={4}>
+                  <Badge sx={InfoDropBadge}> {allinfo.bossDrops[0]} </Badge>
+                  <Badge sx={InfoDropBadge}> {allinfo.bossDrops[1]} </Badge>
+                  <Badge sx={InfoDropBadge}> {allinfo.bossDrops[2]} </Badge>
+                </Stack>
+                <Stack align={'center'} justify={'center'} direction={'row'} mt={4}>
+                  <Badge sx={InfoDropBadge}> {allinfo.bossDrops[3]} </Badge>
+                  <Badge sx={InfoDropBadge}> {allinfo.bossDrops[4]} </Badge>
+                </Stack>
+                <Stack sx={InfoTabStack} direction={"row"}>
+                  <Menu direction={"row"}>
+                    <MenuButton sx={InfoTabButton}>View Loot</MenuButton>
+                    <MenuList bg="#5D5D5D">
+                      {allinfo.bossDrops.map((drops, index) => {
+                        return (<MenuItem key={index} sx={DropDownMenu}>{drops}</MenuItem>)
+                      })}
+                    </MenuList>
+                  </Menu>
+                </Stack>
+                <Stack sx={InfoTabStack} direction={"row"}>
+                  <Menu>
+                    <MenuButton sx={InfoTabButton}>View Roster</MenuButton>
+                    <MenuList bg="#5D5D5D">
+                      {allinfo.teamData.map((roster, index) => {
+                        return (<MenuItem key={index} sx={DropDownMenu}>{roster.Pokemon}</MenuItem>)
+                      })}
+                    </MenuList>
+                  </Menu>
+                </Stack>
+              </Stack>
+            </Stack>
+          </Center>
         )
       })}
     </>
-  );*/
+  )
 }

@@ -89,4 +89,17 @@ router.post("/resetpassword", (req, res) => {
   })
 })
 
+//specific boss loot
+router.get("/bossloot", (req, res) => {
+  console.log(req.body)
+  const bossLootID = 101
+  const bossLootQuery = "SELECT * FROM `lootreports` WHERE `bossID` = ?"
+  connection.query(bossLootQuery, [bossLootID], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Error while getting boss loot", response: null })
+    }
+    res.status(200).json({ error: null, response: result })
+  })
+})
+
 module.exports = router;
