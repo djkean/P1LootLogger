@@ -3,7 +3,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { GridRowUI, ListGridUI } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const BossTable = () => {
   const [bossTableValues, setBossTableValues] = useState([]);
@@ -52,7 +52,7 @@ export const BossTable = () => {
             <Center>
               <HStack>
                 <Box sx={GridRowUI} w="6em">Boss Image</Box>
-                <Box sx={GridRowUI} w="8em">{boss.bossName}</Box>
+                <Box sx={GridRowUI} w="8em"><Link to="/bossdetails">{boss.bossName}</Link></Box>
                 <Box sx={GridRowUI} w="25em" mr="2em">{boss.bossRegion}</Box>
               </HStack>
             </Center>

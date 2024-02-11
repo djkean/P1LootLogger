@@ -89,6 +89,22 @@ router.post("/resetpassword", (req, res) => {
   })
 })
 
+//specific boss
+router.get("/bossdata", (req, res) => {
+  console.log(req.body)
+  const id = req.body
+  const singleBossQuery = "SELECT * FROM `bossinfotable2` where `bossID` = ?"
+  connection.query(singleBossQuery, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Error occurred", response: null })
+    }
+    else if (typeof result[0] == "undefined") {
+      return res.status(403).json({ error: "There is no boss for that ID", response: null })
+    }
+    res.status(200).json({ error: null, response: result })
+  })
+})
+
 //specific boss loot
 router.get("/bossloot", (req, res) => {
   console.log(req.body)

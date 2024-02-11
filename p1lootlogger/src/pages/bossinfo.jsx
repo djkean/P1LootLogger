@@ -1,5 +1,5 @@
 import { Badge, Center, Flex, Heading, Image, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { DropDownMenu, InfoCardStack, InfoDropBadge, InfoImageLayout, InfoSummaryCard, InfoTabButton, InfoTabStack } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
