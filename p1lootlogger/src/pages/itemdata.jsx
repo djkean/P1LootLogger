@@ -10,7 +10,12 @@ export const ItemData = () => {
   console.log(useQueryString)
 
   const [itemData, lootData] = Promise.all([
-    
+    fetch("/api/itemdata", {
+      headers: { 
+        "Authorization": `Bearer ${getToken()}`, 
+        "Content-Type": "application/json" 
+      }
+    }, { method: "GET" })
   ])
 
 

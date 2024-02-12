@@ -17,6 +17,7 @@ import { VerifyEmailPage } from "./pages/verifyemail.jsx";
 import { LoginProvider } from "./LoginContext.js";
 import { ResetPasswordPage } from "./pages/resetpassword.jsx";
 import { BossData } from "./pages/bossdata.jsx";
+import { ItemData } from "./pages/itemdata.jsx";
 
 export function App() {
   const [loggedIn, setLoggedIn] = useState("out")
@@ -47,7 +48,8 @@ export function App() {
             <Route path="/submitloot" element={<SubmitLootPage />} />
             <Route path="/verifyemail" element={<VerifyEmailPage />} />
             <Route path="/resetpassword" element={<ResetPasswordPage />} />
-            <Route path="/bossdata" element={<BossData />} />
+            <Route path="/bossdata/:id" element={<BossData />} />
+            <Route path="/itemdata/:id" element={<ItemData />} />
           </Routes>
         </BrowserRouter>
       </ChakraProvider>

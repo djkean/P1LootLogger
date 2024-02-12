@@ -89,33 +89,18 @@ router.post("/resetpassword", (req, res) => {
   })
 })
 
-//specific boss
-router.get("/bossdata", (req, res) => {
+//dynamic boss page
+router.post("/bossdata", (req, res) => {
+  const id = parseInt(req.body.bossID)
   console.log(req.body)
-  const id = req.body
-  const singleBossQuery = "SELECT * FROM `bosstable` where `ID` = ?"
-  connection.query(singleBossQuery, [id], (err, result) => {
+  if (typeof id !== "number") {
+    return res.status(400).json({ error: "Invalid boss id value", response: null })
+  }
+  const allLootDataQuery = "SELECT loot.report_id, loot.user_id, loot.trainerlevel, loot.submitted, loot.buff, loot.money, loot.boxes, loot.gold, loot.loot1 AS loot1, i1.name AS loot1name, i1.image AS loot1image, loot.loot2 AS loot2, i2.name AS loot2name, i2.image AS loot2image, loot.loot3 AS loot3, i3.name AS loot3name, i3.image AS loot3image, loot.loot4 AS loot4, i4.name AS loot4name, i4.image AS loot4image, loot.loot5 AS loot5, i5.name AS loot5name, i5.name AS loot5image, bosstable.bossName FROM lootreports AS loot LEFT JOIN newitemtable AS i1 ON loot.loot1 = i1.id LEFT JOIN newitemtable AS i2 ON loot.loot2 = i2.id LEFT JOIN newitemtable AS i3 ON loot.loot3 = i3.id LEFT JOIN newitemtable AS i4 ON loot.loot4 = i4.id LEFT JOIN newitemtable AS i5 ON loot.loot5 = i5.id LEFT JOIN bosstable ON loot.boss_id = bosstable.ID WHERE loot.boss_id = ? AND EXISTS ( SELECT 1 FROM bosstable WHERE bosstable.ID = loot.boss_id );"
+  connection.query(allLootDataQuery, [id], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: "Error occurred", response: null })
-    }
-    else if (typeof result[0] == "undefined") {
-      return res.status(403).json({ error: "There is no boss for that ID", response: null })
-    }
-    res.status(200).json({ error: null, response: result })
-  })
-})
-
-//specific boss loot
-router.get("/bossloot", (req, res) => {
-  console.log(req.body)
-  const bossLootID = 101
-  const bossLootQuery = "SELECT * FROM `lootreports` WHERE `bossID` = ?"
-  connection.query(bossLootQuery, [bossLootID], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: "Error while getting boss loot", response: null })
-    }
-    else if (typeof result[0]?.report_id == "undefined") {
-      return res.status(400).json({ error: "There doesn't seem to be any boss with results for that query", response: null })
+      console.log(err)
+      return res.status(500).json({ error: "An error occurred with loot query", response: null })
     }
     res.status(200).json({ error: null, response: result })
   })
@@ -137,15 +122,15 @@ router.get("/itemdata", (req, res) => {
     else if (typeof result[0]?.name == "undefined") {
       return res.status(400).json({ error: "That item doesn't seem to exist", response: null })
     }
-    connection.query(lootTableQuery, [itemID, itemID, itemID, itemID, itemID], (error, lootResult) => {
-      if (error) {
-        return res.status(500).json({ error: "An error occured getting item drop data", response: null })
-      }
-      else if (typeof result[0]?.report_id == "undefined") {
-        return res.status(400).json({ error: "There seems to be no loot data for that item", response: null })
-      }
-      res.status(200).json({ error: null, response: { itemResult, lootResult } })
-    })
+  })
+  connection.query(lootTableQuery, [itemID, itemID, itemID, itemID, itemID], (error, lootResult) => {
+    if (error) {
+      return res.status(500).json({ error: "An error occured getting item drop data", response: null })
+    }
+    else if (typeof result[0]?.report_id == "undefined") {
+      return res.status(400).json({ error: "There seems to be no loot data for that item", response: null })
+    }
+    res.status(200).json({ error: null, response: { itemResult, lootResult } })
   })
 })
 
