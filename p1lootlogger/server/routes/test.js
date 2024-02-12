@@ -114,7 +114,38 @@ router.get("/bossloot", (req, res) => {
     if (err) {
       return res.status(500).json({ error: "Error while getting boss loot", response: null })
     }
+    else if (typeof result[0]?.report_id == "undefined") {
+      return res.status(400).json({ error: "There doesn't seem to be any boss with results for that query", response: null })
+    }
     res.status(200).json({ error: null, response: result })
+  })
+})
+
+//specific item
+router.get("/itemdata", (req, res) => {
+  console.log(req.body)
+  const itemID = req.body
+  const itemQuery = "SELECT * FROM `newitemtable` WHERE `id` = ? LIMIT 1"
+  const lootTableQuery = "SELECT * FROM `lootreports` WHERE `loot1` = ? OR `loot2` = ? OR `loot3` = ? OR `loot4` = ? OR `loot5` = ?"
+  if (typeof itemID !== "number") {
+    return res.status(409).json({ error: "Invalid value for item ID", response: null })
+  }
+  connection.query(itemQuery, [itemID], (err, itemResult) => {
+    if (err) {
+      return res.status(500).json({ error: "An error occured getting item data", response: null })
+    }
+    else if (typeof result[0]?.name == "undefined") {
+      return res.status(400).json({ error: "That item doesn't seem to exist", response: null })
+    }
+    connection.query(lootTableQuery, [itemID, itemID, itemID, itemID, itemID], (error, lootResult) => {
+      if (error) {
+        return res.status(500).json({ error: "An error occured getting item drop data", response: null })
+      }
+      else if (typeof result[0]?.report_id == "undefined") {
+        return res.status(400).json({ error: "There seems to be no loot data for that item", response: null })
+      }
+      res.status(200).json({ error: null, response: { itemResult, lootResult } })
+    })
   })
 })
 
