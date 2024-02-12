@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getToken } from "../shared/getToken";
-import { Box, Center, Flex, Image, Input, Stack, Text } from "@chakra-ui/react";
+import { useLocation, useParams } from "react-router-dom"; 
+import { Box, Center, Flex, Heading, Image, Input, Stack, Text } from "@chakra-ui/react";
 
 export const BossData = () => {
   const [bossData, setBossData] = useState([]);
   const [bossLoot, setBossLoot] = useState([]);
+  const idFromRoute = useParams();
+  console.log(idFromRoute)
 
   const getBossData = async () => {
     try {
@@ -34,11 +37,29 @@ export const BossData = () => {
       const lootValues = lootJson.response
       setBossData(infoValues)
       setBossLoot(lootValues)
+      console.log(infoValues, lootValues)
       return (infoValues, lootValues)
     }
     catch(err) {
       console.log(err)
     }
   }
+
+  useEffect(() => {
+    getBossData()
+  }, []);
+
+  if (bossData?.length === 0 || bossLoot?.length === 0) return <Text>Waiting on server...</Text>
+
+  return (
+    <Flex>
+      <Stack>
+        <Heading></Heading>
+        <Stack>
+
+        </Stack>
+      </Stack>
+    </Flex>
+  )
 
 }

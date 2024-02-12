@@ -43,17 +43,18 @@ export const BossTable = () => {
       <Center>
         <Text>A list of all bosses/dailies found in PokeOne</Text>
       </Center>
-      <Center>
-        <Text>If you think any dailies are missing, please let us know!</Text>
-      </Center>
       {bossTableValues.length > 0 && bossTableValues.map((boss) => {
         return (
           <SimpleGrid key={boss.ID} sx={ListGridUI}>
             <Center>
               <HStack>
                 <Box sx={GridRowUI} w="6em">Boss Image</Box>
-                <Box sx={GridRowUI} w="8em"><Link to="/bossdetails">{boss.bossName}</Link></Box>
-                <Box sx={GridRowUI} w="25em" mr="2em">{boss.bossRegion}</Box>
+                <Box sx={GridRowUI} w="8em">
+                  <Link to="/bossdetails">{boss.bossName}</Link>
+                </Box>
+                <Box sx={GridRowUI} w="25em" mr="2em">
+                  <Link to={"/bossdata/" + boss.ID}>{boss?.region} - {boss?.location}</Link>
+                </Box>
               </HStack>
             </Center>
           </SimpleGrid>

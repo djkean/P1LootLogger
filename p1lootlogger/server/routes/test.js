@@ -93,7 +93,7 @@ router.post("/resetpassword", (req, res) => {
 router.get("/bossdata", (req, res) => {
   console.log(req.body)
   const id = req.body
-  const singleBossQuery = "SELECT * FROM `bossinfotable2` where `bossID` = ?"
+  const singleBossQuery = "SELECT * FROM `bosstable` where `ID` = ?"
   connection.query(singleBossQuery, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Error occurred", response: null })
