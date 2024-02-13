@@ -150,6 +150,15 @@ export const LoginBox = {
   rounded: "lg",
   width: "22em"
 }
+
+export const BossBox = {
+  bg: "#2A2823",
+  boxShadow: "lg",
+  p: 8,
+  rounded: "lg",
+  width: "80em"
+}
+
 export const LoginFlex = {
   bg: "#5D5D5D",
   justify: "center",

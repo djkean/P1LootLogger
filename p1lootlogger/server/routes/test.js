@@ -89,6 +89,22 @@ router.post("/resetpassword", (req, res) => {
   })
 })
 
+//getting boss name while working on an issue
+router.post("/bossname", (req, res) => {
+  const id = parseInt(req.body.bossID)
+  console.log(req.body)
+  if (typeof id !== "number") {
+    return res.status(400).json({ error: "Invalid boss value", response: null })
+  }
+  const bossNameQuery = "SELECT `bossName`, `ID` FROM `bosstable` WHERE `ID` = ? LIMIT 1"
+  connection.query(bossNameQuery, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Something went wrong with boss name", response: null })
+    }
+    res.status(200).json({ error: null, response: result })
+  })
+})
+
 //dynamic boss page
 router.post("/bossdata", (req, res) => {
   const id = parseInt(req.body.bossID)
@@ -96,7 +112,7 @@ router.post("/bossdata", (req, res) => {
   if (typeof id !== "number") {
     return res.status(400).json({ error: "Invalid boss id value", response: null })
   }
-  const allLootDataQuery = "SELECT loot.report_id, loot.user_id, loot.trainerlevel, loot.submitted, loot.buff, loot.money, loot.boxes, loot.gold, loot.loot1 AS loot1, i1.name AS loot1name, i1.image AS loot1image, loot.loot2 AS loot2, i2.name AS loot2name, i2.image AS loot2image, loot.loot3 AS loot3, i3.name AS loot3name, i3.image AS loot3image, loot.loot4 AS loot4, i4.name AS loot4name, i4.image AS loot4image, loot.loot5 AS loot5, i5.name AS loot5name, i5.name AS loot5image, bosstable.bossName FROM lootreports AS loot LEFT JOIN newitemtable AS i1 ON loot.loot1 = i1.id LEFT JOIN newitemtable AS i2 ON loot.loot2 = i2.id LEFT JOIN newitemtable AS i3 ON loot.loot3 = i3.id LEFT JOIN newitemtable AS i4 ON loot.loot4 = i4.id LEFT JOIN newitemtable AS i5 ON loot.loot5 = i5.id LEFT JOIN bosstable ON loot.boss_id = bosstable.ID WHERE loot.boss_id = ? AND EXISTS ( SELECT 1 FROM bosstable WHERE bosstable.ID = loot.boss_id );"
+  const allLootDataQuery = "SELECT loot.report_id, loot.user_id, loot.trainerlevel, loot.submitted, loot.buff, loot.money, loot.boxes, loot.gold, loot.loot1 AS loot1, i1.name AS loot1name, i1.image AS loot1image, loot.loot2 AS loot2, i2.name AS loot2name, i2.image AS loot2image, loot.loot3 AS loot3, i3.name AS loot3name, i3.image AS loot3image, loot.loot4 AS loot4, i4.name AS loot4name, i4.image AS loot4image, loot.loot5 AS loot5, i5.name AS loot5name, i5.image AS loot5image, bosstable.bossName FROM lootreports AS loot LEFT JOIN newitemtable AS i1 ON loot.loot1 = i1.id LEFT JOIN newitemtable AS i2 ON loot.loot2 = i2.id LEFT JOIN newitemtable AS i3 ON loot.loot3 = i3.id LEFT JOIN newitemtable AS i4 ON loot.loot4 = i4.id LEFT JOIN newitemtable AS i5 ON loot.loot5 = i5.id LEFT JOIN bosstable ON loot.boss_id = bosstable.ID WHERE loot.boss_id = ? AND EXISTS ( SELECT 1 FROM bosstable WHERE bosstable.ID = loot.boss_id );"
   connection.query(allLootDataQuery, [id], (err, result) => {
     if (err) {
       console.log(err)
