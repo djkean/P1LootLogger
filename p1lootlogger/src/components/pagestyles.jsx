@@ -156,7 +156,7 @@ export const BossBox = {
   boxShadow: "lg",
   p: 8,
   rounded: "lg",
-  width: "80em"
+  width: "58em"
 }
 
 export const LoginFlex = {

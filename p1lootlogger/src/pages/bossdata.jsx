@@ -68,19 +68,16 @@ export const BossData = () => {
             <Table variant="simple" size="sm">
               <Thead>
                 <Tr>
-                  <Th color={"#FDCA40"}>PokeGold</Th>
+                  <Th color={"#FDCA40"}>
+                    <Image src={`/images/items/icons/1401.png`}/>
+                  </Th>
                   <Th color={"#FDCA40"}>$$$</Th>
                   <Th color={"#FDCA40"}>Boxes</Th>
                   <Th color={"#FDCA40"}>Loot1</Th>
-                  <Th></Th>
                   <Th color={"#FDCA40"}>Loot2</Th>
-                  <Th></Th>
                   <Th color={"#FDCA40"}>Loot3</Th>
-                  <Th></Th>
                   <Th color={"#FDCA40"}>Loot4</Th>
-                  <Th></Th>
                   <Th color={"#FDCA40"}>Loot5</Th>
-                  <Th></Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -91,25 +88,25 @@ export const BossData = () => {
                     <Td color={"#FDCA40"}>{entries?.money}</Td>
                     <Td color={"#FDCA40"}>{entries?.boxes}</Td>
                     <Td color={"#FDCA40"}>
-                      <Image src={`/images/items/icons/${entries?.loot1image}.png`}  />
+                      <Image display={"inline-block"} mx={"0.5em"} src={`/images/items/icons/${entries?.loot1image}.png`}  />
+                      {entries?.loot1name}
                     </Td>
-                    <Td color={"#FDCA40"}>{entries?.loot1name}</Td>
                     <Td color={"#FDCA40"}>
-                      <Image src={`/images/items/icons/${entries?.loot2image}.png`}  />
+                      <Image display={"inline-block"} mx={"0.5em"} src={`/images/items/icons/${entries?.loot2image}.png`}  />
+                      {entries?.loot2name}
                     </Td>
-                    <Td color={"#FDCA40"}>{entries?.loot2name}</Td>
                     <Td color={"#FDCA40"}>
-                      <Image src={`/images/items/icons/${entries?.loot3image}.png`}  />
+                      <Image display={"inline-block"} mx={"0.5em"} src={`/images/items/icons/${entries?.loot3image}.png`}  />
+                      {entries?.loot3name}
                     </Td>
-                    <Td color={"#FDCA40"}>{entries?.loot3name}</Td>
                     <Td color={"#FDCA40"}>
-                      <Image src={`/images/items/icons/${entries?.loot4image}.png`}  />
+                      <Image display={"inline-block"} mx={"0.5em"} src={`/images/items/icons/${entries?.loot4image}.png`}  />
+                      {entries?.loot4name}
                     </Td>
-                    <Td color={"#FDCA40"}>{entries?.loot4name}</Td>
                     <Td color={"#FDCA40"}>
-                      <Image src={`/images/items/icons/${entries?.loot5image}.png`}  />
+                      <Image display={"inline-block"} mx={"0.5em"} src={`/images/items/icons/${entries?.loot5image}.png`}  />
+                      {entries?.loot5name}
                     </Td>
-                    <Td color={"#FDCA40"}>{entries?.loot5name}</Td>
                   </Tr>
                 )
               })}
