@@ -105,7 +105,7 @@ router.post("/bossname", (req, res) => {
   })
 })
 
-//dynamic boss page
+//dynamic boss page - joins newitemtable values to lootreports table on the loot1-5 ids given via user's form
 router.post("/bossdata", (req, res) => {
   const id = parseInt(req.body.bossID)
   console.log(req.body)
@@ -136,7 +136,7 @@ router.get("/itemdata", (req, res) => {
       return res.status(500).json({ error: "An error occured getting item data", response: null })
     }
     else if (typeof result[0]?.name == "undefined") {
-      return res.status(400).json({ error: "That item doesn't seem to exist", response: null })
+      return res.status(400).json({ error: "This item either doesn't exist, or there is yet to be any information on it.", response: null })
     }
   })
   connection.query(lootTableQuery, [itemID, itemID, itemID, itemID, itemID], (error, lootResult) => {

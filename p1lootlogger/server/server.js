@@ -18,6 +18,7 @@ const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
 const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
 const optOut = ["/", "/home", "/login", "/createaccount", "/forgotpassword", "/api/verifyemail", "/verifyemail", "/api/resetpassword", "/resetpassword", "/createnewpassword"];
 
+//middleware for authenticating user's token as valid or invalid
 const verifyUser = (req, res, next) => {
   const path = req.path
   console.log(path)
@@ -68,6 +69,8 @@ app.get("/*", (req, res, next) => {
   res.sendFile(path.join(static_dir, "index.html"));
 });
 
+/*compare req values to regex and then query with case for if username and email are/arent unique
+then mail user with a link to verify their account on pageload using querystrings to pass token and email*/
 app.post("/createaccount", async (req, res) => {
   const { username, email, firstField, secondField } = req.body
   if (username === "" || email === "") {
@@ -152,6 +155,7 @@ app.post("/login", async (req, res) => {
   })
 })
 
+//check if the input email exists in usertable before mailing it a token to prove user authenticity
 app.post("/forgotpassword", async (req, res) => {
   const typedEmail = req.body.email
   if (!emailPattern.test(typedEmail)) {
@@ -277,7 +281,7 @@ app.post("/changeusername", async (req, res) => {
       return res.status(500).send({ message: "An error occurred, please try again", code: "red" })
     }
     else if (usernames.length !== 0) {
-      return res.status(403).send({ message: "Username already taken", code: "red" })
+      return res.status(403).send({ message: "This username is already taken", code: "red" })
     }
     const changeUsernameQuery = "UPDATE `usertable4` SET `username` = ? WHERE `email` = ? LIMIT 1"
     connection.query(changeUsernameQuery, [username, tokenEmail], async (err, result) => {
