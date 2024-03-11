@@ -52,7 +52,7 @@ const verifyUser = (req, res, next) => {
   }
 } 
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: process.env.P1LL_FRONT_URL }));
 app.use(verifyUser);
 app.use(express.json());
 app.use("/api", testApi);
@@ -104,7 +104,7 @@ app.post("/createaccount", async (req, res) => {
     }
     const currentTimestamp = Math.floor(Date.now() / 1000)
     const accountToken = crypto.randomBytes(16).toString("hex")
-    const verifyEmailUrl = `http://localhost:3000/verifyemail?token=${querystring.escape(accountToken)}&email=${querystring.escape(email)}`;
+    const verifyEmailUrl = `${process.env.P1LL_FRONT_URL}/verifyemail?token=${querystring.escape(accountToken)}&email=${querystring.escape(email)}`;
     const verifyEmailBody = `Click <a href=${verifyEmailUrl}>here</a> to confirm.`;
     const salt = crypto.randomBytes(16).toString("hex")
     const hash = crypto.pbkdf2Sync(firstField, salt, 1000, 64, "sha256").toString("hex")
@@ -162,7 +162,7 @@ app.post("/forgotpassword", async (req, res) => {
     return res.status(409).send({ message: "Invalid email", code: "red" })
   }
   const forgotPasswordToken = crypto.randomBytes(16).toString("hex")
-  const forgotPasswordUrl = `http://localhost:3000/resetpassword?token=${querystring.escape(forgotPasswordToken)}&email=${querystring.escape(typedEmail)}`;
+  const forgotPasswordUrl = `${process.env.P1LL_FRONT_URL}/resetpassword?token=${querystring.escape(forgotPasswordToken)}&email=${querystring.escape(typedEmail)}`;
   const forgotPasswordBody = `If you requested this email, click <a href=${forgotPasswordUrl}>here</a> to change your password. 
   If you didn't request this email, you can safely ignore this email.`;
   const confirmEmailQuery = "SELECT `email` from `usertable4` where `email` = ? LIMIT 1"
