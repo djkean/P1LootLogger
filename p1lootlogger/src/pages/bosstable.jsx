@@ -1,7 +1,7 @@
-import { Box, Center, Container, Heading, HStack, SimpleGrid, Text} from "@chakra-ui/react";
+import { Heading, Stack, TableContainer, Table, Tbody, Tr, Td, Flex } from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState } from "react";
-import { GridRowUI, ListGridUI } from "../components/pagestyles";
+import { LoginFlex, LoginStack, BossBox } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -35,31 +35,32 @@ export const BossTable = () => {
   //too many center components, move to regular css for those maybe?
   if (bossTableValues.length === 0) return <h2> Fetching Bosses...</h2>
 
-  return (<div>
-    <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
-      <Center>
-        <Heading my="0.5em" p="0.75em">All Bosses</Heading>
-      </Center>
-      <Center>
-        <Text>A list of all bosses/dailies found in PokeOne</Text>
-      </Center>
-      {bossTableValues.length > 0 && bossTableValues.map((boss) => {
-        return (
-          <SimpleGrid key={boss.ID} sx={ListGridUI}>
-            <Center>
-              <HStack>
-                <Box sx={GridRowUI} w="6em">Boss Image</Box>
-                <Box sx={GridRowUI} w="8em">
-                  <Link to="/bossdetails">{boss.bossName}</Link>
-                </Box>
-                <Box sx={GridRowUI} w="25em" mr="2em">
-                  <Link to={"/bossdata/" + boss.ID}>{boss?.region} - {boss?.location}</Link>
-                </Box>
-              </HStack>
-            </Center>
-          </SimpleGrid>
-        )
-      })}
-    </Container>
-  </div>);
+  return (
+    <Flex sx={LoginFlex} align={"center"}>
+      <Stack sx={LoginStack} align={"center"}>
+        <Heading my="0.5em" p="0.75em">All bosses found in PokeOne</Heading>
+        <Stack sx={BossBox}>
+          <TableContainer>
+            <Table variant="simple" size="lg">
+              <Tbody>
+                {bossTableValues.length > 0 && bossTableValues.map((boss) => {
+                  return (
+                    <Tr key={boss.ID}>
+                      <Td color={"#FDCA40"} textDecor={"underline"}>
+                        <Link to={"/bossdata/" + boss.ID}>{boss.bossName}</Link>
+                      </Td>
+                      <Td></Td>
+                      <Td></Td>
+                      <Td color={"#FDCA40"}>{boss?.region}</Td>
+                      <Td color={"#FDCA40"}>{boss?.location}</Td>
+                    </Tr>
+                  )
+                })}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Stack>
+      </Stack>
+    </Flex>
+  );
 };
