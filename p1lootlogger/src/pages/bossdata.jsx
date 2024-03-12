@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { getToken } from "../shared/getToken";
-import { useLocation, useParams } from "react-router-dom"; 
-import { Box, Center, Flex, Heading, Image, Input, Stack, Text, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer,} from "@chakra-ui/react";
-import { BossBox, LoginBox, LoginFlex, LoginStack, ResCard } from "../components/pagestyles";
+import { useParams } from "react-router-dom"; 
+import { Flex, Heading, Image, Stack, Text, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from "@chakra-ui/react";
+import { BossBox, LoginFlex, LoginStack } from "../components/pagestyles";
 
 export const BossData = () => {
   const [bossData, setBossData] = useState([]);

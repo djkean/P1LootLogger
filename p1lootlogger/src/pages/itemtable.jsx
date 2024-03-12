@@ -1,6 +1,6 @@
-import { Box, Button, Container, Heading, SimpleGrid, Text, Center, HStack, Image, Input } from "@chakra-ui/react";
+import { Box, Button, Heading, Text, Center, Image, Input, Table, Tbody, Tr, Td, TableContainer, Flex, Stack } from "@chakra-ui/react";
 import React, { useEffect, useState, useMemo } from "react";
-import { PageButtonUI, ListGridUI, GridRowUI, SearchBarUI } from "../components/pagestyles";
+import { PageButtonUI, SearchBarUI, LoginFlex, LoginStack, BossBox } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
 import { useNavigate } from "react-router-dom";
 
@@ -56,49 +56,49 @@ export const ItemTable = () => {
 
   if (itemTableValues.length === 0) return <h2>Fetching Items...</h2>
 
-  return (<div>
-    <Container as="section" maxW="100hv" maxH="100hv" bg="#5D5D5D" pb="2em">
-      <Center>
+  return (
+    <Flex sx={LoginFlex} align={"center"}>
+      <Stack sx={LoginStack} align={"center"}>
         <Heading my="0.5em" p="0.75em">All Items</Heading>
-      </Center>
-      <Center>
-        <Text>A list of all items found in PokeOne</Text>
-      </Center>
-      <Center>
-        <Box w="36.5em">
-          <Input type="text" sx={SearchBarUI} onChange={(e) => updateSearchQuery(e.target.value)}></Input>
+        <Box w="30em" align={"center"}>
+          <Text fontSize={"xl"} my="0.5em">A list of all items found in PokeOne</Text>
+          <Input type="text" sx={SearchBarUI} bg={"#2A2823"} placeholder="Search for an item" onChange={(e) => updateSearchQuery(e.target.value)}></Input>
+          <Center sx={SearchBarUI} >
+            <Text>{itemsOnCurrentPage.itemCount} of {itemTableValues.length} items matched your search.</Text>
+            <Button sx={PageButtonUI} onClick={() => setPage(previousPage)}
+            isDisabled={previousPage < 1 ? true : false}>
+              {previousPage}      
+            </Button>
+            <Button sx={PageButtonUI} onClick={() => setPage(nextPage)}
+            isDisabled={page >= totalPages ? true : false}>
+              {nextPage}
+            </Button>
+          </Center>
         </Box>
-      </Center>
-      <Center sx={SearchBarUI} >
-        <Text>{itemsOnCurrentPage.itemCount} of {itemTableValues.length} items matched your search.</Text>
-        <Button sx={PageButtonUI} onClick={() => setPage(previousPage)}
-        isDisabled={previousPage < 1 ? true : false}>
-          {previousPage}      
-        </Button>
-        <Button sx={PageButtonUI} onClick={() => setPage(nextPage)}
-        isDisabled={page >= totalPages ? true : false}>
-          {nextPage}
-        </Button>
-      </Center>
-      {(searchFilter !== "" && itemsOnCurrentPage.itemCount === 0) ? (
-        <Center>
-          <Text>No items matched your search.</Text>
-        </Center>
-      ) : itemsOnCurrentPage.itemCount > 0 && itemsOnCurrentPage.items.map((item) => {
-        return (
-          <SimpleGrid key={item.id} sx={ListGridUI}>
-            <Center>
-              <HStack>
-                <Box sx={GridRowUI} w="10em">
-                  <Image src={`/images/items/icons/${item.image}.png`}/>
-                  {item.name}
-                </Box>
-                <Box sx={GridRowUI} w="30em" mr="2em">{item.description}</Box>
-              </HStack>
-            </Center>
-          </SimpleGrid>
-        )
-      })}
-    </Container>
-  </div>);
+        <Stack sx={BossBox}>
+          <TableContainer>
+            <Table variant="simple" size="sm">
+              <Tbody>
+                {(searchFilter !== "" && itemsOnCurrentPage.itemCount === 0) ? (
+                  <Box align={"center"}>
+                    <Text color={"#FDCA40"}>No Items matched your search.</Text>
+                  </Box>
+                ) : itemsOnCurrentPage.itemCount > 0 && itemsOnCurrentPage.items.map((item) => {
+                  return (
+                    <Tr key={item.id}>
+                      <Td>
+                        <Image display={"inline-block"} mx={"1em"} src={`/images/items/icons/${item.image}.png`}/>
+                      </Td>
+                      <Td color={"#FDCA40"} >{item.name}</Td>
+                      <Td color={"#FDCA40"} fontSize={"xs"} >{item.description}</Td>
+                    </Tr>
+                    )
+                  })} 
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Stack>
+      </Stack>
+    </Flex>
+  );
 };

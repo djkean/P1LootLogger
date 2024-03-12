@@ -195,8 +195,8 @@ export const NavButton = {
 }
 
 export const PageButtonUI = {
-  bg: "orange.200",
-  color: "#2A2823",
+  bg: "#2A2823",
+  color: "#FDCA40",
   mx: "0.25em",
   my: "0.5em",
   ':hover': {
