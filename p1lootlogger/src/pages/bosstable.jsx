@@ -1,4 +1,4 @@
-import { Heading, Stack, TableContainer, Table, Tbody, Tr, Td, Flex } from "@chakra-ui/react";
+import { Heading, Stack, TableContainer, Table, Tbody, Tr, Td, Flex, Box } from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState } from "react";
 import { LoginFlex, LoginStack, BossBox } from "../components/pagestyles";
@@ -38,7 +38,10 @@ export const BossTable = () => {
   return (
     <Flex sx={LoginFlex} align={"center"}>
       <Stack sx={LoginStack} align={"center"}>
-        <Heading my="0.5em" p="0.75em">All bosses found in PokeOne</Heading>
+        <Heading my="0.5em" p="0.75em">Boss List</Heading>
+        <Box w="30em" align={"center"}>
+          <Text fontSize={"xl"} my="0.5em">A list of PokeOne's Bosses and daily battles</Text>
+        </Box>
         <Stack sx={BossBox}>
           <TableContainer>
             <Table variant="simple" size="lg">
