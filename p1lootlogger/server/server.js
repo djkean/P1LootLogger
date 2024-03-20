@@ -34,7 +34,7 @@ const verifyUser = (req, res, next) => {
     }
     jwt.verify(token, secret, (err, decoded) => {
       if (typeof req.email == "undefined" || typeof req.id == "undefined" || typeof req.status == "undefined") {
-        return (res.status(403).send({ message: "Invalid Token.", code: "yellow" }))
+        return (res.status(403).send({ message: "Token is invalid", code: "yellow" }))
       }
       req.email = decoded.email
       req.id = decoded.id
