@@ -1,7 +1,7 @@
-import { Heading, Stack, TableContainer, Table, Tbody, Tr, Td, Flex, Box } from "@chakra-ui/react";
+import { Heading, Stack, TableContainer, Table, Tbody, Tr, Td, Flex, Box, Text } from "@chakra-ui/react";
 import React from "react";
 import { useEffect, useState } from "react";
-import { LoginFlex, LoginStack, BossBox } from "../components/pagestyles";
+import { LoginFlex, LoginStack, BossBox, TableNames } from "../components/pagestyles";
 import { getToken } from "../shared/getToken";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -40,7 +40,8 @@ export const BossTable = () => {
       <Stack sx={LoginStack} align={"center"}>
         <Heading my="0.5em" p="0.75em">Boss List</Heading>
         <Box w="30em" align={"center"}>
-          <Text fontSize={"xl"} my="0.5em">A list of PokeOne's Bosses and daily battles</Text>
+          <Text fontSize={"lg"} my="0.5em">A list of PokeOne's Bosses and daily battles</Text>
+          <Text fontSize={"lg"}>Click any Boss below to view reports of their loot from users</Text>
         </Box>
         <Stack sx={BossBox}>
           <TableContainer>
@@ -49,7 +50,7 @@ export const BossTable = () => {
                 {bossTableValues.length > 0 && bossTableValues.map((boss) => {
                   return (
                     <Tr key={boss.ID}>
-                      <Td color={"#FDCA40"} textDecor={"underline"}>
+                      <Td sx={TableNames}>
                         <Link to={"/bossdata/" + boss.ID}>{boss.bossName}</Link>
                       </Td>
                       <Td></Td>

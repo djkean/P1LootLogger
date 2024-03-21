@@ -201,14 +201,3 @@ export function SubmitLootPage() {
     </Flex>
   )
 }
-
-//set up custom component to display images for the selected items about the select form
-
-/* <Select
-                  options={allItems}
-                  placeholder="select up to five items..."
-                  closeMenuOnSelect={false}
-                  selectedOptionStyle="check"
-                  hideSelectedOptions={false}
-                  isMulti
-                /> */

@@ -30,11 +30,13 @@ const verifyUser = (req, res, next) => {
     const header = req.headers['authorization']
     const token = header && header.split(" ")[1]
     if (token == null) {
-      return (res.status(403).send({ message: "Invalid token", code: "yellow" }))
+      console.log("hit null")
+      return res.status(403).send({ message: "Invalid token", code: "yellow" })
     }
     jwt.verify(token, secret, (err, decoded) => {
-      if (typeof req.email == "undefined" || typeof req.id == "undefined" || typeof req.status == "undefined") {
-        return (res.status(403).send({ message: "Token is invalid", code: "yellow" }))
+      if (typeof decoded.email == "undefined" || typeof decoded.id == "undefined" || typeof decoded.status == "undefined") {
+        console.log("hit undefined")
+        return res.status(403).send({ message: "Token is invalid", code: "yellow" })
       }
       req.email = decoded.email
       req.id = decoded.id

@@ -245,3 +245,11 @@ export const LoginFeedback = {
   rounded: "lg",
   w: "22em"
 }
+
+export const TableNames = {
+  color: "#FDCA40",
+  textDecor: "underline",
+  ':hover': {
+    color: "orange.400"
+  }
+}
