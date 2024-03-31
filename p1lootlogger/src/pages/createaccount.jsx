@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, ResCard } from "../components/pagestyles";
+import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, ResCard, PageLink2 } from "../components/pagestyles";
 import { comparePasswords } from "../components/regexChecks";
 import axios from "axios";
 
@@ -49,9 +49,9 @@ export function CreateAccountPage() {
         {createAccountRes.response && <Stack sx={ResCard} align={"center"}>
           <Text color={"green"}>{createAccountRes.response}</Text>
         </Stack>}
-        <Text fontSize={"lg"}>Already have an account? Log in {" "}
-          <Link to="/createaccount" color="#FDCA40">here</Link>
-        </Text>
+        <Link to="/login">
+          <Text fontSize={"lg"} sx={PageLink2}>Already have an account? Log in here.</Text>
+        </Link>
         <Stack sx={LoginBox} as="form" spacing={3} onSubmit={submitFormData}>
           <FormControl id="create--account--form" sx={FormControlColors}>
             <FormLabel color={"#FDCA40"}>Username:</FormLabel>

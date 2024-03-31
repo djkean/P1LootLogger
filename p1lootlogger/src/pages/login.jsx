@@ -1,5 +1,5 @@
 import { Box, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from "@chakra-ui/react";
-import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback } from "../components/pagestyles"
+import { FormButton, FormControlColors, InputFieldColors, LoginBox, LoginFlex, LoginStack, LoginFeedback, PageLink, PageLink2 } from "../components/pagestyles"
 import { React, useState } from "react";
 import { loginVerification } from "../components/regexChecks"
 import axios from "axios";
@@ -46,9 +46,9 @@ export function LoginPage({loggedIn, setLoggedIn}) {
       <Stack sx={LoginStack} spacing={6} align={"center"}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} py={3}>Log In</Heading>
-          <Text fontSize={"lg"}>Don't have an account? Create one {" "}
-            <Link to="/createaccount" color="#FDCA40">here</Link>
-          </Text>
+          <Link to="/createaccount">
+              <Text sx={PageLink2}>You can create an account here.</Text>
+            </Link>
           { loginRes.message && <Stack align={"center"} sx={LoginFeedback}>
             <Text color={loginRes.code}>{loginRes.message}</Text>
           </Stack>}
@@ -70,7 +70,7 @@ export function LoginPage({loggedIn, setLoggedIn}) {
                 <Input type="submit" sx={FormButton} value="Sign In"/>
               </Center>
               <Link to="/forgotpassword">
-                <Text color={"#BFA55C"} align={"center"}>Forgot Password? Click here</Text>
+                <Text sx={PageLink2} align={"center"}>Forgot Password? Click here</Text>
               </Link>
             </FormControl>
           </Stack>

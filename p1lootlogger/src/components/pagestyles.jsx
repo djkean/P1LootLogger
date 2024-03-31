@@ -253,3 +253,19 @@ export const TableNames = {
     color: "orange.400"
   }
 }
+
+export const PageLink = {
+  color: "#FDCA40",
+  textDecor: "underline",
+  ':hover': {
+    color: "#DCA100"
+  }
+}
+
+export const PageLink2 = {
+  color: "#BFA55C",
+  textDecor: "underline",
+  ':hover': {
+    color: "#8D7534"
+  }
+}

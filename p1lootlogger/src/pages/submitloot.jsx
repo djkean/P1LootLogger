@@ -137,6 +137,8 @@ export function SubmitLootPage() {
         {serverRes.response && <Stack sx={ResCard} align={"center"}>
           <Text color={"green"}>{serverRes.response}</Text>
         </Stack>}
+        <Text fontSize={"lg"}>Submit your loot to contribute to discovering drop rates</Text>
+        <Text fontSize={"lg"}>If you only received 1 reward, make sure you select it using the Loot 1 dropdown.</Text>
         <Stack sx={LoginBox} as={"form"} paddingTop={"2em"} onSubmit={submitFormData}>
           <FormControl id="submit--loot" sx={FormControlColors}>
             <FormLabel color={"#FDCA40"}>Submit your Loot</FormLabel>
@@ -146,27 +148,27 @@ export function SubmitLootPage() {
                 return (<option key={boss?.ID} id={boss?.ID}>{boss?.bossName}</option>)
               })}
             </Select>
-            <Select placeholder="Select your drops" name="loot1" my={3} isRequired onChange={handleLootFields}>
+            <Select placeholder="Loot 1" name="loot1" my={3} isRequired onChange={handleLootFields}>
               {allItems.map(item => {
                 return (<option key={item?.id} id={item?.id}>{item?.name}</option>)
               })}
             </Select>
-            <Select placeholder="Select your drops" name="loot2" my={3} onChange={handleLootFields}>
+            <Select placeholder="Loot 2" name="loot2" my={3} onChange={handleLootFields}>
               {allItems.map(item => {
                 return (<option key={item?.id} id={item?.id}>{item?.name}</option>)
               })}
             </Select>
-            <Select placeholder="Select your drops" name="loot3" my={3} onChange={handleLootFields}>
+            <Select placeholder="Loot 3" name="loot3" my={3} onChange={handleLootFields}>
               {allItems.map(item => {
                 return (<option key={item?.id} id={item?.id}>{item?.name}</option>)
               })}
             </Select>
-            <Select placeholder="Select your drops" name="loot4" my={3} onChange={handleLootFields}>
+            <Select placeholder="Loot 4" name="loot4" my={3} onChange={handleLootFields}>
               {allItems.map(item => {
                 return (<option key={item?.id} id={item?.id}>{item?.name}</option>)
               })}
             </Select>
-            <Select placeholder="Select your drops" name="loot5" my={3} onChange={handleLootFields}>
+            <Select placeholder="Loot 5" name="loot5" my={3} onChange={handleLootFields}>
               {allItems.map(item => {
                 return (<option key={item?.id} id={item?.id} name="loot5">{item?.name}</option>)
               })}
@@ -185,7 +187,7 @@ export function SubmitLootPage() {
             </Stack>
             <Stack flexDirection={"row"}>
             <FormLabel w={"11em"} marginTop={"0.75em"}>Trainer Level:</FormLabel>
-              <Input type="number" name="level" w={"6.1em"} isRequired onChange={handleFields}/>
+              <Input type="number" name="level" w={"6.1em"} placeholder="/100" isRequired onChange={handleFields}/>
             </Stack>
             <Stack>
               <Checkbox size={"lg"} colorScheme={"yellow"} iconColor={"#2A2823"} paddingTop={"0.6em"} onChange={toggleCheckbox}>

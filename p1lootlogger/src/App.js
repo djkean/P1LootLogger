@@ -36,6 +36,7 @@ export function App() {
           <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
           <Routes>
             <Route path="/home" element={<HomePage />} />
+            <Route exact path="/" element={<HomePage />} />
             <Route path="/tables" element={<TablesPage />} />
             <Route path="/itemtable" element={<ItemTable />} />
             <Route path="/bosstable" element={<BossTable />} />

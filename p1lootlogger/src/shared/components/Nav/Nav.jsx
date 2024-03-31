@@ -26,9 +26,6 @@ export function Nav({loggedIn, setLoggedIn}) {
             <Link to="/bosstable">
               <MenuItem sx={MenuStyles}>Bosses</MenuItem>
             </Link>
-            <Link to="/bossinfo">
-              <MenuItem sx={MenuStyles}>Boss Info</MenuItem>
-            </Link>
             <Link to="/submitloot">
               <MenuItem sx={MenuStyles}>Submit Loot</MenuItem>
             </Link>
