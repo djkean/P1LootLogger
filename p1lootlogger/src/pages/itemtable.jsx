@@ -54,6 +54,7 @@ export const ItemTable = () => {
     getItemsFromDb()
   }, []);
 
+
   if (itemTableValues.length === 0) return <h2>Fetching Items...</h2>
 
   return (

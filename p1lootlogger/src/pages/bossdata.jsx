@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { getToken } from "../shared/getToken";
-import { useParams } from "react-router-dom"; 
+import { Link, useParams } from "react-router-dom"; 
 import { Flex, Heading, Image, Stack, Text, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from "@chakra-ui/react";
-import { BossBox, LoginFlex, LoginStack } from "../components/pagestyles";
+import { BossBox, LoginFlex, LoginStack, PageLink2 } from "../components/pagestyles";
 
 export const BossData = () => {
   const [bossData, setBossData] = useState([]);
@@ -62,7 +62,7 @@ export const BossData = () => {
   return (
     <Flex sx={LoginFlex} align={"center"}>
       <Stack sx={LoginStack} align={"center"}>
-        <Heading fontSize={"3xl"}>{bossName.bossName}</Heading>
+        <Heading fontSize={"3xl"} marginBottom={"1em"}>{bossName.bossName}</Heading>
         <Stack sx={BossBox}>
           <TableContainer>
             <Table variant="simple" size="sm">
@@ -114,6 +114,9 @@ export const BossData = () => {
             </Table>
           </TableContainer>
         </Stack>
+        <Link to="/submitloot">
+          <Text sx={PageLink2}>Submit your own loot here</Text>
+        </Link>
       </Stack>
     </Flex>
   )
